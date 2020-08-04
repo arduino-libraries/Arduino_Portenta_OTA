@@ -80,7 +80,7 @@ ArduinoOTAPortenta::ArduinoOTAPortenta() :
  * PUBLIC MEMBER FUNCTIONS
  ******************************************************************************/
 
-void ArduinoOTAPortenta::begin(int storage)  //PortentaStorageType PortentaStorage
+void ArduinoOTAPortenta::begin(PortentaStorageType storage)  //PortentaStorageType PortentaStorage
 {
 
   Serial1.begin(115200);

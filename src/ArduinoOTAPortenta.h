@@ -42,6 +42,12 @@ static uint16_t const DEFAULT_BROKER_PORT_SECURE_AUTH = 8883;
 static char const DEFAULT_BROKER_ADDRESS_USER_PASS_AUTH[] = "mqtts-up.iot.arduino.cc";
 static uint16_t const DEFAULT_BROKER_PORT_USER_PASS_AUTH = 8884;
 */
+enum PortentaStorageType
+{
+  InternalFlash   = 0,
+  QSPIFlash       = 1,
+  SD              = 2
+};
 
 /******************************************************************************
  * CLASS DECLARATION
@@ -59,7 +65,7 @@ class ArduinoOTAPortenta
     virtual int  connected     ()/* override*/;
     //virtual void printDebugInfo()/* override*/;
 
-    void begin(int storage);
+    void begin(PortentaStorageType storage);
 
     /*
     #ifdef BOARD_HAS_ECCX08
@@ -90,12 +96,6 @@ class ArduinoOTAPortenta
   private:
     //static const int MQTT_TRANSMIT_BUFFER_SIZE = 256;
 
-    enum class PortentaStorageType
-    {
-        InternalFlash   = 0,
-        QSPIFlash       = 1,
-        SD              = 2
-    };
 
 #if OTA_STORAGE_PORTENTA
     OTALogicPortenta _ota_logic_portenta;
