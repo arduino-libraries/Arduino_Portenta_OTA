@@ -1,0 +1,34 @@
+#######################################
+# Syntax Coloring Map For ArduinoIoTCloud
+#######################################
+
+#######################################
+# Class (KEYWORD1)
+#######################################
+
+OTAPortenta	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+initProperties	KEYWORD2
+
+# ArduinoOTAPortenta.h
+begin	KEYWORD2
+#setBoardId	KEYWORD2
+setOTAStorage	KEYWORD2
+update	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+ON	LITERAL1
+OFF	LITERAL1
+ON_CHANGE	LITERAL1
+SECONDS	LITERAL1
+MINUTES	LITERAL1
+HOURS	LITERAL1
+DAYS	LITERAL1
+
