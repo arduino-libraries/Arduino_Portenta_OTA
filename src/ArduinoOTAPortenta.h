@@ -29,7 +29,7 @@
 #if OTA_ENABLED
   //#include "utility/ota/OTALogic.h"
   #include "OTALogicPortenta.h"
-  #include "OTAStorage.h"
+  #include "OTAStoragePortenta.h"
   #include "OTAStorage_Portenta_SD.h"
 #endif /* OTA_ENABLED */
 
@@ -89,7 +89,7 @@ class ArduinoOTAPortenta
     */
 
 #if OTA_ENABLED
-    void setOTAStorage(OTAStorage & ota_storage);
+    void setOTAStorage(OTAStoragePortenta & ota_storage);
 #endif /* OTA_ENABLED */
 
 
@@ -102,7 +102,7 @@ class ArduinoOTAPortenta
     int _ota_error;
     //String _ota_img_sha256;
     //PortentaStorageType _storagePortenta;
-#endif /* OTA_ENABLED */
+#endif /* OTA_STORAGE_PORTENTA */
     /*
     enum class State
     {

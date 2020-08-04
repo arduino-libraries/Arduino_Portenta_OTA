@@ -25,13 +25,13 @@
 #include <AIoTC_Config.h>
 #if OTA_STORAGE_PORTENTA
 
-#include "OTAStorage.h"
+#include "OTAStoragePortenta.h"
 
 /******************************************************************************
  * CLASS DECLARATION
  ******************************************************************************/
 
-class OTAStorage_Portenta_SD : public OTAStorage
+class OTAStorage_Portenta_SD : public OTAStoragePortenta
 {
 public:
            //OTAStorage_Portenta_SD();

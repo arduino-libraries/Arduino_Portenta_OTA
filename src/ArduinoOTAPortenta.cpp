@@ -141,7 +141,7 @@ void ArduinoOTAPortenta::printDebugInfo()
 }
 */
 #if OTA_ENABLED
-void ArduinoOTAPortenta::setOTAStorage(OTAStorage & ota_storage)
+void ArduinoOTAPortenta::setOTAStorage(OTAStoragePortenta & ota_storage)
 {
   //Serial1.println("ArduinoOTAPortenta::setOTAStorage");
   _ota_logic_portenta.setOTAStorage(ota_storage);

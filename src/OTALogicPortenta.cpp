@@ -58,7 +58,7 @@ OTALogicPortenta::OTALogicPortenta()
  * PUBLIC MEMBER FUNCTIONS
  ******************************************************************************/
 
-void OTALogicPortenta::setOTAStorage(OTAStorage & ota_storage)
+void OTALogicPortenta::setOTAStorage(OTAStoragePortenta & ota_storage)
 {
   _ota_storage = &ota_storage;
   _is_configured = true;

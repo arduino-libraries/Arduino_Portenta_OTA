@@ -31,7 +31,7 @@
 
 //#include "OTALogic.h"
 
-#include "OTAStorage.h"
+#include "OTAStoragePortenta.h"
 
 //#include "crc.h"
 /*
@@ -77,7 +77,7 @@ public:
   /*virtual ~*/OTALogicPortenta();
 
 
-  void setOTAStorage(OTAStorage & ota_storage);
+  void setOTAStorage(OTAStoragePortenta & ota_storage);
 
 
   OTAError update();
@@ -106,7 +106,7 @@ private:
   } sOTABinaryData;
   */
   bool _is_configured;
-  OTAStorage * _ota_storage;
+  OTAStoragePortenta * _ota_storage;
   OTAState _ota_state;
   OTAError _ota_error;
   //storageTypePortenta _storagePortenta;
