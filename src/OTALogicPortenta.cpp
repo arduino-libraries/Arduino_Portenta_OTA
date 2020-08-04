@@ -185,7 +185,7 @@ OTAState OTALogicPortenta::handle_BinaryReceived()
     uint8_t buf[10];
   /* Write to OTA storage */
   //Serial1.println("Im going to start the write");
-  int size = _ota_storage->write(buf, 10);
+  int size = _ota_storage->write();
   /*
   Serial1.print("Write completed! Size = ");
   Serial1.println(size);

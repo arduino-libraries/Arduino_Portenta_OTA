@@ -25,10 +25,6 @@
 
 #include "OTAStorage_Portenta_SD.h"
 
-//#include "SDMMCBlockDevice.h"
-
-//#include "FATFileSystem.h"
-
 #include "stm32h7xx_hal_rtc_ex.h"
 
 using namespace arduino;
@@ -38,20 +34,6 @@ using namespace arduino;
  ******************************************************************************/
 
 static char const SD_UPDATE_FILENAME[] = "UPDATE.BIN";
-//static char const SD_CHECK_FILE_NAME[] = "UPDATE.OK";
-/*static*/ // mbed::FATFileSystem fs("fs");
-/*mbed::*//*FATFileSystem fs("fs");
-
-SDMMCBlockDevice block_device;
-
-extern RTC_HandleTypeDef RTCHandle;
-
-DIR *dir;
-
-struct dirent *ent;
-
-int update_size;
-*/
 
 SDMMCBlockDevice block_device;
 
@@ -61,31 +43,14 @@ DIR *dir;
 
 struct dirent *ent;
 
-/******************************************************************************
-   CTOR/DTOR
- ******************************************************************************/
-OTAStorage_Portenta_SD::OTAStorage_Portenta_SD()
-: //fs{"fs"}
- started{-1}
-, update_size{0}
-{ }
-/*
-OTAStorage_Portenta::OTAStorage_Portenta(): _storage{0},
-                                            fs{"fs"},
-                                            block_device{bd},
-                                            RTCHandle{RTCHandle},
-                                            dir{dir},
-                                            ent{ent},
-                                            update_size{0}
-                                            { }
-*/
+int update_size;
+
 /******************************************************************************
    PUBLIC MEMBER FUNCTIONS
  ******************************************************************************/
 
 bool OTAStorage_Portenta_SD::init()
 {
-  int started = millis();
   int err =  fs.mount(&block_device);
   /*
   Serial1.print("OTAStorage_Portenta_SD::init()    err = ");
@@ -117,11 +82,8 @@ bool OTAStorage_Portenta_SD::open()
     return false;
 }
 
-size_t OTAStorage_Portenta_SD::write(uint8_t const* const buf, size_t const num_bytes)
+size_t OTAStorage_Portenta_SD::write()
 {
-  uint32_t reg = 0;
-  //#define RTC_BKP_DR0                       0x00u
-  //RTC_HandleTypeDef RTCHandle;
   storagePortenta = SD_FATFS;
   Serial1.println("OTAStorage_Portenta_SD::write");
   delay(200);
@@ -139,11 +101,10 @@ size_t OTAStorage_Portenta_SD::write(uint8_t const* const buf, size_t const num_
 
   // offset is useless if the storage medium is a partition
   // HAL_RTCEx_BKUPWrite(&RtcHandle, RTC_BKP_DR2, offset);
-  reg = 3;
+
   HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR3, update_size);
   Serial1.println("OTAStorage_Portenta_SD::write    3");
   delay(200);
-  started = millis();
 
   return update_size;
 }
