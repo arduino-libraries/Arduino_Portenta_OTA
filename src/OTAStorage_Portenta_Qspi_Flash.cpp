@@ -15,43 +15,66 @@
    a commercial license, send an email to license@arduino.cc.
 */
 
-#ifndef ARDUINO_OTA_STORAGE_PORTENTA_SD_H_
-#define ARDUINO_OTA_STORAGE_PORTENTA_SD_H_
-
 /******************************************************************************
- * INCLUDE
+   INCLUDE
  ******************************************************************************/
 
 #include <AIoTC_Config.h>
 #if OTA_STORAGE_PORTENTA
 
-#include "OTAStoragePortenta.h"
+#include "OTAStorage_Portenta_Qspi_Flash.h"
+
+#include "stm32h7xx_hal_rtc_ex.h"
+
+using namespace arduino;
 
 /******************************************************************************
- * CLASS DECLARATION
+   CONSTANTS
  ******************************************************************************/
 
-class OTAStorage_Portenta_SD : public OTAStoragePortenta
+static char const SD_UPDATE_FILENAME[] = "UPDATE.BIN";
+
+int update_size_Qspi;
+
+/******************************************************************************
+   PUBLIC MEMBER FUNCTIONS
+ ******************************************************************************/
+
+bool OTAStorage_Portenta_Qspi_Flash::init()
 {
-public:
+    //TO BE DEFINED
+}
 
-  virtual ~OTAStorage_Portenta_SD() { }
+bool OTAStorage_Portenta_Qspi_Flash::open()
+{
+    //TO BE DEFINED
+}
 
+size_t OTAStorage_Portenta_Qspi_Flash::write()
+{
+  //TO BE DEFINED
 
-  virtual bool   init  () override;
-  virtual bool   open  () override;
-  virtual size_t write () override;
-  virtual void   close () override;
-  virtual void   remove() override;
-  virtual bool   rename() override;
-  virtual void   deinit() override;
+  return update_size_Qspi;
+}
 
-private:
+void OTAStorage_Portenta_Qspi_Flash::close()
+{
+    //TO BE DEFINED
+}
 
-    storageTypePortenta storagePortenta;
+void OTAStorage_Portenta_Qspi_Flash::remove()
+{
 
-};
+}
+
+bool OTAStorage_Portenta_Qspi_Flash::rename()
+{
+
+}
+
+void OTAStorage_Portenta_Qspi_Flash::deinit()
+{
+  /* Nothing to do */
+}
 
 #endif /* OTA_STORAGE_PORTENTA */
-
-#endif /* ARDUINO_OTA_STORAGE_PORTENTA_SD_H_ */

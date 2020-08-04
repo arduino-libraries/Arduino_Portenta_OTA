@@ -101,7 +101,7 @@ class ArduinoOTAPortenta
     OTALogicPortenta _ota_logic_portenta;
     int _ota_error;
     //String _ota_img_sha256;
-    //PortentaStorageType _storagePortenta;
+    PortentaStorageType _storagePortenta;
 #endif /* OTA_STORAGE_PORTENTA */
     /*
     enum class State

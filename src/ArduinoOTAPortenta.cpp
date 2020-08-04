@@ -23,30 +23,20 @@
 
 #if OTA_STORAGE_PORTENTA
 #include <ArduinoOTAPortenta.h>
-/*
-#ifdef BOARD_HAS_ECCX08
-  #include "tls/BearSSLTrustAnchors.h"
-  #include "tls/utility/CryptoUtil.h"
-#endif
-*/
 //#include "utility/ota/FlashSHA256.h"
+#include "OTAStorage_Portenta_Internal_Flash.h"
+#include "OTAStorage_Portenta_Qspi_Flash.h"
 #include "OTAStorage_Portenta_SD.h"
 
-//#include "cbor/CBOREncoder.h"
 
 /******************************************************************************
    GLOBAL VARIABLES
  ******************************************************************************/
-/*
-#if defined(OTA_STORAGE_PORTENTA_INTERNAL_FLASH)
-    static OTAStorage_Portenta_Internal_Flash ota_storage_portenta_internal_flash;
-#elif defined(OTA_STORAGE_PORTENTA_QSPI_FLASH)
-    static OTAStorage_Portenta_Qspi_Flash ota_storage_portenta_qspi_flash;
-#elif defined(OTA_STORAGE_PORTENTA_SD)
-    static OTAStorage_Portenta_SD ota_storage_portenta_sd;
-#endif
-*/
+
+  static OTAStorage_Portenta_Internal_Flash ota_storage_portenta_internal_flash;
+  static OTAStorage_Portenta_Qspi_Flash ota_storage_portenta_qspi_flash;
   static OTAStorage_Portenta_SD ota_storage_portenta_sd;
+
 /******************************************************************************
    GLOBAL CONSTANTS
  ******************************************************************************/
@@ -70,7 +60,7 @@ ArduinoOTAPortenta::ArduinoOTAPortenta() :
 #if OTA_ENABLED
   _ota_error{static_cast<int>(OTAError::None)}
 //, _ota_img_sha256{"Inv."}
-//, _storagePortenta{SD}
+, _storagePortenta{SD}
 #endif /* OTA_ENABLED */
 {
 
@@ -86,24 +76,19 @@ void ArduinoOTAPortenta::begin(PortentaStorageType storage)  //PortentaStorageTy
   Serial1.begin(115200);
   //Serial1.println("ArduinoOTAPortenta begin");
 
+  _storagePortenta = storage;
+
   //_storagePortenta = PortentaStorage;
   switch (storage) {
-    case 0: //InternalFlash: 
-      //#define OTA_STORAGE_PORTENTA_INTERNAL_FLASH
-      //static OTAStorage_Portenta_Internal_Flash ota_storage_portenta_internal_flash;
-      //setOTAStorage(ota_storage_portenta_internal_flash);
+    case 0: //InternalFlash:
+      setOTAStorage(ota_storage_portenta_internal_flash);
     break;
 
-    case 1: //QSPIFlash: 
-      //#define OTA_STORAGE_PORTENTA_QSPI_FLASH
-      //static OTAStorage_Portenta_Qspi_Flash ota_storage_portenta_qspi_flash;
-      //setOTAStorage(ota_storage_portenta_qspi_flash);
+    case 1: //QSPIFlash:
+      setOTAStorage(ota_storage_portenta_qspi_flash);
     break;
 
-    case 2: //SD: 
-      //Serial1.println("Im going to set the OTA Storage to SD");
-      //#define OTA_STORAGE_PORTENTA_SD
-      /*static*/ //OTAStorage_Portenta_SD ota_storage_portenta_sd;
+    case 2: //SD:
       setOTAStorage(ota_storage_portenta_sd);
     break;
 

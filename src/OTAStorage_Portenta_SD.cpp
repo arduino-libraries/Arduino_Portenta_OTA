@@ -21,7 +21,6 @@
 
 #include <AIoTC_Config.h>
 #if OTA_STORAGE_PORTENTA
-//#if OTA_STORAGE_PORTENTA_SD
 
 #include "OTAStorage_Portenta_SD.h"
 
@@ -128,7 +127,5 @@ void OTAStorage_Portenta_SD::deinit()
 {
   /* Nothing to do */
 }
-
-//#endif /* OTA_STORAGE_PORTENTA_SD */
 
 #endif /* OTA_STORAGE_PORTENTA */
