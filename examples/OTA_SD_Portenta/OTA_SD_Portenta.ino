@@ -16,7 +16,7 @@ void setup() {
 
   Serial.print("Opening SD card...");
   
-  OTAPortenta.begin(SD);
+  OTAPortenta.begin(SD_FATFS);
 
   Serial.println("OK!");
 

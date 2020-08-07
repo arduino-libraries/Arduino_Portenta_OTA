@@ -71,18 +71,33 @@ ArduinoOTAPortenta::ArduinoOTAPortenta() :
  * PUBLIC MEMBER FUNCTIONS
  ******************************************************************************/
 
-void ArduinoOTAPortenta::begin(PortentaStorageType storage)  //PortentaStorageType PortentaStorage
+void ArduinoOTAPortenta::begin(storageTypePortenta storage)  //PortentaStorageType PortentaStorage
 {
 
   Serial1.begin(115200);
-  //Serial1.println("ArduinoOTAPortenta begin");
+  Serial1.print("ArduinoOTAPortenta begin. Storage = ");
+  Serial1.println(storage);
 
-  _storagePortenta = storage;
+  //_storagePortenta = storage;
 
   //_storagePortenta = PortentaStorage;
+  if (storage==INTERNAL_FLASH_OFFSET || storage==INTERNAL_FLASH_FATFS || storage==INTERNAL_FLASH_LITTLEFS) {
+    Serial1.println("Internal falsh storage");
+    setOTAStorage(ota_storage_internal_flash_raw, storage);
+  } else if (storage==QSPI_FLASH_OFFSET || storage==QSPI_FLASH_FATFS || storage==QSPI_FLASH_LITTLEFS || storage==QSPI_FLASH_FATFS_MBR || storage==QSPI_FLASH_LITTLEFS_MBR) {
+    Serial1.println("QSPI falsh storage");
+    setOTAStorage(ota_storage_qspi_flash, storage);
+  } else if (storage==SD_OFFSET || storage==SD_FATFS || storage==SD_LITTLEFS || storage==SD_FATFS_MBR || storage==SD_LITTLEFS_MBR) {
+    Serial1.println("SD storage");
+    setOTAStorage(ota_storage_sd, storage);
+  } else {
+    Serial1.println("Invalid storage type");
+    delay(200);
+  }
+  /*
   switch (storage) {
     case InternalFlashRaw: //InternalFlashRaw:
-      setOTAStorage(ota_storage_internal_flash_raw);
+      setOTAStorage(ota_storage_internal_flash_raw, INTERNAL_FLASH_OFFSET);
     break;
 
     case InternalFlashOffset: //InternalFlashOffset:
@@ -100,6 +115,7 @@ void ArduinoOTAPortenta::begin(PortentaStorageType storage)  //PortentaStorageTy
     default:
     break;
   }
+  */
 }
 
 void ArduinoOTAPortenta::update()
@@ -130,13 +146,14 @@ void ArduinoOTAPortenta::printDebugInfo()
   //DBG_INFO("MQTT Broker: %s:%d", _brokerAddress.c_str(), _brokerPort);
 }
 */
-#if OTA_ENABLED
-void ArduinoOTAPortenta::setOTAStorage(OTAStoragePortenta & ota_storage)
+//#if OTA_ENABLED
+void ArduinoOTAPortenta::setOTAStorage(OTAStoragePortenta & ota_storage, storageTypePortenta storageType)
 {
-  //Serial1.println("ArduinoOTAPortenta::setOTAStorage");
-  _ota_logic_portenta.setOTAStorage(ota_storage);
+  Serial1.println("ArduinoOTAPortenta::setOTAStorage     storageType = ");
+  Serial1.println(storageType);
+  _ota_logic_portenta.setOTAStorage(ota_storage, storageType);
 }
-#endif /* OTA_ENABLED */
+//#endif /* OTA_ENABLED */
 
 /******************************************************************************
  * PRIVATE MEMBER FUNCTIONS

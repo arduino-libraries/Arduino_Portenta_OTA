@@ -42,6 +42,7 @@ static uint16_t const DEFAULT_BROKER_PORT_SECURE_AUTH = 8883;
 static char const DEFAULT_BROKER_ADDRESS_USER_PASS_AUTH[] = "mqtts-up.iot.arduino.cc";
 static uint16_t const DEFAULT_BROKER_PORT_USER_PASS_AUTH = 8884;
 */
+/*
 enum PortentaStorageType
 {
   InternalFlashRaw = 0,
@@ -49,7 +50,7 @@ enum PortentaStorageType
   QSPIFlash,
   SD
 };
-
+*/
 /******************************************************************************
  * CLASS DECLARATION
  ******************************************************************************/
@@ -65,8 +66,8 @@ class ArduinoOTAPortenta
     virtual void update        ()/* override*/;
     virtual int  connected     ()/* override*/;
     //virtual void printDebugInfo()/* override*/;
-
-    void begin(PortentaStorageType storage);
+//#if OTA_ENABLED
+    void begin(storageTypePortenta storage);
 
     /*
     #ifdef BOARD_HAS_ECCX08

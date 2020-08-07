@@ -77,7 +77,7 @@ public:
   /*virtual ~*/OTALogicPortenta();
 
 
-  void setOTAStorage(OTAStoragePortenta & ota_storage);
+  void setOTAStorage(OTAStoragePortenta & ota_storage, storageTypePortenta storageType);
 
 
   OTAError update();

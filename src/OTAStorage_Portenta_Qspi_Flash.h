@@ -46,9 +46,10 @@ public:
   virtual bool   rename() override;
   virtual void   deinit() override;
 
-private:
+  //storageTypePortenta * storagePortenta;
+//private:
 
-    storageTypePortenta storagePortenta;
+    //storageTypePortenta storagePortenta;
 
 };
 

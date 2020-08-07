@@ -22,7 +22,7 @@ void setup() {
 
   if (mode == 0) {
     Serial.println("OTA from raw flash");
-    OTAPortenta.begin(InternalFlashRaw);
+    OTAPortenta.begin(INTERNAL_FLASH_OFFSET);
   } else if (mode == 1) {
     Serial.println("OTA from flash with filesystem");
     //OTAPortenta.begin(InternalFlashOffset);

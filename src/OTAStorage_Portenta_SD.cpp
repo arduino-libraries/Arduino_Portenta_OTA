@@ -83,7 +83,7 @@ bool OTAStorage_Portenta_SD::open()
 
 size_t OTAStorage_Portenta_SD::write()
 {
-  storagePortenta = SD_FATFS;
+  //storagePortenta = SD_FATFS;
   Serial1.println("OTAStorage_Portenta_SD::write");
   delay(200);
     // OTA file is already in the FAT partition of the SDCARD
@@ -99,7 +99,7 @@ size_t OTAStorage_Portenta_SD::write()
   delay(200);
 
   // offset is useless if the storage medium is a partition
-  // HAL_RTCEx_BKUPWrite(&RtCHandle, RTC_BKP_DR2, offset);
+  // HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR2, offset);
 
   HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR3, update_size);
   Serial1.println("OTAStorage_Portenta_SD::write    3");

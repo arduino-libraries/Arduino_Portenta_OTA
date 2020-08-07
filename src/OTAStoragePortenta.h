@@ -75,6 +75,8 @@ public:
   virtual bool   rename() = 0;
   virtual void   deinit() = 0;
 
+  storageTypePortenta storagePortenta;
+
 };
 
 #endif /* ARDUINO_OTA_STORAGE_PORTENTA_H_ */

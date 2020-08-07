@@ -58,9 +58,12 @@ OTALogicPortenta::OTALogicPortenta()
  * PUBLIC MEMBER FUNCTIONS
  ******************************************************************************/
 
-void OTALogicPortenta::setOTAStorage(OTAStoragePortenta & ota_storage)
+void OTALogicPortenta::setOTAStorage(OTAStoragePortenta & ota_storage, storageTypePortenta storageType)
 {
   _ota_storage = &ota_storage;
+  Serial1.print("OTALogicPortenta::setOTAStorage    storageType = ");
+  Serial1.println(storageType);
+  _ota_storage->storagePortenta = storageType;
   _is_configured = true;
   /*
   Serial1.print("OTALogicPortenta::setOTAStorage    _is_configured = ");
