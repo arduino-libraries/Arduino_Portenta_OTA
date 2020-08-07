@@ -1,8 +1,10 @@
 /*
  This example demonstrates how to use the OTA on Portenta, 
- flashing the binary stored in the SD card.
+ flashing the binary stored in the Internal Flash in Bank1.
+ With the library ArduinoOTAPortenta it is currently possible to test
+ only the storage type INTERNAL_FLASH_OFFSET. 
  Before uploading this sketch:
- Upload OTA_Usage_Portenta.ino and follow the instructions
+ Flash OTA_Usage_Portenta.ino.bin through dfu-util at address 0x08080000
 */
 #include "ArduinoOTAPortenta.h"
 
