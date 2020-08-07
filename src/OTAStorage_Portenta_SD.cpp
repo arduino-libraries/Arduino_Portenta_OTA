@@ -50,54 +50,68 @@ int update_size;
 
 bool OTAStorage_Portenta_SD::init()
 {
-  int err =  fs.mount(&block_device);
-
-  if (err)
+  if(storagePortenta==SD_FATFS) {
+    int err =  fs.mount(&block_device);
+    if (err)
+      return false;
+    else
+      return true;
+  } else {
+    Serial1.println("storageType not implemented yet");
     return false;
-  else
-    return true;
+  }
 }
 
 bool OTAStorage_Portenta_SD::open()
 {
+  if(storagePortenta==SD_FATFS) {
     if ((dir = opendir("/fs")) != NULL) {
-        /* print all the files and directories within directory */
-        while ((ent = readdir(dir)) != NULL) {
-            if (String(ent->d_name) == "UPDATE.BIN") {
-                struct stat stat_buf;
-                stat("/fs/UPDATE.BIN", &stat_buf);
-                update_size = stat_buf.st_size;
-                return true;
-            }
+      /* print all the files and directories within directory */
+      while ((ent = readdir(dir)) != NULL) {
+        if (String(ent->d_name) == "UPDATE.BIN") {
+            struct stat stat_buf;
+            stat("/fs/UPDATE.BIN", &stat_buf);
+            update_size = stat_buf.st_size;
+            return true;
         }
+      }
     }
+  } else {
+    Serial1.println("storageType not implemented yet");
     return false;
+  }
 }
 
 size_t OTAStorage_Portenta_SD::write()
 {
   Serial1.println("OTAStorage_Portenta_SD::write");
   delay(200);
+
+  if(storagePortenta==SD_FATFS) {
     // OTA file is already in the FAT partition of the SDCARD
-  HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR0, 0x07AA);
-  Serial1.println("OTAStorage_Portenta_SD::write    1");
-  Serial1.print("OTAStorage_Portenta_SD::write    storagePortenta = ");
-  Serial1.println(storagePortenta);
-  delay(200);
-  HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR1, storagePortenta);
-  Serial1.println("OTAStorage_Portenta_SD::write    2");
-  Serial1.print("OTAStorage_Portenta_SD::write    update_size = ");
-  Serial1.println(update_size);
-  delay(200);
+    HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR0, 0x07AA);
+    Serial1.println("OTAStorage_Portenta_SD::write    1");
+    Serial1.print("OTAStorage_Portenta_SD::write    storagePortenta = ");
+    Serial1.println(storagePortenta);
+    delay(200);
+    HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR1, storagePortenta);
+    Serial1.println("OTAStorage_Portenta_SD::write    2");
+    Serial1.print("OTAStorage_Portenta_SD::write    update_size = ");
+    Serial1.println(update_size);
+    delay(200);
 
-  // offset is useless if the storage medium is a partition
-  // HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR2, offset);
+    // offset is useless if the storage medium is a partition
+    // HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR2, offset);
 
-  HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR3, update_size);
-  Serial1.println("OTAStorage_Portenta_SD::write    3");
-  delay(200);
-
-  return update_size;
+    HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR3, update_size);
+    Serial1.println("OTAStorage_Portenta_SD::write    3");
+    delay(200);
+    return update_size;
+  } else {
+    Serial1.println("storageType not implemented yet");
+    return 0;
+  }
+  
 }
 
 void OTAStorage_Portenta_SD::close()
