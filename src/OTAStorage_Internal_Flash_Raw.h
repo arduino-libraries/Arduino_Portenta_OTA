@@ -15,8 +15,8 @@
    a commercial license, send an email to license@arduino.cc.
 */
 
-#ifndef ARDUINO_OTA_STORAGE_PORTENTA_INTERNAL_FLASH_H_
-#define ARDUINO_OTA_STORAGE_PORTENTA_INTERNAL_FLASH_H_
+#ifndef OTA_STORAGE_INTERNAL_FLASH_RAW_H_
+#define OTA_STORAGE_INTERNAL_FLASH_RAW_H_
 
 /******************************************************************************
  * INCLUDE
@@ -27,15 +27,17 @@
 
 #include "OTAStoragePortenta.h"
 
+#include "FlashIAPBlockDevice.h"
+
 /******************************************************************************
  * CLASS DECLARATION
  ******************************************************************************/
 
-class OTAStorage_Portenta_Internal_Flash : public OTAStoragePortenta
+class OTAStorage_Internal_Flash_Raw : public OTAStoragePortenta
 {
 public:
 
-  virtual ~OTAStorage_Portenta_Internal_Flash() { }
+  virtual ~OTAStorage_Internal_Flash_Raw() { }
 
 
   virtual bool   init  () override;
@@ -54,4 +56,4 @@ private:
 
 #endif /* OTA_STORAGE_PORTENTA */
 
-#endif /* ARDUINO_OTA_STORAGE_PORTENTA_INTERNAL_FLASH_H_ */
+#endif /* OTA_STORAGE_INTERNAL_FLASH_RAW_H_ */

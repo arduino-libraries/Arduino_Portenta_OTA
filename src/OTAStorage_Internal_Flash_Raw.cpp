@@ -22,7 +22,7 @@
 #include <AIoTC_Config.h>
 #if OTA_STORAGE_PORTENTA
 
-#include "OTAStorage_Portenta_Internal_Flash.h"
+#include "OTAStorage_Internal_Flash_Raw.h"
 
 #include "stm32h7xx_hal_rtc_ex.h"
 
@@ -32,47 +32,68 @@ using namespace arduino;
    CONSTANTS
  ******************************************************************************/
 
-static char const SD_UPDATE_FILENAME[] = "UPDATE.BIN";
+FlashIAPBlockDevice bd(0x8000000, 2 * 1024 * 1024);
 
-int update_size_Internal_Flash;
+//int update_size_Internal_Flash;
 
 /******************************************************************************
    PUBLIC MEMBER FUNCTIONS
  ******************************************************************************/
 
-bool OTAStorage_Portenta_Internal_Flash::init()
+bool OTAStorage_Internal_Flash_Raw::init()
 {
-    //TO BE DEFINED
+  return true;
 }
 
-bool OTAStorage_Portenta_Internal_Flash::open()
+bool OTAStorage_Internal_Flash_Raw::open()
 {
-    //TO BE DEFINED
+  return true;
 }
 
-size_t OTAStorage_Portenta_Internal_Flash::write()
+size_t OTAStorage_Internal_Flash_Raw::write()
 {
-  //TO BE DEFINED
+  storagePortenta = INTERNAL_FLASH_OFFSET;
+
+  Serial1.println("OTAStorage_Internal_Flash_Raw::write");
+  delay(200);
+  HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR0, 0x07AA);
+  Serial1.println("OTAStorage_Internal_Flash_Raw::write    1");
+  Serial1.print("OTAStorage_Internal_Flash_Raw::write    storagePortenta = ");
+  Serial1.println(storagePortenta);
+  delay(200);
+  HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR1, storagePortenta);
+  Serial1.println("OTAStorage_Internal_Flash_Raw::write    2");
+  Serial1.print("OTAStorage_Internal_Flash_Raw::write    update_size = ");
+  int update_size_Internal_Flash = 2 * 1024 * 1024;
+  Serial1.println(update_size_Internal_Flash);
+  delay(200);
+
+  // offset is useless if the storage medium is a partition
+  // HAL_RTCEx_BKUPWrite(&RtCHandle, RTC_BKP_DR2, offset);
+
+  HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR3, update_size_Internal_Flash);
+  Serial1.println("OTAStorage_Internal_Flash_Raw::write    3");
+  delay(200);
 
   return update_size_Internal_Flash;
 }
 
-void OTAStorage_Portenta_Internal_Flash::close()
+void OTAStorage_Internal_Flash_Raw::close()
 {
-    //TO BE DEFINED
+  /* Nothing to do */
 }
 
-void OTAStorage_Portenta_Internal_Flash::remove()
+void OTAStorage_Internal_Flash_Raw::remove()
 {
-
+  /* Nothing to do */
 }
 
-bool OTAStorage_Portenta_Internal_Flash::rename()
+bool OTAStorage_Internal_Flash_Raw::rename()
 {
-
+  /* Nothing to do */
 }
 
-void OTAStorage_Portenta_Internal_Flash::deinit()
+void OTAStorage_Internal_Flash_Raw::deinit()
 {
   /* Nothing to do */
 }

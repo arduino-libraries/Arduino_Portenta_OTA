@@ -24,7 +24,7 @@
 #if OTA_STORAGE_PORTENTA
 #include <ArduinoOTAPortenta.h>
 //#include "utility/ota/FlashSHA256.h"
-#include "OTAStorage_Portenta_Internal_Flash.h"
+#include "OTAStorage_Internal_Flash_Raw.h"
 #include "OTAStorage_Portenta_Qspi_Flash.h"
 #include "OTAStorage_Portenta_SD.h"
 
@@ -33,9 +33,10 @@
    GLOBAL VARIABLES
  ******************************************************************************/
 
-  static OTAStorage_Portenta_Internal_Flash ota_storage_portenta_internal_flash;
-  static OTAStorage_Portenta_Qspi_Flash ota_storage_portenta_qspi_flash;
-  static OTAStorage_Portenta_SD ota_storage_portenta_sd;
+  static OTAStorage_Internal_Flash_Raw ota_storage_internal_flash_raw;
+  //static OTAStorage_Internal_Flash_offset ota_storage_internal_flash_offset;
+  static OTAStorage_Portenta_Qspi_Flash ota_storage_qspi_flash;
+  static OTAStorage_Portenta_SD ota_storage_sd;
 
 /******************************************************************************
    GLOBAL CONSTANTS
@@ -80,16 +81,20 @@ void ArduinoOTAPortenta::begin(PortentaStorageType storage)  //PortentaStorageTy
 
   //_storagePortenta = PortentaStorage;
   switch (storage) {
-    case 0: //InternalFlash:
-      setOTAStorage(ota_storage_portenta_internal_flash);
+    case InternalFlashRaw: //InternalFlashRaw:
+      setOTAStorage(ota_storage_internal_flash_raw);
     break;
 
-    case 1: //QSPIFlash:
-      setOTAStorage(ota_storage_portenta_qspi_flash);
+    case InternalFlashOffset: //InternalFlashOffset:
+      //setOTAStorage(ota_storage_internal_flash_offset);
     break;
 
-    case 2: //SD:
-      setOTAStorage(ota_storage_portenta_sd);
+    case QSPIFlash: //QSPIFlash:
+      setOTAStorage(ota_storage_qspi_flash);
+    break;
+
+    case SD: //SD:
+      setOTAStorage(ota_storage_sd);
     break;
 
     default:

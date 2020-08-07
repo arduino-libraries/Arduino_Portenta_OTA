@@ -26,7 +26,11 @@
 #if OTA_STORAGE_PORTENTA
 
 #include "OTAStoragePortenta.h"
+/*
+#include "SDMMCBlockDevice.h"
 
+#include "FATFileSystem.h"
+*/
 /******************************************************************************
  * CLASS DECLARATION
  ******************************************************************************/

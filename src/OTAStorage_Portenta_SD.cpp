@@ -99,7 +99,7 @@ size_t OTAStorage_Portenta_SD::write()
   delay(200);
 
   // offset is useless if the storage medium is a partition
-  // HAL_RTCEx_BKUPWrite(&RtcHandle, RTC_BKP_DR2, offset);
+  // HAL_RTCEx_BKUPWrite(&RtCHandle, RTC_BKP_DR2, offset);
 
   HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR3, update_size);
   Serial1.println("OTAStorage_Portenta_SD::write    3");

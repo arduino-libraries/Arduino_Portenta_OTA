@@ -44,9 +44,10 @@ static uint16_t const DEFAULT_BROKER_PORT_USER_PASS_AUTH = 8884;
 */
 enum PortentaStorageType
 {
-  InternalFlash   = 0,
-  QSPIFlash       = 1,
-  SD              = 2
+  InternalFlashRaw = 0,
+  InternalFlashOffset,
+  QSPIFlash,
+  SD
 };
 
 /******************************************************************************
