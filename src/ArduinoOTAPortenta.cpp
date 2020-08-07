@@ -23,7 +23,7 @@
 
 #if OTA_STORAGE_PORTENTA
 #include <ArduinoOTAPortenta.h>
-#include "OTAStorage_Internal_Flash_Raw.h"
+#include "OTAStorage_Internal_Flash.h"
 #include "OTAStorage_Portenta_Qspi_Flash.h"
 #include "OTAStorage_Portenta_SD.h"
 
@@ -32,7 +32,7 @@
    GLOBAL VARIABLES
  ******************************************************************************/
 
-  static OTAStorage_Internal_Flash_Raw ota_storage_internal_flash_raw;
+  static OTAStorage_Internal_Flash ota_storage_internal_flash;
   //static OTAStorage_Internal_Flash_offset ota_storage_internal_flash_offset;
   static OTAStorage_Portenta_Qspi_Flash ota_storage_qspi_flash;
   static OTAStorage_Portenta_SD ota_storage_sd;
@@ -71,7 +71,7 @@ void ArduinoOTAPortenta::begin(storageTypePortenta storage)
 
   if (storage==INTERNAL_FLASH_OFFSET || storage==INTERNAL_FLASH_FATFS || storage==INTERNAL_FLASH_LITTLEFS) {
     Serial1.println("Internal falsh storage");
-    setOTAStorage(ota_storage_internal_flash_raw, storage);
+    setOTAStorage(ota_storage_internal_flash, storage);
   } else if (storage==QSPI_FLASH_OFFSET || storage==QSPI_FLASH_FATFS || storage==QSPI_FLASH_LITTLEFS || storage==QSPI_FLASH_FATFS_MBR || storage==QSPI_FLASH_LITTLEFS_MBR) {
     Serial1.println("QSPI falsh storage");
     setOTAStorage(ota_storage_qspi_flash, storage);

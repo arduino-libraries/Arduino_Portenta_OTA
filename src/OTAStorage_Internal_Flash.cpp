@@ -22,7 +22,7 @@
 #include <AIoTC_Config.h>
 #if OTA_STORAGE_PORTENTA
 
-#include "OTAStorage_Internal_Flash_Raw.h"
+#include "OTAStorage_Internal_Flash.h"
 
 #include "stm32h7xx_hal_rtc_ex.h"
 
@@ -38,29 +38,29 @@ FlashIAPBlockDevice bd(0x8000000, 2 * 1024 * 1024);
    PUBLIC MEMBER FUNCTIONS
  ******************************************************************************/
 
-bool OTAStorage_Internal_Flash_Raw::init()
+bool OTAStorage_Internal_Flash::init()
 {
   return true;
 }
 
-bool OTAStorage_Internal_Flash_Raw::open()
+bool OTAStorage_Internal_Flash::open()
 {
   return true;
 }
 
-size_t OTAStorage_Internal_Flash_Raw::write()
+size_t OTAStorage_Internal_Flash::write()
 {
 
-  Serial1.println("OTAStorage_Internal_Flash_Raw::write");
+  Serial1.println("OTAStorage_Internal_Flash::write");
   delay(200);
   HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR0, 0x07AA);
-  Serial1.println("OTAStorage_Internal_Flash_Raw::write    1");
-  Serial1.print("OTAStorage_Internal_Flash_Raw::write    storagePortenta = ");
+  Serial1.println("OTAStorage_Internal_Flash::write    1");
+  Serial1.print("OTAStorage_Internal_Flash::write    storagePortenta = ");
   Serial1.println(storagePortenta);
   delay(200);
   HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR1, storagePortenta);
-  Serial1.println("OTAStorage_Internal_Flash_Raw::write    2");
-  Serial1.print("OTAStorage_Internal_Flash_Raw::write    update_size = ");
+  Serial1.println("OTAStorage_Internal_Flash::write    2");
+  Serial1.print("OTAStorage_Internal_Flash::write    update_size = ");
   int update_size_Internal_Flash = 2 * 1024 * 1024;
   Serial1.println(update_size_Internal_Flash);
   delay(200);
@@ -68,28 +68,28 @@ size_t OTAStorage_Internal_Flash_Raw::write()
   HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR2, 0X80000);
 
   HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR3, update_size_Internal_Flash);
-  Serial1.println("OTAStorage_Internal_Flash_Raw::write    3");
+  Serial1.println("OTAStorage_Internal_Flash::write    3");
   delay(200);
 
   return update_size_Internal_Flash;
 }
 
-void OTAStorage_Internal_Flash_Raw::close()
+void OTAStorage_Internal_Flash::close()
 {
   /* Nothing to do */
 }
 
-void OTAStorage_Internal_Flash_Raw::remove()
+void OTAStorage_Internal_Flash::remove()
 {
   /* Nothing to do */
 }
 
-bool OTAStorage_Internal_Flash_Raw::rename()
+bool OTAStorage_Internal_Flash::rename()
 {
   /* Nothing to do */
 }
 
-void OTAStorage_Internal_Flash_Raw::deinit()
+void OTAStorage_Internal_Flash::deinit()
 {
   /* Nothing to do */
 }
