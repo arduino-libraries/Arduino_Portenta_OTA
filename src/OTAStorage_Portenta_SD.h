@@ -26,11 +26,7 @@
 #if OTA_STORAGE_PORTENTA
 
 #include "OTAStoragePortenta.h"
-/*
-#include "SDMMCBlockDevice.h"
 
-#include "FATFileSystem.h"
-*/
 /******************************************************************************
  * CLASS DECLARATION
  ******************************************************************************/
@@ -49,11 +45,6 @@ public:
   virtual void   remove() override;
   virtual bool   rename() override;
   virtual void   deinit() override;
-
-  //storageTypePortenta * storagePortenta;
-//private:
-
-    //storageTypePortenta storagePortenta;
 
 };
 

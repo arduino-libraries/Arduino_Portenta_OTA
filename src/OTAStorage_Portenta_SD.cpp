@@ -51,10 +51,7 @@ int update_size;
 bool OTAStorage_Portenta_SD::init()
 {
   int err =  fs.mount(&block_device);
-  /*
-  Serial1.print("OTAStorage_Portenta_SD::init()    err = ");
-  Serial1.println(err);
-  */
+
   if (err)
     return false;
   else
@@ -70,10 +67,6 @@ bool OTAStorage_Portenta_SD::open()
                 struct stat stat_buf;
                 stat("/fs/UPDATE.BIN", &stat_buf);
                 update_size = stat_buf.st_size;
-                /*
-                Serial1.print("OTAStorage_Portenta_SD::open()   update_size = ");
-                Serial1.println(update_size);
-                */
                 return true;
             }
         }
@@ -83,7 +76,6 @@ bool OTAStorage_Portenta_SD::open()
 
 size_t OTAStorage_Portenta_SD::write()
 {
-  //storagePortenta = SD_FATFS;
   Serial1.println("OTAStorage_Portenta_SD::write");
   delay(200);
     // OTA file is already in the FAT partition of the SDCARD
@@ -115,12 +107,12 @@ void OTAStorage_Portenta_SD::close()
 
 void OTAStorage_Portenta_SD::remove()
 {
-
+  /* Nothing to do */
 }
 
 bool OTAStorage_Portenta_SD::rename()
 {
-
+  /* Nothing to do */
 }
 
 void OTAStorage_Portenta_SD::deinit()

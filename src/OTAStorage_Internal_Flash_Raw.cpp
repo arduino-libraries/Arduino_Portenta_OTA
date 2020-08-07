@@ -34,8 +34,6 @@ using namespace arduino;
 
 FlashIAPBlockDevice bd(0x8000000, 2 * 1024 * 1024);
 
-//int update_size_Internal_Flash;
-
 /******************************************************************************
    PUBLIC MEMBER FUNCTIONS
  ******************************************************************************/
@@ -52,7 +50,6 @@ bool OTAStorage_Internal_Flash_Raw::open()
 
 size_t OTAStorage_Internal_Flash_Raw::write()
 {
-  //storagePortenta = INTERNAL_FLASH_OFFSET;
 
   Serial1.println("OTAStorage_Internal_Flash_Raw::write");
   delay(200);
@@ -68,8 +65,7 @@ size_t OTAStorage_Internal_Flash_Raw::write()
   Serial1.println(update_size_Internal_Flash);
   delay(200);
 
-  // offset is useless if the storage medium is a partition
-   HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR2, 0X80000);
+  HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR2, 0X80000);
 
   HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR3, update_size_Internal_Flash);
   Serial1.println("OTAStorage_Internal_Flash_Raw::write    3");

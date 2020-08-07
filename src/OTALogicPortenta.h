@@ -27,22 +27,9 @@
 #else
   #define OTA_ENABLED (1)
 #endif
-#if OTA_ENABLED
-
-//#include "OTALogic.h"
 
 #include "OTAStoragePortenta.h"
 
-//#include "crc.h"
-/*
-#define INTERNAL_FLASH_FLAG     (1 << 1)
-#define QSPI_FLASH_FLAG         (1 << 2)
-#define SDCARD_FLAG             (1 << 3)
-#define RAW_FLAG                (1 << 4)
-#define FATFS_FLAG              (1 << 5)
-#define LITTLEFS_FLAG           (1 << 6)
-#define MBR_FLAG                (1 << 7)
-*/
 
 /******************************************************************************
  * TYPEDEF
@@ -69,19 +56,18 @@ enum class OTAError : int
  * CLASS DECLARATION
  ******************************************************************************/
 
-class OTALogicPortenta/*: public OTALogic*/
+class OTALogicPortenta
 {
 
 public:
 
-  /*virtual ~*/OTALogicPortenta();
+  OTALogicPortenta();
 
 
   void setOTAStorage(OTAStoragePortenta & ota_storage, storageTypePortenta storageType);
 
 
   OTAError update();
-  //void onOTADataReceived(uint8_t const * const data, size_t const length);
 
 #ifdef HOST
   inline OTAState state() const { return _ota_state; }
@@ -90,48 +76,16 @@ public:
 
 
 private:
-  /*
-  typedef struct
-  {
-    size_t  num_bytes;
-    uint8_t buf[MQTT_OTA_BUF_SIZE];
-  } sMQTTOTABuffer;
 
-  typedef struct
-  {
-    uint32_t hdr_len;
-    uint32_t hdr_crc32;
-    uint32_t bytes_received;
-    crc_t    crc32;
-  } sOTABinaryData;
-  */
   bool _is_configured;
   OTAStoragePortenta * _ota_storage;
   OTAState _ota_state;
   OTAError _ota_error;
-  //storageTypePortenta _storagePortenta;
-  /*
-  sMQTTOTABuffer _mqtt_ota_buf;
-  sOTABinaryData _ota_bin_data;
 
-  static size_t const OTA_BINARY_HEADER_SIZE = sizeof(_ota_bin_data.hdr_len) + sizeof(_ota_bin_data.hdr_crc32);
-    */
   OTAState handle_Init();
-  //OTAState handle_Idle();
   OTAState handle_StartDownload();
-  //OTAState handle_WaitForHeader();
-  //OTAState handle_HeaderReceived();
-  //OTAState handle_WaitForBinary();
   OTAState handle_BinaryReceived();
-  //OTAState handle_Verify();
-  //OTAState handle_Rename();
   OTAState handle_Reset();
-/*
-  void init_mqtt_ota_buffer();
-  void init_ota_binary_data();
-  */
 };
-
-#endif /* OTA_ENABLED */
 
 #endif /* ARDUINO_OTA_LOGIC_PORTENTA_H_ */

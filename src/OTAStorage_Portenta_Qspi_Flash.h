@@ -46,11 +46,6 @@ public:
   virtual bool   rename() override;
   virtual void   deinit() override;
 
-  //storageTypePortenta * storagePortenta;
-//private:
-
-    //storageTypePortenta storagePortenta;
-
 };
 
 #endif /* OTA_STORAGE_PORTENTA */

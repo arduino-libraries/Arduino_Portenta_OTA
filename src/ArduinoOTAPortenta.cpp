@@ -23,7 +23,6 @@
 
 #if OTA_STORAGE_PORTENTA
 #include <ArduinoOTAPortenta.h>
-//#include "utility/ota/FlashSHA256.h"
 #include "OTAStorage_Internal_Flash_Raw.h"
 #include "OTAStorage_Portenta_Qspi_Flash.h"
 #include "OTAStorage_Portenta_SD.h"
@@ -47,22 +46,14 @@ static const int TIMEOUT_FOR_LASTVALUES_SYNC = 10000;
 /******************************************************************************
    LOCAL MODULE FUNCTIONS
  ******************************************************************************/
-/*
-extern "C" unsigned long getTime()
-{
-  return ArduinoCloud.getInternalTime();
-}
-*/
+
+
 /******************************************************************************
    CTOR/DTOR
  ******************************************************************************/
 
 ArduinoOTAPortenta::ArduinoOTAPortenta() :
-#if OTA_ENABLED
   _ota_error{static_cast<int>(OTAError::None)}
-//, _ota_img_sha256{"Inv."}
-, _storagePortenta{SD}
-#endif /* OTA_ENABLED */
 {
 
 }
@@ -71,16 +62,13 @@ ArduinoOTAPortenta::ArduinoOTAPortenta() :
  * PUBLIC MEMBER FUNCTIONS
  ******************************************************************************/
 
-void ArduinoOTAPortenta::begin(storageTypePortenta storage)  //PortentaStorageType PortentaStorage
+void ArduinoOTAPortenta::begin(storageTypePortenta storage)
 {
 
   Serial1.begin(115200);
   Serial1.print("ArduinoOTAPortenta begin. Storage = ");
   Serial1.println(storage);
 
-  //_storagePortenta = storage;
-
-  //_storagePortenta = PortentaStorage;
   if (storage==INTERNAL_FLASH_OFFSET || storage==INTERNAL_FLASH_FATFS || storage==INTERNAL_FLASH_LITTLEFS) {
     Serial1.println("Internal falsh storage");
     setOTAStorage(ota_storage_internal_flash_raw, storage);
@@ -94,66 +82,29 @@ void ArduinoOTAPortenta::begin(storageTypePortenta storage)  //PortentaStorageTy
     Serial1.println("Invalid storage type");
     delay(200);
   }
-  /*
-  switch (storage) {
-    case InternalFlashRaw: //InternalFlashRaw:
-      setOTAStorage(ota_storage_internal_flash_raw, INTERNAL_FLASH_OFFSET);
-    break;
-
-    case InternalFlashOffset: //InternalFlashOffset:
-      //setOTAStorage(ota_storage_internal_flash_offset);
-    break;
-
-    case QSPIFlash: //QSPIFlash:
-      setOTAStorage(ota_storage_qspi_flash);
-    break;
-
-    case SD: //SD:
-      setOTAStorage(ota_storage_sd);
-    break;
-
-    default:
-    break;
-  }
-  */
 }
 
 void ArduinoOTAPortenta::update()
 {
-#if OTA_ENABLED
-    /* If a _ota_logic object has been instantiated then we are spinning its
-     * 'update' method here in order to process incoming data and generally
-     * to transition to the OTA logic update states.
-     */
-    OTAError const err = _ota_logic_portenta.update();
-    _ota_error = static_cast<int>(err);
-    //Serial1.print("ArduinoOTAPortenta::update    _ota_error = ");
-    //Serial1.println(_ota_error);
-#endif /* OTA_ENABLED */
+  /* If a _ota_logic object has been instantiated then we are spinning its
+    * 'update' method here in order to process incoming data and generally
+    * to transition to the OTA logic update states.
+    */
+  OTAError const err = _ota_logic_portenta.update();
+  _ota_error = static_cast<int>(err);
 }
 
 int ArduinoOTAPortenta::connected()
 {
-  //return _mqttClient.connected();
   return 1;
 }
-/*
-void ArduinoOTAPortenta::printDebugInfo()
-{
-  DBG_INFO("***** Arduino IoT Cloud for Portenta - configuration info *****");
-  //DBG_INFO("Device ID: %s", getDeviceId().c_str());
-  //DBG_INFO("Thing ID: %s", getThingId().c_str());
-  //DBG_INFO("MQTT Broker: %s:%d", _brokerAddress.c_str(), _brokerPort);
-}
-*/
-//#if OTA_ENABLED
+
 void ArduinoOTAPortenta::setOTAStorage(OTAStoragePortenta & ota_storage, storageTypePortenta storageType)
 {
   Serial1.println("ArduinoOTAPortenta::setOTAStorage     storageType = ");
   Serial1.println(storageType);
   _ota_logic_portenta.setOTAStorage(ota_storage, storageType);
 }
-//#endif /* OTA_ENABLED */
 
 /******************************************************************************
  * PRIVATE MEMBER FUNCTIONS

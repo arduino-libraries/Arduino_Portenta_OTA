@@ -42,24 +42,24 @@ int update_size_Qspi;
 
 bool OTAStorage_Portenta_Qspi_Flash::init()
 {
-    //TO BE DEFINED
+  /* Nothing to do */
 }
 
 bool OTAStorage_Portenta_Qspi_Flash::open()
 {
-    //TO BE DEFINED
+  /* Nothing to do */
 }
 
 size_t OTAStorage_Portenta_Qspi_Flash::write()
 {
-  //TO BE DEFINED
+  /* Nothing to do */
 
   return update_size_Qspi;
 }
 
 void OTAStorage_Portenta_Qspi_Flash::close()
 {
-    //TO BE DEFINED
+  /* Nothing to do */
 }
 
 void OTAStorage_Portenta_Qspi_Flash::remove()
