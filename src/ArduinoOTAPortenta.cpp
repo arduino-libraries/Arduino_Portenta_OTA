@@ -62,22 +62,24 @@ ArduinoOTAPortenta::ArduinoOTAPortenta() :
  * PUBLIC MEMBER FUNCTIONS
  ******************************************************************************/
 
-void ArduinoOTAPortenta::begin(storageTypePortenta storage)
+void ArduinoOTAPortenta::begin(storageTypePortenta storage, uint32_t offset)
 {
 
   Serial1.begin(115200);
   Serial1.print("ArduinoOTAPortenta begin. Storage = ");
   Serial1.println(storage);
+  Serial1.print("ArduinoOTAPortenta begin. Offset = ");
+  Serial1.println(offset);
 
   if (storage==INTERNAL_FLASH_OFFSET || storage==INTERNAL_FLASH_FATFS || storage==INTERNAL_FLASH_LITTLEFS) {
     Serial1.println("Internal falsh storage");
-    setOTAStorage(ota_storage_internal_flash, storage);
+    setOTAStorage(ota_storage_internal_flash, storage, offset);
   } else if (storage==QSPI_FLASH_OFFSET || storage==QSPI_FLASH_FATFS || storage==QSPI_FLASH_LITTLEFS || storage==QSPI_FLASH_FATFS_MBR || storage==QSPI_FLASH_LITTLEFS_MBR) {
     Serial1.println("QSPI falsh storage");
-    setOTAStorage(ota_storage_qspi_flash, storage);
+    setOTAStorage(ota_storage_qspi_flash, storage, offset);
   } else if (storage==SD_OFFSET || storage==SD_FATFS || storage==SD_LITTLEFS || storage==SD_FATFS_MBR || storage==SD_LITTLEFS_MBR) {
     Serial1.println("SD storage");
-    setOTAStorage(ota_storage_sd, storage);
+    setOTAStorage(ota_storage_sd, storage, offset);
   } else {
     Serial1.println("Invalid storage type");
     delay(200);
@@ -99,11 +101,13 @@ int ArduinoOTAPortenta::connected()
   return 1;
 }
 
-void ArduinoOTAPortenta::setOTAStorage(OTAStoragePortenta & ota_storage, storageTypePortenta storageType)
+void ArduinoOTAPortenta::setOTAStorage(OTAStoragePortenta & ota_storage, storageTypePortenta storageType, uint32_t offset)
 {
-  Serial1.println("ArduinoOTAPortenta::setOTAStorage     storageType = ");
+  Serial1.print("ArduinoOTAPortenta::setOTAStorage     storageType = ");
   Serial1.println(storageType);
-  _ota_logic_portenta.setOTAStorage(ota_storage, storageType);
+  Serial1.print("ArduinoOTAPortenta::setOTAStorage     offset = ");
+  Serial1.println(offset);
+  _ota_logic_portenta.setOTAStorage(ota_storage, storageType, offset);
 }
 
 /******************************************************************************

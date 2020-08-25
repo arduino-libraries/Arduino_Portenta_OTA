@@ -32,7 +32,14 @@ using namespace arduino;
    CONSTANTS
  ******************************************************************************/
 
-FlashIAPBlockDevice bd(0x8000000, 2 * 1024 * 1024);
+mbed::FATFileSystem fs_Flash("fs");
+
+DIR *dir_Flash;
+
+struct dirent *ent_Flash;
+
+int update_size_Internal_Flash;
+
 
 /******************************************************************************
    PUBLIC MEMBER FUNCTIONS
@@ -40,20 +47,50 @@ FlashIAPBlockDevice bd(0x8000000, 2 * 1024 * 1024);
 
 bool OTAStorage_Internal_Flash::init()
 {
-  return true;
+  FlashIAPBlockDevice bd(0x8000000 + data_offset, 2 * 1024 * 1024 - data_offset);
+
+  if(storagePortenta==INTERNAL_FLASH_FATFS) {
+    int err =  fs_Flash.mount(&bd);
+    if (err)
+      return false;
+    else
+      return true;
+  } else if (storagePortenta==INTERNAL_FLASH_OFFSET) {
+    return true;
+  } else {
+    Serial1.println("storageType not implemented yet");
+    return false;
+  }
 }
 
 bool OTAStorage_Internal_Flash::open()
 {
-  return true;
+  if(storagePortenta==INTERNAL_FLASH_FATFS) {
+    if ((dir_Flash = opendir("/fs")) != NULL) {
+      /* print all the files and directories within directory */
+      while ((ent_Flash = readdir(dir_Flash)) != NULL) {
+        if (String(ent_Flash->d_name) == "UPDATE.BIN") {
+            struct stat stat_buf;
+            stat("/fs/UPDATE.BIN", &stat_buf);
+            update_size_Internal_Flash = stat_buf.st_size;
+            return true;
+        }
+      }
+    }
+  } else if (storagePortenta==INTERNAL_FLASH_OFFSET) {
+    update_size_Internal_Flash = 2 * 1024 * 1024;
+    return true;
+  } else {
+    Serial1.println("storageType not implemented yet");
+    update_size_Internal_Flash = 0;
+    return false;
+  }
 }
 
 size_t OTAStorage_Internal_Flash::write()
 {
-  Serial1.println("OTAStorage_Internal_Flash::write");
-  delay(200);
 
-  if(storagePortenta==INTERNAL_FLASH_OFFSET) {
+  if(storagePortenta==INTERNAL_FLASH_OFFSET || storagePortenta==INTERNAL_FLASH_FATFS) {
     HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR0, 0x07AA);
     Serial1.println("OTAStorage_Internal_Flash::write    1");
     Serial1.print("OTAStorage_Internal_Flash::write    storagePortenta = ");
@@ -62,11 +99,11 @@ size_t OTAStorage_Internal_Flash::write()
     HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR1, storagePortenta);
     Serial1.println("OTAStorage_Internal_Flash::write    2");
     Serial1.print("OTAStorage_Internal_Flash::write    update_size = ");
-    int update_size_Internal_Flash = 2 * 1024 * 1024;
+    //int update_size_Internal_Flash = 2 * 1024 * 1024;
     Serial1.println(update_size_Internal_Flash);
     delay(200);
 
-    HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR2, 0X80000);
+    HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR2, data_offset);
 
     HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR3, update_size_Internal_Flash);
     Serial1.println("OTAStorage_Internal_Flash::write    3");
@@ -81,7 +118,9 @@ size_t OTAStorage_Internal_Flash::write()
 
 void OTAStorage_Internal_Flash::close()
 {
-  /* Nothing to do */
+  if(storagePortenta==INTERNAL_FLASH_FATFS) {
+    closedir (dir_Flash);
+  }
 }
 
 void OTAStorage_Internal_Flash::remove()

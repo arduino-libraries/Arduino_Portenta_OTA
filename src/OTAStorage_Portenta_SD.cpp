@@ -36,13 +36,13 @@ static char const SD_UPDATE_FILENAME[] = "UPDATE.BIN";
 
 SDMMCBlockDevice block_device;
 
-mbed::FATFileSystem fs("fs");
+mbed::FATFileSystem fs_SD("fs");
 
-DIR *dir;
+DIR *dir_SD;
 
-struct dirent *ent;
+struct dirent *ent_SD;
 
-int update_size;
+int update_size_SD;
 
 /******************************************************************************
    PUBLIC MEMBER FUNCTIONS
@@ -51,7 +51,7 @@ int update_size;
 bool OTAStorage_Portenta_SD::init()
 {
   if(storagePortenta==SD_FATFS) {
-    int err =  fs.mount(&block_device);
+    int err =  fs_SD.mount(&block_device);
     if (err)
       return false;
     else
@@ -65,13 +65,13 @@ bool OTAStorage_Portenta_SD::init()
 bool OTAStorage_Portenta_SD::open()
 {
   if(storagePortenta==SD_FATFS) {
-    if ((dir = opendir("/fs")) != NULL) {
+    if ((dir_SD = opendir("/fs")) != NULL) {
       /* print all the files and directories within directory */
-      while ((ent = readdir(dir)) != NULL) {
-        if (String(ent->d_name) == "UPDATE.BIN") {
+      while ((ent_SD = readdir(dir_SD)) != NULL) {
+        if (String(ent_SD->d_name) == "UPDATE.BIN") {
             struct stat stat_buf;
             stat("/fs/UPDATE.BIN", &stat_buf);
-            update_size = stat_buf.st_size;
+            update_size_SD = stat_buf.st_size;
             return true;
         }
       }
@@ -97,16 +97,16 @@ size_t OTAStorage_Portenta_SD::write()
     HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR1, storagePortenta);
     Serial1.println("OTAStorage_Portenta_SD::write    2");
     Serial1.print("OTAStorage_Portenta_SD::write    update_size = ");
-    Serial1.println(update_size);
+    Serial1.println(update_size_SD);
     delay(200);
 
     // offset is useless if the storage medium is a partition
     // HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR2, offset);
 
-    HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR3, update_size);
+    HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR3, update_size_SD);
     Serial1.println("OTAStorage_Portenta_SD::write    3");
     delay(200);
-    return update_size;
+    return update_size_SD;
   } else {
     Serial1.println("storageType not implemented yet");
     return 0;
@@ -116,7 +116,7 @@ size_t OTAStorage_Portenta_SD::write()
 
 void OTAStorage_Portenta_SD::close()
 {
-  closedir (dir);
+  closedir (dir_SD);
 }
 
 void OTAStorage_Portenta_SD::remove()

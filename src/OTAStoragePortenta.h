@@ -77,6 +77,8 @@ public:
 
   storageTypePortenta storagePortenta;
 
+  uint32_t data_offset;
+
 };
 
 #endif /* ARDUINO_OTA_STORAGE_PORTENTA_H_ */

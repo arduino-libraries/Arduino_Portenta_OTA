@@ -46,14 +46,16 @@ class ArduinoOTAPortenta
 
     virtual void update        ();
     virtual int  connected     ();
-    void begin(storageTypePortenta storage);
+    //void setOffset(uint32_t offset);
+    void begin(storageTypePortenta storage, uint32_t offset);
 
-    void setOTAStorage(OTAStoragePortenta & ota_storage, storageTypePortenta storageType);
+    void setOTAStorage(OTAStoragePortenta & ota_storage, storageTypePortenta storageType, uint32_t offset);
 
   private:
 
     OTALogicPortenta _ota_logic_portenta;
     int _ota_error;
+    uint32_t data_offset;
     storageTypePortenta PortentaStorageType;
 };
 
