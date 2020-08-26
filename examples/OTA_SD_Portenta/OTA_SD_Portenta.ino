@@ -15,8 +15,9 @@ void setup() {
   int started = millis();
 
   Serial.print("Opening SD card...");
-  
-  OTAPortenta.begin(SD_FATFS);
+
+  OTAPortenta.setUpdateLen(131728);
+  OTAPortenta.begin(SD_OFFSET,10240);
 
   Serial.println("OK!");
 

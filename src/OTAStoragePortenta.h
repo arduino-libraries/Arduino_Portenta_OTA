@@ -30,6 +30,8 @@
 
 #include "FATFileSystem.h"
 
+#include "LittleFileSystem.h"
+
 #define INTERNAL_FLASH_FLAG     (1 << 1)
 #define QSPI_FLASH_FLAG         (1 << 2)
 #define SDCARD_FLAG             (1 << 3)
@@ -77,6 +79,7 @@ public:
 
   storageTypePortenta storagePortenta;
 
+  uint32_t program_len;
   uint32_t data_offset;
 
 };

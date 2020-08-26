@@ -64,7 +64,7 @@ public:
   OTALogicPortenta();
 
 
-  void setOTAStorage(OTAStoragePortenta & ota_storage, storageTypePortenta storageType, uint32_t offset);
+  void setOTAStorage(OTAStoragePortenta & ota_storage, storageTypePortenta storageType, uint32_t offset, uint32_t length);
 
 
   OTAError update();
