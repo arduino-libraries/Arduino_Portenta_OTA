@@ -36,9 +36,11 @@ using namespace arduino;
 
 static char const SD_UPDATE_FILENAME[] = "UPDATE.BIN";
 
+mbed::BlockDevice* bd = NULL;
+
 SDMMCBlockDevice block_device;
 
-mbed::FATFileSystem fs_SD("fs");
+mbed::FATFileSystem* fs_SD = NULL;
 
 DIR *dir_SD;
 
@@ -63,11 +65,30 @@ bool OTAStorage_Portenta_SD::init()
     else
       return true;
   } else if(storagePortenta==SD_FATFS) {
-    err =  fs_SD.mount(&block_device);
-    if (err)
+    fs_SD = new mbed::FATFileSystem("fs");
+    err =  fs_SD->mount(&block_device);
+    if (err) {
+      Serial1.print("Error while mounting the filesystem. Err = ");
+      Serial1.println(err);
       return false;
-    else
+    } else {
+      Serial1.println("Filesystem correcly mounted");
       return true;
+    }
+  } else if (storagePortenta==SD_FATFS_MBR) {
+    bd = &block_device;
+    mbed::BlockDevice* physical_block_device = bd;
+    bd = new mbed::MBRBlockDevice(physical_block_device, 1);
+    fs_SD = new mbed::FATFileSystem("fs");
+    err =  fs_SD->mount(bd);
+    if (err) {
+      Serial1.print("Error while mounting the filesystem. Err = ");
+      Serial1.println(err);
+      return false;
+    } else {
+      Serial1.println("Filesystem correcly mounted");
+      return true;
+    }
   } else {
     Serial1.println("storageType not implemented yet");
     return false;
@@ -95,7 +116,7 @@ bool OTAStorage_Portenta_SD::open()
     Serial1.print("OTAStorage_Portenta_SD::open    LogBlockLogBlockSizeNbr = ");
     Serial1.println(card_info.LogBlockSize);
     return true;
-  } else if(storagePortenta==SD_FATFS) {
+  } else if(storagePortenta==SD_FATFS || storagePortenta==SD_FATFS_MBR) {
     if ((dir_SD = opendir("/fs")) != NULL) {
       /* print all the files and directories within directory */
       while ((ent_SD = readdir(dir_SD)) != NULL) {
@@ -118,8 +139,7 @@ size_t OTAStorage_Portenta_SD::write()
   Serial1.println("OTAStorage_Portenta_SD::write");
   delay(200);
 
-  if(storagePortenta==SD_FATFS || storagePortenta==SD_OFFSET) {
-    // OTA file is already in the FAT partition of the SDCARD
+  if(storagePortenta==SD_FATFS || storagePortenta==SD_OFFSET || storagePortenta==SD_FATFS_MBR) {
     HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR0, 0x07AA);
     HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR1, storagePortenta);
     Serial1.println("OTAStorage_Portenta_SD::write    1");
@@ -127,7 +147,7 @@ size_t OTAStorage_Portenta_SD::write()
     Serial1.println(storagePortenta);
     delay(200);
 
-    if(storagePortenta==SD_OFFSET) {
+    if(storagePortenta==SD_OFFSET || storagePortenta==SD_FATFS_MBR) {
       HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR2, data_offset);
       update_size_SD = program_len;
     }
@@ -151,7 +171,7 @@ size_t OTAStorage_Portenta_SD::write()
 
 void OTAStorage_Portenta_SD::close()
 {
-  if(storagePortenta==SD_FATFS) {
+  if(storagePortenta==SD_FATFS || storagePortenta==SD_FATFS_MBR) {
     closedir (dir_SD);
   }
 }

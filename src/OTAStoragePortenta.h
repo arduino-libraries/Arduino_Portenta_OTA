@@ -26,7 +26,9 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#include "BlockDevice.h"
 #include "SDMMCBlockDevice.h"
+#include "MBRBlockDevice.h"
 
 #include "FATFileSystem.h"
 
