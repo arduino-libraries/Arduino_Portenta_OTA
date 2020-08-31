@@ -36,7 +36,7 @@ void setup() {
   }
   */
   OTAPortenta.setUpdateLen(131728);
-  OTAPortenta.begin(QSPI_FLASH_OFFSET,0);
+  OTAPortenta.begin(QSPI_FLASH_FATFS_MBR,2048); //2048
 
   pinMode(LEDB, OUTPUT);
   digitalWrite(LEDB, LOW);
