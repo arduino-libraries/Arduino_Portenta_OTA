@@ -73,8 +73,7 @@ bool OTAStorage_Portenta_Qspi_Flash::init()
     Serial1.println("Storage type = QSPI_FLASH_FATFS_MBR");
     bd_Qspi = &blockDevice_qspi;
     mbed::BlockDevice* physical_block_device = bd_Qspi;
-    bd_Qspi = new mbed::MBRBlockDevice(physical_block_device, 1);
-    mbed::MBRBlockDevice::partition(physical_block_device, 1, 0x01, 2048 * 512, 30767 * 512);
+    bd_Qspi = new mbed::MBRBlockDevice(physical_block_device, data_offset);
     fs_QSPI = new mbed::FATFileSystem("fs");
     err =  fs_QSPI->mount(bd_Qspi);
     if (err) {
