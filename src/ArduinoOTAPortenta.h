@@ -51,6 +51,9 @@ class ArduinoOTAPortenta
 
     void setOTAStorage(OTAStoragePortenta & ota_storage, storageTypePortenta storageType, uint32_t offset, uint32_t length);
 
+    int download(char* url);
+    size_t decompress();
+
   private:
 
     OTALogicPortenta _ota_logic_portenta;

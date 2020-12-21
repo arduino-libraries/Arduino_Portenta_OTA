@@ -43,7 +43,7 @@
 OTALogicPortenta::OTALogicPortenta()
 : _is_configured{false}
 , _ota_storage{nullptr}
-, _ota_state{OTAState::Init}
+, _ota_state{OTAState::StartDownload}
 , _ota_error{OTAError::None}
 {
 }
@@ -61,7 +61,7 @@ void OTALogicPortenta::setOTAStorage(OTAStoragePortenta & ota_storage, storageTy
   _ota_storage->data_offset = offset;
   _ota_storage->program_len = length;
   _is_configured = true;
-
+  handle_Init();
 }
 
 OTAError OTALogicPortenta::update()
