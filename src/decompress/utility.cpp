@@ -207,6 +207,7 @@ size_t ArduinoOTAPortenta::decompress() {
 
   /* Delete UPDATE.BIN.LZSS because this update is complete. */
   fclose(update_file);
+  fclose(decompressed);
   remove(UPDATE_FILE_NAME_LZSS);
 
   return stat_buf.st_size;
