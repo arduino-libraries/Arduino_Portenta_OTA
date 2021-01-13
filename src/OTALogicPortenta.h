@@ -30,6 +30,11 @@
 
 #include "OTAStoragePortenta.h"
 
+/******************************************************************************
+ * DEFINE
+ ******************************************************************************/
+
+#define PORTENTA_OTA_ERROR_BASE (100)
 
 /******************************************************************************
  * TYPEDEF
@@ -40,16 +45,16 @@ enum class OTAState
   Init, Idle, StartDownload, WaitForHeader, HeaderReceived, WaitForBinary, BinaryReceived, Verify, Rename, Reset, Error
 };
 
-enum class OTAError : int
+enum class PortentaOTAError : int
 {
-  None                   = 0,
-  StorageInitFailed      = 1,
-  StorageOpenFailed      = 2,
-  StorageWriteFailed     = 3,
-  ChecksumMismatch       = 4,
-  ReceivedDataOverrun    = 5,
-  RenameOfTempFileFailed = 6,
-  NoOTAStorageConfigured = 7
+  None                   = PORTENTA_OTA_ERROR_BASE + 0,
+  StorageInitFailed      = PORTENTA_OTA_ERROR_BASE + 1,
+  StorageOpenFailed      = PORTENTA_OTA_ERROR_BASE + 2,
+  StorageWriteFailed     = PORTENTA_OTA_ERROR_BASE + 3,
+  ChecksumMismatch       = PORTENTA_OTA_ERROR_BASE + 4,
+  ReceivedDataOverrun    = PORTENTA_OTA_ERROR_BASE + 5,
+  RenameOfTempFileFailed = PORTENTA_OTA_ERROR_BASE + 6,
+  NoOTAStorageConfigured = PORTENTA_OTA_ERROR_BASE + 7
 };
 
 /******************************************************************************
@@ -67,11 +72,11 @@ public:
   void setOTAStorage(OTAStoragePortenta & ota_storage, storageTypePortenta storageType, uint32_t offset, uint32_t length);
 
 
-  OTAError update();
+  PortentaOTAError update();
 
 #ifdef HOST
-  inline OTAState state() const { return _ota_state; }
-  inline OTAError error() const { return _ota_error; }
+  inline OTAState         state() const { return _ota_state; }
+  inline PortentaOTAError error() const { return _ota_error; }
 #endif
 
 
@@ -80,7 +85,7 @@ private:
   bool _is_configured;
   OTAStoragePortenta * _ota_storage;
   OTAState _ota_state;
-  OTAError _ota_error;
+  PortentaOTAError _ota_error;
 
   OTAState handle_Init();
   OTAState handle_StartDownload();

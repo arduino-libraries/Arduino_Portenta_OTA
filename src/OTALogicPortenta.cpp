@@ -44,7 +44,7 @@ OTALogicPortenta::OTALogicPortenta()
 : _is_configured{false}
 , _ota_storage{nullptr}
 , _ota_state{OTAState::StartDownload}
-, _ota_error{OTAError::None}
+, _ota_error{PortentaOTAError::None}
 {
 }
 
@@ -64,7 +64,7 @@ void OTALogicPortenta::setOTAStorage(OTAStoragePortenta & ota_storage, storageTy
   handle_Init();
 }
 
-OTAError OTALogicPortenta::update()
+PortentaOTAError OTALogicPortenta::update()
 {
   /* This if clause should never happen. None the less we
    * should insure ourselves against this scenario because
@@ -72,7 +72,7 @@ OTAError OTALogicPortenta::update()
    */
   if (!_is_configured) {
     _ota_state = OTAState::Error;
-    _ota_error = OTAError::NoOTAStorageConfigured;
+    _ota_error = PortentaOTAError::NoOTAStorageConfigured;
     return _ota_error;
   }
 
@@ -114,7 +114,7 @@ OTAState OTALogicPortenta::handle_Init()
   if (_ota_storage->init()) {
     return OTAState::StartDownload;
   } else {
-    _ota_error = OTAError::StorageInitFailed;
+    _ota_error = PortentaOTAError::StorageInitFailed;
     return OTAState::Error;
   }
 }
@@ -124,7 +124,7 @@ OTAState OTALogicPortenta::handle_StartDownload()
   if(_ota_storage->open()) {
     return OTAState::BinaryReceived;
   } else {
-    _ota_error = OTAError::StorageOpenFailed;
+    _ota_error = PortentaOTAError::StorageOpenFailed;
     return OTAState::Error;
   }
 }

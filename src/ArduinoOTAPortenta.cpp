@@ -53,7 +53,7 @@ static const int TIMEOUT_FOR_LASTVALUES_SYNC = 10000;
  ******************************************************************************/
 
 ArduinoOTAPortenta::ArduinoOTAPortenta() :
-  _ota_error{static_cast<int>(OTAError::None)}
+  _ota_error{static_cast<int>(PortentaOTAError::None)}
 {
 
 }
@@ -98,7 +98,7 @@ void ArduinoOTAPortenta::update()
     * 'update' method here in order to process incoming data and generally
     * to transition to the OTA logic update states.
     */
-  OTAError const err = _ota_logic_portenta.update();
+  PortentaOTAError const err = _ota_logic_portenta.update();
   _ota_error = static_cast<int>(err);
 }
 
