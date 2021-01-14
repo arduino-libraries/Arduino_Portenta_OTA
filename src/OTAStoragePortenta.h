@@ -44,7 +44,7 @@
 
 extern RTC_HandleTypeDef RTCHandle;
 
-enum storageTypePortenta {
+enum StorageTypePortenta {
     INTERNAL_FLASH_OFFSET = INTERNAL_FLASH_FLAG | RAW_FLAG,
     INTERNAL_FLASH_FATFS = INTERNAL_FLASH_FLAG | FATFS_FLAG,
     INTERNAL_FLASH_LITTLEFS = INTERNAL_FLASH_FLAG | LITTLEFS_FLAG,
@@ -75,11 +75,8 @@ public:
   virtual bool   open  () = 0;
   virtual size_t write () = 0;
   virtual void   close () = 0;
-  virtual void   remove() = 0;
-  virtual bool   rename() = 0;
-  virtual void   deinit() = 0;
 
-  storageTypePortenta storagePortenta;
+  StorageTypePortenta storagePortenta;
 
   uint32_t program_len;
   uint32_t data_offset;

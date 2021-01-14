@@ -22,12 +22,6 @@
  * INCLUDE
  ******************************************************************************/
 
-#ifndef HOST
-  #include <AIoTC_Config.h>
-#else
-  #define OTA_ENABLED (1)
-#endif
-
 #include "OTAStoragePortenta.h"
 
 /******************************************************************************
@@ -68,17 +62,9 @@ public:
 
   OTALogicPortenta();
 
-
-  void setOTAStorage(OTAStoragePortenta & ota_storage, storageTypePortenta storageType, uint32_t offset, uint32_t length);
-
+  void setOTAStorage(OTAStoragePortenta & ota_storage, StorageTypePortenta storageType, uint32_t offset, uint32_t length);
 
   PortentaOTAError update();
-
-#ifdef HOST
-  inline OTAState         state() const { return _ota_state; }
-  inline PortentaOTAError error() const { return _ota_error; }
-#endif
-
 
 private:
 

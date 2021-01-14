@@ -22,9 +22,6 @@
  * INCLUDE
  ******************************************************************************/
 
-#include <AIoTC_Config.h>
-#if OTA_STORAGE_PORTENTA
-
 #include "OTAStoragePortenta.h"
 
 #include "FlashIAPBlockDevice.h"
@@ -44,12 +41,7 @@ public:
   virtual bool   open  () override;
   virtual size_t write () override;
   virtual void   close () override;
-  virtual void   remove() override;
-  virtual bool   rename() override;
-  virtual void   deinit() override;
 
 };
 
 #endif /* OTA_STORAGE_PORTENTA */
-
-#endif /* OTA_STORAGE_INTERNAL_FLASH_H_ */

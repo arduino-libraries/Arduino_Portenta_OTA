@@ -21,17 +21,9 @@
  **************************************************************************************/
 
 #include "lzss.h"
+
+#include "WiFi.h" /* WiFi from ArduinoCore-mbed */
 #include "ArduinoOTAPortenta.h"
-
-
-/**************************************************************************************
-   DEFINE
- **************************************************************************************/
-
-#define SDU_START    0x2000
-#define SDU_SIZE     0x4000
-
-#define SKETCH_START (uint32_t*)(SDU_START + SDU_SIZE)
 
 /**************************************************************************************
    CONST
@@ -40,7 +32,8 @@
 const char * UPDATE_FILE_NAME      = "/fs/UPDATE.BIN";
 const char * UPDATE_FILE_NAME_LZSS = "/fs/UPDATE.BIN.LZSS";
 
-static const uint32_t crc_table[256] = {
+static const uint32_t crc_table[256] =
+{
     0x00000000, 0x77073096, 0xee0e612c, 0x990951ba, 0x076dc419, 0x706af48f, 0xe963a535, 0x9e6495a3,
     0x0edb8832, 0x79dcb8a4, 0xe0d5e91e, 0x97d2d988, 0x09b64c2b, 0x7eb17cbd, 0xe7b82d07, 0x90bf1d91,
     0x1db71064, 0x6ab020f2, 0xf3b97148, 0x84be41de, 0x1adad47d, 0x6ddde4eb, 0xf4d4b551, 0x83d385c7,
@@ -97,10 +90,9 @@ uint32_t crc_update(uint32_t crc, const void * data, size_t data_len)
    MAIN
  **************************************************************************************/
 
-#include "WiFi.h"
-
-int ArduinoOTAPortenta::download(char* url) {
-  WiFi.download(url, UPDATE_FILE_NAME_LZSS);
+int ArduinoOTAPortenta::download(char* url)
+{
+  return WiFi.download(url, UPDATE_FILE_NAME_LZSS);
 }
 
 size_t ArduinoOTAPortenta::decompress() {

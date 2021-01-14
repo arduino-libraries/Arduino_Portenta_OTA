@@ -19,22 +19,7 @@
  * INCLUDE
  ******************************************************************************/
 
-#ifndef HOST
-  #include <AIoTC_Config.h>
-#else
-  #define OTA_ENABLED (1)
-#endif
-
 #include "OTALogicPortenta.h"
-
-#ifndef HOST
-  #include <Arduino.h>
-#else
-  #include <algorithm> // for std::min, otherwise Arduino defines min() 
-  using namespace std;
-#endif
-
-#include <string.h>
 
 /******************************************************************************
  * CTOR/DTOR
@@ -52,11 +37,9 @@ OTALogicPortenta::OTALogicPortenta()
  * PUBLIC MEMBER FUNCTIONS
  ******************************************************************************/
 
-void OTALogicPortenta::setOTAStorage(OTAStoragePortenta & ota_storage, storageTypePortenta storageType, uint32_t offset, uint32_t length)
+void OTALogicPortenta::setOTAStorage(OTAStoragePortenta & ota_storage, StorageTypePortenta storageType, uint32_t offset, uint32_t length)
 {
   _ota_storage = &ota_storage;
-  Serial1.print("OTALogicPortenta::setOTAStorage    storageType = ");
-  Serial1.println(storageType);
   _ota_storage->storagePortenta = storageType;
   _ota_storage->data_offset = offset;
   _ota_storage->program_len = length;
@@ -89,14 +72,8 @@ PortentaOTAError OTALogicPortenta::update()
     switch(_ota_state)
     {
     case OTAState::Init:           _ota_state = handle_Init          (); break;
-    case OTAState::Idle:           /*_ota_state = handle_Idle      ()*/; break;
     case OTAState::StartDownload:  _ota_state = handle_StartDownload (); break;
-    case OTAState::WaitForHeader:  /*_ota_state = handle_WaitForHeader ()*/; break;
-    case OTAState::HeaderReceived: /*_ota_state = handle_HeaderReceived()*/; break;
-    case OTAState::WaitForBinary:  /*_ota_state = handle_WaitForBinary ()*/; break;
     case OTAState::BinaryReceived: _ota_state = handle_BinaryReceived(); break;
-    case OTAState::Verify:         /*_ota_state = handle_Verify        ()*/; break;
-    case OTAState::Rename:         /*_ota_state = handle_Rename        ()*/; break;
     case OTAState::Reset:          _ota_state = handle_Reset         (); break;
     case OTAState::Error:                                                break;
     }

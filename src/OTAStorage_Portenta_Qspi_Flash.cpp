@@ -19,9 +19,6 @@
    INCLUDE
  ******************************************************************************/
 
-#include <AIoTC_Config.h>
-#if OTA_STORAGE_PORTENTA
-
 #include "OTAStorage_Portenta_Qspi_Flash.h"
 
 #include "stm32h7xx_hal_rtc_ex.h"
@@ -147,20 +144,3 @@ void OTAStorage_Portenta_Qspi_Flash::close()
     closedir (dir_QSPI);
   }
 }
-
-void OTAStorage_Portenta_Qspi_Flash::remove()
-{
-
-}
-
-bool OTAStorage_Portenta_Qspi_Flash::rename()
-{
-
-}
-
-void OTAStorage_Portenta_Qspi_Flash::deinit()
-{
-  /* Nothing to do */
-}
-
-#endif /* OTA_STORAGE_PORTENTA */

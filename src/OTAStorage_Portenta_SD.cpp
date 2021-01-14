@@ -19,9 +19,6 @@
    INCLUDE
  ******************************************************************************/
 
-#include <AIoTC_Config.h>
-#if OTA_STORAGE_PORTENTA
-
 #include "OTAStorage_Portenta_SD.h"
 
 #include "stm32h7xx_hal_rtc_ex.h"
@@ -175,20 +172,3 @@ void OTAStorage_Portenta_SD::close()
     closedir (dir_SD);
   }
 }
-
-void OTAStorage_Portenta_SD::remove()
-{
-  /* Nothing to do */
-}
-
-bool OTAStorage_Portenta_SD::rename()
-{
-  /* Nothing to do */
-}
-
-void OTAStorage_Portenta_SD::deinit()
-{
-  /* Nothing to do */
-}
-
-#endif /* OTA_STORAGE_PORTENTA */

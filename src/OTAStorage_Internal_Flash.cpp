@@ -19,9 +19,6 @@
    INCLUDE
  ******************************************************************************/
 
-#include <AIoTC_Config.h>
-#if OTA_STORAGE_PORTENTA
-
 #include "OTAStorage_Internal_Flash.h"
 
 #include "stm32h7xx_hal_rtc_ex.h"
@@ -41,7 +38,6 @@ DIR *dir_Flash;
 struct dirent *ent_Flash;
 
 int update_size_Internal_Flash;
-
 
 /******************************************************************************
    PUBLIC MEMBER FUNCTIONS
@@ -111,32 +107,24 @@ bool OTAStorage_Internal_Flash::open()
 
 size_t OTAStorage_Internal_Flash::write()
 {
+  HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR0, 0x07AA);
+  Serial1.println("OTAStorage_Internal_Flash::write    1");
+  Serial1.print("OTAStorage_Internal_Flash::write    storagePortenta = ");
+  Serial1.println(storagePortenta);
+  delay(200);
+  HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR1, storagePortenta);
+  Serial1.println("OTAStorage_Internal_Flash::write    2");
+  Serial1.print("OTAStorage_Internal_Flash::write    update_size = ");
+  Serial1.println(update_size_Internal_Flash);
+  delay(200);
 
-  //if(storagePortenta==INTERNAL_FLASH_OFFSET || storagePortenta==INTERNAL_FLASH_FATFS) {
-    HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR0, 0x07AA);
-    Serial1.println("OTAStorage_Internal_Flash::write    1");
-    Serial1.print("OTAStorage_Internal_Flash::write    storagePortenta = ");
-    Serial1.println(storagePortenta);
-    delay(200);
-    HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR1, storagePortenta);
-    Serial1.println("OTAStorage_Internal_Flash::write    2");
-    Serial1.print("OTAStorage_Internal_Flash::write    update_size = ");
-    //int update_size_Internal_Flash = 2 * 1024 * 1024;
-    Serial1.println(update_size_Internal_Flash);
-    delay(200);
+  HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR2, data_offset);
 
-    HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR2, data_offset);
+  HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR3, update_size_Internal_Flash);
+  Serial1.println("OTAStorage_Internal_Flash::write    3");
+  delay(200);
 
-    HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR3, update_size_Internal_Flash);
-    Serial1.println("OTAStorage_Internal_Flash::write    3");
-    delay(200);
-
-    return update_size_Internal_Flash;
-  /*} else {
-    Serial1.println("storageType not implemented yet");
-    return 0;
-  }
-  */
+  return update_size_Internal_Flash;
 }
 
 void OTAStorage_Internal_Flash::close()
@@ -145,20 +133,3 @@ void OTAStorage_Internal_Flash::close()
     closedir (dir_Flash);
   }
 }
-
-void OTAStorage_Internal_Flash::remove()
-{
-  /* Nothing to do */
-}
-
-bool OTAStorage_Internal_Flash::rename()
-{
-  /* Nothing to do */
-}
-
-void OTAStorage_Internal_Flash::deinit()
-{
-  /* Nothing to do */
-}
-
-#endif /* OTA_STORAGE_PORTENTA */

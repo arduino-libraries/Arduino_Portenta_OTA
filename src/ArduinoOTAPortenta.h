@@ -22,15 +22,9 @@
  * INCLUDE
  ******************************************************************************/
 
-#include <AIoTC_Config.h>
-
 #include "OTALogicPortenta.h"
 #include "OTAStoragePortenta.h"
 #include "OTAStorage_Portenta_SD.h"
-
-/******************************************************************************
-   CONSTANTS
- ******************************************************************************/
 
 /******************************************************************************
  * CLASS DECLARATION
@@ -40,16 +34,15 @@ class ArduinoOTAPortenta
 {
   public:
 
-             ArduinoOTAPortenta();
-    virtual ~ArduinoOTAPortenta() { }
+    ArduinoOTAPortenta();
 
 
-    virtual void update        ();
-    virtual int  connected     ();
+    PortentaOTAError update();
+
     void setUpdateLen(uint32_t length);
-    void begin(storageTypePortenta storage, uint32_t offset);
+    bool begin(StorageTypePortenta storage, uint32_t offset);
 
-    void setOTAStorage(OTAStoragePortenta & ota_storage, storageTypePortenta storageType, uint32_t offset, uint32_t length);
+    void setOTAStorage(OTAStoragePortenta & ota_storage, StorageTypePortenta storageType, uint32_t offset, uint32_t length);
 
     int download(char* url);
     size_t decompress();
@@ -57,10 +50,9 @@ class ArduinoOTAPortenta
   private:
 
     OTALogicPortenta _ota_logic_portenta;
-    int _ota_error;
     uint32_t data_offset;
     uint32_t program_len = 0;
-    storageTypePortenta PortentaStorageType;
+    StorageTypePortenta PortentaStorageType;
 };
 
 /******************************************************************************
