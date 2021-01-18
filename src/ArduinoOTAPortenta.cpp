@@ -21,25 +21,19 @@
 
 #include "ArduinoOTAPortenta.h"
 
-#include "OTAStorage_Internal_Flash.h"
-#include "OTAStorage_Portenta_Qspi_Flash.h"
-#include "OTAStorage_Portenta_SD.h"
-
-/******************************************************************************
-   GLOBAL VARIABLES
- ******************************************************************************/
-
-static OTAStorage_Internal_Flash ota_storage_internal_flash;
-static OTAStorage_Portenta_Qspi_Flash ota_storage_qspi_flash;
-static OTAStorage_Portenta_SD ota_storage_sd;
-
 /******************************************************************************
    CTOR/DTOR
  ******************************************************************************/
 
 ArduinoOTAPortenta::ArduinoOTAPortenta()
-: _ota_storage{nullptr}
-, _program_len{0}
+: _storage_type{NONE}
+, _program_length{0}
+, _data_offset{0}
+{
+
+}
+
+ArduinoOTAPortenta::~ArduinoOTAPortenta()
 {
 
 }
@@ -48,57 +42,62 @@ ArduinoOTAPortenta::ArduinoOTAPortenta()
  * PUBLIC MEMBER FUNCTIONS
  ******************************************************************************/
 
-void ArduinoOTAPortenta::setUpdateLen(uint32_t const length)
+void ArduinoOTAPortenta::setUpdateLen(uint32_t const program_length)
 {
-  _program_len = length;
+  _program_length = program_length;
 }
 
-bool ArduinoOTAPortenta::begin(StorageTypePortenta const storage, uint32_t const offset)
+bool ArduinoOTAPortenta::begin(StorageTypePortenta const storage_type, uint32_t const data_offset)
 {
   Serial1.begin(115200);
-  if (storage==INTERNAL_FLASH_OFFSET || storage==INTERNAL_FLASH_FATFS || storage==INTERNAL_FLASH_LITTLEFS) {
-    setOTAStorage(ota_storage_internal_flash, storage, offset, _program_len);
+  if (storage_type == INTERNAL_FLASH_OFFSET ||
+      storage_type == INTERNAL_FLASH_FATFS  ||
+      storage_type == INTERNAL_FLASH_LITTLEFS)
+  {
+    setOTAStorage(storage_type, data_offset, _program_length);
     return true;
-  } else if (storage==QSPI_FLASH_OFFSET || storage==QSPI_FLASH_FATFS || storage==QSPI_FLASH_LITTLEFS || storage==QSPI_FLASH_FATFS_MBR || storage==QSPI_FLASH_LITTLEFS_MBR) {
-    setOTAStorage(ota_storage_qspi_flash, storage, offset, _program_len);
-    return true;
-  } else if (storage==SD_OFFSET || storage==SD_FATFS || storage==SD_LITTLEFS || storage==SD_FATFS_MBR || storage==SD_LITTLEFS_MBR) {
-    setOTAStorage(ota_storage_sd, storage, offset, _program_len);
-    return true;
-  } else {
-    return false;
   }
+  else if (storage_type == QSPI_FLASH_OFFSET    || 
+           storage_type == QSPI_FLASH_FATFS     ||
+           storage_type == QSPI_FLASH_LITTLEFS  ||
+           storage_type == QSPI_FLASH_FATFS_MBR ||
+           storage_type == QSPI_FLASH_LITTLEFS_MBR)
+  {
+    setOTAStorage(storage_type, data_offset, _program_length);
+    return true;
+  }
+  else if (storage_type == SD_OFFSET    ||
+           storage_type == SD_FATFS     ||
+           storage_type == SD_LITTLEFS  ||
+           storage_type == SD_FATFS_MBR ||
+           storage_type == SD_LITTLEFS_MBR)
+  {
+    setOTAStorage(storage_type, data_offset, _program_length);
+    return true;
+  }
+
+  return false;
 }
 
 ArduinoOTAPortenta::Error ArduinoOTAPortenta::update()
 {
-  if (!_ota_storage)
-    return Error::NoOtaStorage;
-
-  if(!_ota_storage->open())
+  if(!open())
     return Error::OtaStorageOpen;
 
-  _ota_storage->write();
-  _ota_storage->close();
+  write();
+  close();
   NVIC_SystemReset();
   return Error::None;
 }
 
-ArduinoOTAPortenta::Error ArduinoOTAPortenta::setOTAStorage(OTAStoragePortenta & ota_storage, StorageTypePortenta const storageType, uint32_t const offset, uint32_t const length)
+ArduinoOTAPortenta::Error ArduinoOTAPortenta::setOTAStorage(StorageTypePortenta const storage_type, uint32_t const data_offset, uint32_t const program_length)
 {
-  _ota_storage = &ota_storage;
-  _ota_storage->storagePortenta = storageType;
-  _ota_storage->data_offset = offset;
-  _ota_storage->program_len = length;
+  _storage_type = storage_type;
+  _data_offset = data_offset;
+  _program_length = program_length;
 
-  if (!_ota_storage->init())
+  if (!init())
     return Error::OtaStorageInit;
   else
     return Error::None;
 }
-
-/******************************************************************************
- * EXTERN DEFINITION
- ******************************************************************************/
-
-ArduinoOTAPortenta OTAPortenta;

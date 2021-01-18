@@ -40,30 +40,38 @@ class ArduinoOTAPortenta
       OtaStorageOpen = 3
     };
 
-    ArduinoOTAPortenta();
+             ArduinoOTAPortenta();
+    virtual ~ArduinoOTAPortenta();
 
 
     Error update();
 
-    void setUpdateLen(uint32_t const length);
-    bool begin(StorageTypePortenta const storage, uint32_t const offset);
+    void setUpdateLen(uint32_t const program_length);
+    bool begin(StorageTypePortenta const storage, uint32_t const data_offset);
 
-    Error setOTAStorage(OTAStoragePortenta & ota_storage, StorageTypePortenta const storageType, uint32_t const offset, uint32_t const length);
+    Error setOTAStorage(StorageTypePortenta const storage_type, uint32_t const data_offset, uint32_t const program_length);
 
     int download(const char * url);
     size_t decompress();
 
-  private:
 
-    OTAStoragePortenta * _ota_storage;
-    uint32_t _program_len;
+  protected:
+
+    StorageTypePortenta _storage_type;
+    uint32_t _program_length;
+    uint32_t _data_offset;
+
+    virtual bool   init  () = 0;
+    virtual bool   open  () = 0;
+    virtual size_t write () = 0;
+    virtual void   close () = 0;
 
 };
 
 /******************************************************************************
- * EXTERN DECLARATION
+ * INCLUDE
  ******************************************************************************/
 
-extern ArduinoOTAPortenta OTAPortenta;
+#include "ArduinoOTAPortenta_Qspi_Flash.h"
 
 #endif /* ARDUINO_OTA_PORTENTA_H */

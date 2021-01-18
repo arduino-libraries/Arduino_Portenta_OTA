@@ -22,20 +22,21 @@
  * INCLUDE
  ******************************************************************************/
 
-#include "OTAStoragePortenta.h"
-
-#include "QSPIFBlockDevice.h"
+#include "ArduinoOTAPortenta.h"
 
 /******************************************************************************
  * CLASS DECLARATION
  ******************************************************************************/
 
-class OTAStorage_Portenta_Qspi_Flash : public OTAStoragePortenta
+class ArduinoOTAPortenta_Qspi_Flash : public ArduinoOTAPortenta
 {
+
 public:
 
-  virtual ~OTAStorage_Portenta_Qspi_Flash() { }
+           ArduinoOTAPortenta_Qspi_Flash();
+  virtual ~ArduinoOTAPortenta_Qspi_Flash();
 
+protected:
 
   virtual bool   init  () override;
   virtual bool   open  () override;

@@ -19,7 +19,12 @@
    INCLUDE
  ******************************************************************************/
 
-#include "OTAStorage_Portenta_Qspi_Flash.h"
+#include "ArduinoOTAPortenta_Qspi_Flash.h"
+
+#include "BlockDevice.h"
+#include "QSPIFBlockDevice.h"
+#include "MBRBlockDevice.h"
+#include "FATFileSystem.h"
 
 #include "stm32h7xx_hal_rtc_ex.h"
 
@@ -42,20 +47,34 @@ struct dirent *ent_QSPI;
 int update_size_Qspi;
 
 /******************************************************************************
+   CTOR/DTOR
+ ******************************************************************************/
+
+ArduinoOTAPortenta_Qspi_Flash::ArduinoOTAPortenta_Qspi_Flash()
+{
+
+}
+
+ArduinoOTAPortenta_Qspi_Flash::~ArduinoOTAPortenta_Qspi_Flash()
+{
+
+}
+
+/******************************************************************************
    PUBLIC MEMBER FUNCTIONS
  ******************************************************************************/
 
-bool OTAStorage_Portenta_Qspi_Flash::init()
+bool ArduinoOTAPortenta_Qspi_Flash::init()
 {
   int err;
 
-  if(storagePortenta==QSPI_FLASH_OFFSET) {
+  if(_storage_type==QSPI_FLASH_OFFSET) {
     err = blockDevice_qspi.init();
     if (err)
       return false;
     else
       return true;
-  } else if(storagePortenta==QSPI_FLASH_FATFS) {
+  } else if(_storage_type==QSPI_FLASH_FATFS) {
     fs_QSPI = new mbed::FATFileSystem("fs");
     err =  fs_QSPI->mount(&blockDevice_qspi);
     if (err) {
@@ -66,11 +85,11 @@ bool OTAStorage_Portenta_Qspi_Flash::init()
       Serial1.println("Filesystem correcly mounted");
       return true;
     }
-  } else if (storagePortenta==QSPI_FLASH_FATFS_MBR) {
+  } else if (_storage_type==QSPI_FLASH_FATFS_MBR) {
     Serial1.println("Storage type = QSPI_FLASH_FATFS_MBR");
     bd_Qspi = &blockDevice_qspi;
     mbed::BlockDevice* physical_block_device = bd_Qspi;
-    bd_Qspi = new mbed::MBRBlockDevice(physical_block_device, data_offset);
+    bd_Qspi = new mbed::MBRBlockDevice(physical_block_device, _data_offset);
     fs_QSPI = new mbed::FATFileSystem("fs");
     err =  fs_QSPI->mount(bd_Qspi);
     if (err) {
@@ -87,12 +106,12 @@ bool OTAStorage_Portenta_Qspi_Flash::init()
   }
 }
 
-bool OTAStorage_Portenta_Qspi_Flash::open()
+bool ArduinoOTAPortenta_Qspi_Flash::open()
 {
-  if(storagePortenta==QSPI_FLASH_OFFSET) {
-    update_size_Qspi = program_len;
+  if(_storage_type==QSPI_FLASH_OFFSET) {
+    update_size_Qspi = _program_length;
     return true;
-  } else if(storagePortenta==QSPI_FLASH_FATFS || storagePortenta==QSPI_FLASH_FATFS_MBR) {
+  } else if(_storage_type==QSPI_FLASH_FATFS || _storage_type==QSPI_FLASH_FATFS_MBR) {
     if ((dir_QSPI = opendir("/fs")) != NULL) {
       /* print all the files and directories within directory */
       while ((ent_QSPI = readdir(dir_QSPI)) != NULL) {
@@ -111,21 +130,21 @@ bool OTAStorage_Portenta_Qspi_Flash::open()
   }
 }
 
-size_t OTAStorage_Portenta_Qspi_Flash::write()
+size_t ArduinoOTAPortenta_Qspi_Flash::write()
 {
-  if(storagePortenta==QSPI_FLASH_OFFSET || storagePortenta==QSPI_FLASH_FATFS || storagePortenta==QSPI_FLASH_FATFS_MBR) {
+  if(_storage_type==QSPI_FLASH_OFFSET || _storage_type==QSPI_FLASH_FATFS || _storage_type==QSPI_FLASH_FATFS_MBR) {
     HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR0, 0x07AA);
     Serial1.println("OTAStorage_Internal_Flash::write    1");
-    Serial1.print("OTAStorage_Internal_Flash::write    storagePortenta = ");
-    Serial1.println(storagePortenta);
+    Serial1.print("OTAStorage_Internal_Flash::write    _storage_type = ");
+    Serial1.println(_storage_type);
     delay(200);
-    HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR1, storagePortenta);
+    HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR1, _storage_type);
     Serial1.println("OTAStorage_Internal_Flash::write    2");
     Serial1.print("OTAStorage_Internal_Flash::write    update_size = ");
     Serial1.println(update_size_Qspi);
     delay(200);
 
-    HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR2, data_offset);
+    HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR2, _data_offset);
 
     HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR3, update_size_Qspi);
     Serial1.println("OTAStorage_Internal_Flash::write    3");
@@ -138,9 +157,9 @@ size_t OTAStorage_Portenta_Qspi_Flash::write()
   }
 }
 
-void OTAStorage_Portenta_Qspi_Flash::close()
+void ArduinoOTAPortenta_Qspi_Flash::close()
 {
-  if(storagePortenta==QSPI_FLASH_FATFS || storagePortenta==QSPI_FLASH_FATFS_MBR) {
+  if(_storage_type==QSPI_FLASH_FATFS || _storage_type==QSPI_FLASH_FATFS_MBR) {
     closedir (dir_QSPI);
   }
 }
