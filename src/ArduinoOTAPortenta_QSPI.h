@@ -15,8 +15,8 @@
    a commercial license, send an email to license@arduino.cc.
 */
 
-#ifndef ARDUINO_OTA_STORAGE_PORTENTA_QSPI_FLASH_H_
-#define ARDUINO_OTA_STORAGE_PORTENTA_QSPI_FLASH_H_
+#ifndef ARDUINO_OTA_PORTENTA_QSPI_H_
+#define ARDUINO_OTA_PORTENTA_QSPI_H_
 
 /******************************************************************************
  * INCLUDE
@@ -32,13 +32,13 @@
  * CLASS DECLARATION
  ******************************************************************************/
 
-class ArduinoOTAPortenta_Qspi_Flash : public ArduinoOTAPortenta
+class ArduinoOTAPortenta_QSPI : public ArduinoOTAPortenta
 {
 
 public:
 
-           ArduinoOTAPortenta_Qspi_Flash(StorageTypePortenta const storage_type, uint32_t const data_offset);
-  virtual ~ArduinoOTAPortenta_Qspi_Flash() { }
+           ArduinoOTAPortenta_QSPI(StorageTypePortenta const storage_type, uint32_t const data_offset);
+  virtual ~ArduinoOTAPortenta_QSPI() { }
 
 
 protected:
@@ -59,4 +59,4 @@ private:
 
 };
 
-#endif /* ARDUINO_OTA_STORAGE_PORTENTA_QSPI_FLASH_H_ */
+#endif /* ARDUINO_OTA_PORTENTA_QSPI_H_ */

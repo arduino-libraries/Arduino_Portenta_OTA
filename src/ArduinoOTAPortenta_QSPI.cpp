@@ -19,7 +19,7 @@
    INCLUDE
  ******************************************************************************/
 
-#include "ArduinoOTAPortenta_Qspi_Flash.h"
+#include "ArduinoOTAPortenta_QSPI.h"
 
 #include <stm32h7xx_hal_rtc_ex.h>
 
@@ -31,7 +31,7 @@ using namespace arduino;
    CTOR/DTOR
  ******************************************************************************/
 
-ArduinoOTAPortenta_Qspi_Flash::ArduinoOTAPortenta_Qspi_Flash(StorageTypePortenta const storage_type, uint32_t const data_offset)
+ArduinoOTAPortenta_QSPI::ArduinoOTAPortenta_QSPI(StorageTypePortenta const storage_type, uint32_t const data_offset)
 : ArduinoOTAPortenta(storage_type, data_offset)
 , _bd_qspi{NULL}
 , _fs_qspi{NULL}
@@ -50,7 +50,7 @@ ArduinoOTAPortenta_Qspi_Flash::ArduinoOTAPortenta_Qspi_Flash(StorageTypePortenta
    PUBLIC MEMBER FUNCTIONS
  ******************************************************************************/
 
-bool ArduinoOTAPortenta_Qspi_Flash::init()
+bool ArduinoOTAPortenta_QSPI::init()
 {
   int err;
 
@@ -92,7 +92,7 @@ bool ArduinoOTAPortenta_Qspi_Flash::init()
   }
 }
 
-bool ArduinoOTAPortenta_Qspi_Flash::open()
+bool ArduinoOTAPortenta_QSPI::open()
 {
   if(_storage_type==QSPI_FLASH_OFFSET) {
     _update_size_qspi = _program_length;
@@ -117,7 +117,7 @@ bool ArduinoOTAPortenta_Qspi_Flash::open()
   }
 }
 
-size_t ArduinoOTAPortenta_Qspi_Flash::write()
+size_t ArduinoOTAPortenta_QSPI::write()
 {
   if(_storage_type==QSPI_FLASH_OFFSET || _storage_type==QSPI_FLASH_FATFS || _storage_type==QSPI_FLASH_FATFS_MBR) {
     HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR0, 0x07AA);
@@ -144,7 +144,7 @@ size_t ArduinoOTAPortenta_Qspi_Flash::write()
   }
 }
 
-void ArduinoOTAPortenta_Qspi_Flash::close()
+void ArduinoOTAPortenta_QSPI::close()
 {
   if(_storage_type==QSPI_FLASH_FATFS || _storage_type==QSPI_FLASH_FATFS_MBR) {
     closedir (_dir_qspi);
