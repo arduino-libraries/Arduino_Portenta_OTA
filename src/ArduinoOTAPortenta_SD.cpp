@@ -50,7 +50,6 @@ ArduinoOTAPortenta_SD::ArduinoOTAPortenta_SD(StorageTypePortenta const storage_t
 , _bd{NULL}
 , _block_device()
 , _fs_sd{NULL}
-, _dir_sd{NULL}
 , _update_size_sd{0}
 {
   assert(_storage_type == SD_OFFSET    ||
@@ -116,21 +115,25 @@ bool ArduinoOTAPortenta_SD::open()
 
   if (_storage_type == SD_FATFS || _storage_type == SD_FATFS_MBR)
   {
-    struct dirent * entry = NULL;
-    if ((_dir_sd = opendir("/fs")) != NULL)
+    DIR * dir = NULL;
+    if ((dir = opendir("/fs")) != NULL)
     {
       /* print all the files and directories within directory */
-      while ((entry = readdir(_dir_sd)) != NULL)
+      struct dirent * entry = NULL;
+      while ((entry = readdir(dir)) != NULL)
       {
         if (String(entry->d_name) == "UPDATE.BIN")
         {
           struct stat stat_buf;
           stat("/fs/UPDATE.BIN", &stat_buf);
           _update_size_sd = stat_buf.st_size;
+          closedir(dir);
           return true;
         }
       }
+      closedir(dir);
     }
+    return false;
   }
 
   return false;
@@ -160,7 +163,5 @@ size_t ArduinoOTAPortenta_SD::write()
 
 void ArduinoOTAPortenta_SD::close()
 {
-  if(_storage_type==SD_FATFS || _storage_type==SD_FATFS_MBR) {
-    closedir (_dir_sd);
-  }
+
 }
