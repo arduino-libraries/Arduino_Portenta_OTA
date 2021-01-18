@@ -70,5 +70,6 @@ class ArduinoOTAPortenta
  ******************************************************************************/
 
 #include "ArduinoOTAPortenta_QSPI.h"
+#include "ArduinoOTAPortenta_InternalFlash.h"
 
 #endif /* ARDUINO_OTA_PORTENTA_H */
