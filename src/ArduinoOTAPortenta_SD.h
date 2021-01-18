@@ -15,25 +15,28 @@
    a commercial license, send an email to license@arduino.cc.
 */
 
-#ifndef ARDUINO_OTA_STORAGE_PORTENTA_SD_H_
-#define ARDUINO_OTA_STORAGE_PORTENTA_SD_H_
+#ifndef ARDUINO_OTA_PORTENTA_SD_H_
+#define ARDUINO_OTA_PORTENTA_SD_H_
 
 /******************************************************************************
  * INCLUDE
  ******************************************************************************/
 
-#include "OTAStoragePortenta.h"
+#include "ArduinoOTAPortenta.h"
 
 /******************************************************************************
  * CLASS DECLARATION
  ******************************************************************************/
 
-class OTAStorage_Portenta_SD : public OTAStoragePortenta
+class ArduinoOTAPortenta_SD : public ArduinoOTAPortenta
 {
 public:
 
-  virtual ~OTAStorage_Portenta_SD() { }
+           ArduinoOTAPortenta_SD(StorageTypePortenta const storage_type, uint32_t const data_offset);
+  virtual ~ArduinoOTAPortenta_SD() { }
 
+
+protected:
 
   virtual bool   init  () override;
   virtual bool   open  () override;
@@ -42,4 +45,4 @@ public:
 
 };
 
-#endif /* ARDUINO_OTA_STORAGE_PORTENTA_SD_H_ */
+#endif /* ARDUINO_OTA_PORTENTA_SD_H_ */

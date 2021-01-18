@@ -69,6 +69,7 @@ class ArduinoOTAPortenta
  * INCLUDE
  ******************************************************************************/
 
+#include "ArduinoOTAPortenta_SD.h"
 #include "ArduinoOTAPortenta_QSPI.h"
 #include "ArduinoOTAPortenta_InternalFlash.h"
 
