@@ -59,7 +59,6 @@ ArduinoOTAPortenta::Error ArduinoOTAPortenta::update()
     return Error::OtaStorageOpen;
 
   write();
-  close();
   NVIC_SystemReset();
   return Error::None;
 }

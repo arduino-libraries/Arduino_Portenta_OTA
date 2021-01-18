@@ -160,8 +160,3 @@ size_t ArduinoOTAPortenta_SD::write()
 
   return 0;
 }
-
-void ArduinoOTAPortenta_SD::close()
-{
-
-}

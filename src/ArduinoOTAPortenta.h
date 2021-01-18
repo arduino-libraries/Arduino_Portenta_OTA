@@ -100,7 +100,6 @@ class ArduinoOTAPortenta
     virtual bool   init  () = 0;
     virtual bool   open  () = 0;
     virtual size_t write () = 0;
-    virtual void   close () = 0;
 
 };
 

@@ -139,8 +139,3 @@ size_t ArduinoOTAPortenta_QSPI::write()
   }
   return 0;
 }
-
-void ArduinoOTAPortenta_QSPI::close()
-{
-
-}

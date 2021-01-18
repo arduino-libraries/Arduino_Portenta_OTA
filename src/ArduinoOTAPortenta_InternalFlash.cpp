@@ -153,8 +153,3 @@ size_t ArduinoOTAPortenta_InternalFlash::write()
   HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR3, _update_size_internal_flash);
   return _update_size_internal_flash;
 }
-
-void ArduinoOTAPortenta_InternalFlash::close()
-{
-
-}
