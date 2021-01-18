@@ -40,16 +40,13 @@ class ArduinoOTAPortenta
       OtaStorageOpen = 3
     };
 
-             ArduinoOTAPortenta();
+             ArduinoOTAPortenta(StorageTypePortenta const storage_type, uint32_t const data_offset);
     virtual ~ArduinoOTAPortenta();
 
 
-    Error update();
-
+    bool begin();
     void setUpdateLen(uint32_t const program_length);
-    bool begin(StorageTypePortenta const storage, uint32_t const data_offset);
-
-    Error setOTAStorage(StorageTypePortenta const storage_type, uint32_t const data_offset, uint32_t const program_length);
+    Error update();
 
     int download(const char * url);
     size_t decompress();
@@ -58,8 +55,8 @@ class ArduinoOTAPortenta
   protected:
 
     StorageTypePortenta _storage_type;
-    uint32_t _program_length;
     uint32_t _data_offset;
+    uint32_t _program_length;
 
     virtual bool   init  () = 0;
     virtual bool   open  () = 0;

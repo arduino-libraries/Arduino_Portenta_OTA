@@ -33,7 +33,7 @@ class ArduinoOTAPortenta_Qspi_Flash : public ArduinoOTAPortenta
 
 public:
 
-           ArduinoOTAPortenta_Qspi_Flash();
+           ArduinoOTAPortenta_Qspi_Flash(StorageTypePortenta const storage_type, uint32_t const data_offset);
   virtual ~ArduinoOTAPortenta_Qspi_Flash();
 
 protected:

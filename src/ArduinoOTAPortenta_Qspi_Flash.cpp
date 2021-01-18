@@ -28,6 +28,8 @@
 
 #include "stm32h7xx_hal_rtc_ex.h"
 
+#include <assert.h>
+
 using namespace arduino;
 
 /******************************************************************************
@@ -50,9 +52,14 @@ int update_size_Qspi;
    CTOR/DTOR
  ******************************************************************************/
 
-ArduinoOTAPortenta_Qspi_Flash::ArduinoOTAPortenta_Qspi_Flash()
+ArduinoOTAPortenta_Qspi_Flash::ArduinoOTAPortenta_Qspi_Flash(StorageTypePortenta const storage_type, uint32_t const data_offset)
+: ArduinoOTAPortenta(storage_type, data_offset)
 {
-
+  assert(_storage_type == QSPI_FLASH_OFFSET    ||
+         _storage_type == QSPI_FLASH_FATFS     ||
+         _storage_type == QSPI_FLASH_LITTLEFS  ||
+         _storage_type == QSPI_FLASH_FATFS_MBR ||
+         _storage_type == QSPI_FLASH_LITTLEFS_MBR);
 }
 
 ArduinoOTAPortenta_Qspi_Flash::~ArduinoOTAPortenta_Qspi_Flash()
