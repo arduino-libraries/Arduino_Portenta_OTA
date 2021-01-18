@@ -57,7 +57,7 @@ class ArduinoOTAPortenta
 
     OTAStoragePortenta * _ota_storage;
     uint32_t _program_len;
-    StorageTypePortenta PortentaStorageType;
+
 };
 
 /******************************************************************************
