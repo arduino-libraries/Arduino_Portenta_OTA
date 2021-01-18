@@ -48,12 +48,12 @@ ArduinoOTAPortenta::ArduinoOTAPortenta()
  * PUBLIC MEMBER FUNCTIONS
  ******************************************************************************/
 
-void ArduinoOTAPortenta::setUpdateLen(uint32_t length)
+void ArduinoOTAPortenta::setUpdateLen(uint32_t const length)
 {
   _program_len = length;
 }
 
-bool ArduinoOTAPortenta::begin(StorageTypePortenta storage, uint32_t offset)
+bool ArduinoOTAPortenta::begin(StorageTypePortenta const storage, uint32_t const offset)
 {
   Serial1.begin(115200);
   if (storage==INTERNAL_FLASH_OFFSET || storage==INTERNAL_FLASH_FATFS || storage==INTERNAL_FLASH_LITTLEFS) {
@@ -84,7 +84,7 @@ ArduinoOTAPortenta::Error ArduinoOTAPortenta::update()
   return Error::None;
 }
 
-ArduinoOTAPortenta::Error ArduinoOTAPortenta::setOTAStorage(OTAStoragePortenta & ota_storage, StorageTypePortenta storageType, uint32_t offset, uint32_t length)
+ArduinoOTAPortenta::Error ArduinoOTAPortenta::setOTAStorage(OTAStoragePortenta & ota_storage, StorageTypePortenta const storageType, uint32_t const offset, uint32_t const length)
 {
   _ota_storage = &ota_storage;
   _ota_storage->storagePortenta = storageType;

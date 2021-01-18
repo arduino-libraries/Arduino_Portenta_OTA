@@ -45,12 +45,12 @@ class ArduinoOTAPortenta
 
     Error update();
 
-    void setUpdateLen(uint32_t length);
-    bool begin(StorageTypePortenta storage, uint32_t offset);
+    void setUpdateLen(uint32_t const length);
+    bool begin(StorageTypePortenta const storage, uint32_t const offset);
 
-    Error setOTAStorage(OTAStoragePortenta & ota_storage, StorageTypePortenta storageType, uint32_t offset, uint32_t length);
+    Error setOTAStorage(OTAStoragePortenta & ota_storage, StorageTypePortenta const storageType, uint32_t const offset, uint32_t const length);
 
-    int download(char* url);
+    int download(const char * url);
     size_t decompress();
 
   private:
