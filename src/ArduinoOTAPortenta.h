@@ -22,7 +22,46 @@
  * INCLUDE
  ******************************************************************************/
 
-#include "OTAStoragePortenta.h"
+#include <BlockDevice.h>
+#include <MBRBlockDevice.h>
+#include <SDMMCBlockDevice.h>
+
+#include <FATFileSystem.h>
+#include <LittleFileSystem.h>
+
+#include <QSPIFBlockDevice.h>
+
+/******************************************************************************
+ * DEFINE
+ ******************************************************************************/
+
+#define INTERNAL_FLASH_FLAG     (1 << 1)
+#define QSPI_FLASH_FLAG         (1 << 2)
+#define SDCARD_FLAG             (1 << 3)
+#define RAW_FLAG                (1 << 4)
+#define FATFS_FLAG              (1 << 5)
+#define LITTLEFS_FLAG           (1 << 6)
+#define MBR_FLAG                (1 << 7)
+
+/******************************************************************************
+ * TYPEDEF
+ ******************************************************************************/
+
+enum StorageTypePortenta {
+    INTERNAL_FLASH_OFFSET   = INTERNAL_FLASH_FLAG | RAW_FLAG,
+    INTERNAL_FLASH_FATFS    = INTERNAL_FLASH_FLAG | FATFS_FLAG,
+    INTERNAL_FLASH_LITTLEFS = INTERNAL_FLASH_FLAG | LITTLEFS_FLAG,
+    QSPI_FLASH_OFFSET       = QSPI_FLASH_FLAG | RAW_FLAG,
+    QSPI_FLASH_FATFS        = QSPI_FLASH_FLAG | FATFS_FLAG,
+    QSPI_FLASH_LITTLEFS     = QSPI_FLASH_FLAG | LITTLEFS_FLAG,
+    QSPI_FLASH_FATFS_MBR    = QSPI_FLASH_FLAG | FATFS_FLAG | MBR_FLAG,
+    QSPI_FLASH_LITTLEFS_MBR = QSPI_FLASH_FLAG | LITTLEFS_FLAG | MBR_FLAG,
+    SD_OFFSET               = SDCARD_FLAG | RAW_FLAG,
+    SD_FATFS                = SDCARD_FLAG | FATFS_FLAG,
+    SD_LITTLEFS             = SDCARD_FLAG | LITTLEFS_FLAG,
+    SD_FATFS_MBR            = SDCARD_FLAG | FATFS_FLAG | MBR_FLAG,
+    SD_LITTLEFS_MBR         = SDCARD_FLAG | LITTLEFS_FLAG | MBR_FLAG
+};
 
 /******************************************************************************
  * CLASS DECLARATION

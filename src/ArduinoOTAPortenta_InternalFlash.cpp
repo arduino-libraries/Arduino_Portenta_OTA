@@ -23,9 +23,17 @@
 
 #include <stm32h7xx_hal_rtc_ex.h>
 
+#include "FlashIAPBlockDevice.h"
+
 #include <assert.h>
 
 using namespace arduino;
+
+/******************************************************************************
+ * EXTERN
+ ******************************************************************************/
+
+extern RTC_HandleTypeDef RTCHandle;
 
 /******************************************************************************
    CTOR/DTOR

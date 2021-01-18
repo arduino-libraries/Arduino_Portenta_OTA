@@ -24,10 +24,6 @@
 
 #include "ArduinoOTAPortenta.h"
 
-#include <BlockDevice.h>
-#include <FATFileSystem.h>
-#include <SDMMCBlockDevice.h>
-
 /******************************************************************************
  * CLASS DECLARATION
  ******************************************************************************/
