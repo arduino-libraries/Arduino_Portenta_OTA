@@ -24,6 +24,10 @@
 
 #include "ArduinoOTAPortenta.h"
 
+#include <BlockDevice.h>
+#include <FATFileSystem.h>
+#include <QSPIFBlockDevice.h>
+
 /******************************************************************************
  * CLASS DECLARATION
  ******************************************************************************/
@@ -34,7 +38,8 @@ class ArduinoOTAPortenta_Qspi_Flash : public ArduinoOTAPortenta
 public:
 
            ArduinoOTAPortenta_Qspi_Flash(StorageTypePortenta const storage_type, uint32_t const data_offset);
-  virtual ~ArduinoOTAPortenta_Qspi_Flash();
+  virtual ~ArduinoOTAPortenta_Qspi_Flash() { }
+
 
 protected:
 
@@ -42,6 +47,15 @@ protected:
   virtual bool   open  () override;
   virtual size_t write () override;
   virtual void   close () override;
+
+
+private:
+
+  mbed::BlockDevice * _bd_qspi;
+  mbed::FATFileSystem * _fs_qspi;
+  QSPIFBlockDevice _block_device_qspi;
+  DIR *_dir_qspi;
+  int _update_size_qspi;
 
 };
 
