@@ -113,6 +113,7 @@ bool ArduinoOTAPortenta_QSPI::open()
           struct stat stat_buf;
           stat("/fs/UPDATE.BIN", &stat_buf);
           _update_size_qspi = stat_buf.st_size;
+          closedir(dir);
           return true;
         }
       }
