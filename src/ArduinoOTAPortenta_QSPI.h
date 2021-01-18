@@ -50,7 +50,6 @@ private:
   mbed::BlockDevice * _bd_qspi;
   mbed::FATFileSystem * _fs_qspi;
   QSPIFBlockDevice _block_device_qspi;
-  DIR *_dir_qspi;
   int _update_size_qspi;
 
 };

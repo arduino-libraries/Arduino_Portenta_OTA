@@ -42,7 +42,6 @@ ArduinoOTAPortenta_QSPI::ArduinoOTAPortenta_QSPI(StorageTypePortenta const stora
 , _bd_qspi{NULL}
 , _fs_qspi{NULL}
 , _block_device_qspi(PD_11, PD_12, PF_7, PD_13,  PF_10, PG_6, QSPIF_POLARITY_MODE_1, 40000000)
-, _dir_qspi{NULL}
 , _update_size_qspi{0}
 {
   assert(_storage_type == QSPI_FLASH_OFFSET    ||
@@ -102,13 +101,14 @@ bool ArduinoOTAPortenta_QSPI::open()
 
   if(_storage_type == QSPI_FLASH_FATFS || _storage_type == QSPI_FLASH_FATFS_MBR)
   {
-    struct dirent * ent_QSPI = NULL;
-    if ((_dir_qspi = opendir("/fs")) != NULL)
+    DIR * dir = NULL;
+    if ((dir = opendir("/fs")) != NULL)
     {
       /* print all the files and directories within directory */
-      while ((ent_QSPI = readdir(_dir_qspi)) != NULL)
+      struct dirent * entry = NULL;
+      while ((entry = readdir(dir)) != NULL)
       {
-        if (String(ent_QSPI->d_name) == "UPDATE.BIN")
+        if (String(entry->d_name) == "UPDATE.BIN")
         {
           struct stat stat_buf;
           stat("/fs/UPDATE.BIN", &stat_buf);
@@ -116,6 +116,7 @@ bool ArduinoOTAPortenta_QSPI::open()
           return true;
         }
       }
+      closedir(dir);
     }
   }
 
@@ -127,7 +128,7 @@ size_t ArduinoOTAPortenta_QSPI::write()
 {
   if(_storage_type == QSPI_FLASH_OFFSET ||
      _storage_type == QSPI_FLASH_FATFS  ||
-    _storage_type == QSPI_FLASH_FATFS_MBR)
+     _storage_type == QSPI_FLASH_FATFS_MBR)
   {
     HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR0, 0x07AA);
     delay(200);
@@ -143,8 +144,5 @@ size_t ArduinoOTAPortenta_QSPI::write()
 
 void ArduinoOTAPortenta_QSPI::close()
 {
-  if(_storage_type == QSPI_FLASH_FATFS || _storage_type == QSPI_FLASH_FATFS_MBR)
-  {
-    closedir (_dir_qspi);
-  }
+
 }
