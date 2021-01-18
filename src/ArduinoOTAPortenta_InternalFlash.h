@@ -48,7 +48,6 @@ private:
 
   mbed::FATFileSystem _fs_flash;
   mbed::LittleFileSystem _littlefs_fs_flash;
-  DIR *_dir_flash;
   int _update_size_internal_flash;
 
 };

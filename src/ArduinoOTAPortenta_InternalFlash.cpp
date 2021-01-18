@@ -43,7 +43,6 @@ ArduinoOTAPortenta_InternalFlash::ArduinoOTAPortenta_InternalFlash(StorageTypePo
 : ArduinoOTAPortenta(storage_type, _data_offset)
 , _fs_flash("fs")
 , _littlefs_fs_flash("little_fs")
-, _dir_flash{NULL}
 , _update_size_internal_flash{0}
 {
   assert(_storage_type == INTERNAL_FLASH_OFFSET ||
@@ -59,63 +58,91 @@ bool ArduinoOTAPortenta_InternalFlash::init()
 {
   FlashIAPBlockDevice bd(0x8000000 + _data_offset, 2 * 1024 * 1024 - _data_offset);
 
-  int err;
-
-  if(_storage_type==INTERNAL_FLASH_FATFS) {
-    err =  _fs_flash.mount(&bd);
+  if (_storage_type == INTERNAL_FLASH_FATFS)
+  {
+    int const err = _fs_flash.mount(&bd);
     if (err)
+    {
+      Serial1.print("Error while mounting flash filesystem: ");
+      Serial1.println(err);
       return false;
-    else
-      return true;
-  } else if (_storage_type==INTERNAL_FLASH_OFFSET) {
+    }
     return true;
-  } else if (_storage_type==INTERNAL_FLASH_LITTLEFS) {
-    err =  _littlefs_fs_flash.mount(&bd);
-    if (err)
-      return false;
-    else
-      return true;
-  } else {
-    Serial1.println("ERROR: storageType not available");
-    return false;
   }
+
+  if (_storage_type == INTERNAL_FLASH_OFFSET)
+    return true;
+
+  if (_storage_type == INTERNAL_FLASH_LITTLEFS)
+  {
+    int const err = _littlefs_fs_flash.mount(&bd);
+    if (err)
+    {
+      Serial1.print("Error while mounting littlefs filesystem: ");
+      Serial1.println(err);
+      return false;
+    }
+    return true;
+  }
+
+  return false;
 }
 
 bool ArduinoOTAPortenta_InternalFlash::open()
 {
-  struct dirent *ent_Flash = NULL;
-  if(_storage_type==INTERNAL_FLASH_FATFS) {
-    if ((_dir_flash = opendir("/fs")) != NULL) {
+  DIR * dir = NULL;
+  struct dirent *entry = NULL;
+
+  if (_storage_type == INTERNAL_FLASH_FATFS)
+  {
+    if ((dir = opendir("/fs")) != NULL)
+    {
       /* print all the files and directories within directory */
-      while ((ent_Flash = readdir(_dir_flash)) != NULL) {
-        if (String(ent_Flash->d_name) == "UPDATE.BIN") {
-            struct stat stat_buf;
-            stat("/fs/UPDATE.BIN", &stat_buf);
-            _update_size_internal_flash = stat_buf.st_size;
-            return true;
+      while ((entry = readdir(dir)) != NULL)
+      {
+        if (String(entry->d_name) == "UPDATE.BIN")
+        {
+          struct stat stat_buf;
+          stat("/fs/UPDATE.BIN", &stat_buf);
+          _update_size_internal_flash = stat_buf.st_size;
+          closedir(dir);
+          return true;
         }
       }
+      closedir(dir);
     }
-  } else if (_storage_type==INTERNAL_FLASH_OFFSET) {
-    _update_size_internal_flash = 2 * 1024 * 1024;
-    return true;
-  } else if (_storage_type==INTERNAL_FLASH_LITTLEFS) {
-    if ((_dir_flash = opendir("/little_fs")) != NULL) {
-      /* print all the files and directories within directory */
-      while ((ent_Flash = readdir(_dir_flash)) != NULL) {
-        if (String(ent_Flash->d_name) == "UPDATE.BIN") {
-            struct stat stat_buf;
-            stat("/little_fs/UPDATE.BIN", &stat_buf);
-            _update_size_internal_flash = stat_buf.st_size;
-            return true;
-        }
-      }
-    }
-  } else {
-    Serial1.println("ERROR: storageType not available");
-    _update_size_internal_flash = 0;
     return false;
   }
+
+  if (_storage_type == INTERNAL_FLASH_OFFSET)
+  {
+    _update_size_internal_flash = 2 * 1024 * 1024;
+    return true;
+  }
+
+  if (_storage_type == INTERNAL_FLASH_LITTLEFS)
+  {
+    if ((dir = opendir("/little_fs")) != NULL)
+    {
+      /* print all the files and directories within directory */
+      while ((entry = readdir(dir)) != NULL)
+      {
+        if (String(entry->d_name) == "UPDATE.BIN")
+        {
+          struct stat stat_buf;
+          stat("/little_fs/UPDATE.BIN", &stat_buf);
+          _update_size_internal_flash = stat_buf.st_size;
+          closedir(dir);
+          return true;
+        }
+      }
+      closedir(dir);
+    }
+    return false;
+  }
+
+  _update_size_internal_flash = 0;
+  return false;
 }
 
 size_t ArduinoOTAPortenta_InternalFlash::write()
@@ -129,7 +156,5 @@ size_t ArduinoOTAPortenta_InternalFlash::write()
 
 void ArduinoOTAPortenta_InternalFlash::close()
 {
-  if(_storage_type==INTERNAL_FLASH_FATFS || _storage_type==INTERNAL_FLASH_LITTLEFS) {
-    closedir (_dir_flash);
-  }
+
 }
