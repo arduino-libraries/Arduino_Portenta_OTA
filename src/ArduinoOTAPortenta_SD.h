@@ -24,6 +24,10 @@
 
 #include "ArduinoOTAPortenta.h"
 
+#include <BlockDevice.h>
+#include <FATFileSystem.h>
+#include <SDMMCBlockDevice.h>
+
 /******************************************************************************
  * CLASS DECLARATION
  ******************************************************************************/
@@ -42,6 +46,15 @@ protected:
   virtual bool   open  () override;
   virtual size_t write () override;
   virtual void   close () override;
+
+
+private:
+
+  mbed::BlockDevice * _bd;
+  SDMMCBlockDevice _block_device;
+  mbed::FATFileSystem * _fs_sd;
+  DIR *_dir_sd;
+  int _update_size_sd;
 
 };
 
