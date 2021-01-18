@@ -28,25 +28,15 @@
 using namespace arduino;
 
 /******************************************************************************
-   CONSTANTS
- ******************************************************************************/
-
-mbed::FATFileSystem fs_Flash("fs");
-
-mbed::LittleFileSystem Little_fs_Flash("little_fs");
-
-DIR *dir_Flash;
-
-struct dirent *ent_Flash;
-
-int update_size_Internal_Flash;
-
-/******************************************************************************
    CTOR/DTOR
  ******************************************************************************/
 
 ArduinoOTAPortenta_InternalFlash::ArduinoOTAPortenta_InternalFlash(StorageTypePortenta const storage_type, uint32_t const _data_offset)
 : ArduinoOTAPortenta(storage_type, _data_offset)
+, _fs_flash("fs")
+, _littlefs_fs_flash("little_fs")
+, _dir_flash{NULL}
+, _update_size_internal_flash{0}
 {
   assert(_storage_type == INTERNAL_FLASH_OFFSET ||
          _storage_type == INTERNAL_FLASH_FATFS  ||
@@ -64,7 +54,7 @@ bool ArduinoOTAPortenta_InternalFlash::init()
   int err;
 
   if(_storage_type==INTERNAL_FLASH_FATFS) {
-    err =  fs_Flash.mount(&bd);
+    err =  _fs_flash.mount(&bd);
     if (err)
       return false;
     else
@@ -72,7 +62,7 @@ bool ArduinoOTAPortenta_InternalFlash::init()
   } else if (_storage_type==INTERNAL_FLASH_OFFSET) {
     return true;
   } else if (_storage_type==INTERNAL_FLASH_LITTLEFS) {
-    err =  Little_fs_Flash.mount(&bd);
+    err =  _littlefs_fs_flash.mount(&bd);
     if (err)
       return false;
     else
@@ -85,36 +75,37 @@ bool ArduinoOTAPortenta_InternalFlash::init()
 
 bool ArduinoOTAPortenta_InternalFlash::open()
 {
+  struct dirent *ent_Flash = NULL;
   if(_storage_type==INTERNAL_FLASH_FATFS) {
-    if ((dir_Flash = opendir("/fs")) != NULL) {
+    if ((_dir_flash = opendir("/fs")) != NULL) {
       /* print all the files and directories within directory */
-      while ((ent_Flash = readdir(dir_Flash)) != NULL) {
+      while ((ent_Flash = readdir(_dir_flash)) != NULL) {
         if (String(ent_Flash->d_name) == "UPDATE.BIN") {
             struct stat stat_buf;
             stat("/fs/UPDATE.BIN", &stat_buf);
-            update_size_Internal_Flash = stat_buf.st_size;
+            _update_size_internal_flash = stat_buf.st_size;
             return true;
         }
       }
     }
   } else if (_storage_type==INTERNAL_FLASH_OFFSET) {
-    update_size_Internal_Flash = 2 * 1024 * 1024;
+    _update_size_internal_flash = 2 * 1024 * 1024;
     return true;
   } else if (_storage_type==INTERNAL_FLASH_LITTLEFS) {
-    if ((dir_Flash = opendir("/little_fs")) != NULL) {
+    if ((_dir_flash = opendir("/little_fs")) != NULL) {
       /* print all the files and directories within directory */
-      while ((ent_Flash = readdir(dir_Flash)) != NULL) {
+      while ((ent_Flash = readdir(_dir_flash)) != NULL) {
         if (String(ent_Flash->d_name) == "UPDATE.BIN") {
             struct stat stat_buf;
             stat("/little_fs/UPDATE.BIN", &stat_buf);
-            update_size_Internal_Flash = stat_buf.st_size;
+            _update_size_internal_flash = stat_buf.st_size;
             return true;
         }
       }
     }
   } else {
     Serial1.println("ERROR: storageType not available");
-    update_size_Internal_Flash = 0;
+    _update_size_internal_flash = 0;
     return false;
   }
 }
@@ -129,21 +120,21 @@ size_t ArduinoOTAPortenta_InternalFlash::write()
   HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR1, _storage_type);
   Serial1.println("ArduinoOTAPortenta_InternalFlash::write    2");
   Serial1.print("ArduinoOTAPortenta_InternalFlash::write    update_size = ");
-  Serial1.println(update_size_Internal_Flash);
+  Serial1.println(_update_size_internal_flash);
   delay(200);
 
   HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR2, _data_offset);
 
-  HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR3, update_size_Internal_Flash);
+  HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR3, _update_size_internal_flash);
   Serial1.println("ArduinoOTAPortenta_InternalFlash::write    3");
   delay(200);
 
-  return update_size_Internal_Flash;
+  return _update_size_internal_flash;
 }
 
 void ArduinoOTAPortenta_InternalFlash::close()
 {
   if(_storage_type==INTERNAL_FLASH_FATFS || _storage_type==INTERNAL_FLASH_LITTLEFS) {
-    closedir (dir_Flash);
+    closedir (_dir_flash);
   }
 }
