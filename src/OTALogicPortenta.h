@@ -34,21 +34,12 @@
  * TYPEDEF
  ******************************************************************************/
 
-enum class OTAState
-{
-  Init, Idle, StartDownload, WaitForHeader, HeaderReceived, WaitForBinary, BinaryReceived, Verify, Rename, Reset, Error
-};
-
 enum class PortentaOTAError : int
 {
   None                   = PORTENTA_OTA_ERROR_BASE + 0,
   StorageInitFailed      = PORTENTA_OTA_ERROR_BASE + 1,
   StorageOpenFailed      = PORTENTA_OTA_ERROR_BASE + 2,
-  StorageWriteFailed     = PORTENTA_OTA_ERROR_BASE + 3,
-  ChecksumMismatch       = PORTENTA_OTA_ERROR_BASE + 4,
-  ReceivedDataOverrun    = PORTENTA_OTA_ERROR_BASE + 5,
-  RenameOfTempFileFailed = PORTENTA_OTA_ERROR_BASE + 6,
-  NoOTAStorageConfigured = PORTENTA_OTA_ERROR_BASE + 7
+  NoOTAStorageConfigured = PORTENTA_OTA_ERROR_BASE + 4
 };
 
 /******************************************************************************
@@ -70,13 +61,7 @@ private:
 
   bool _is_configured;
   OTAStoragePortenta * _ota_storage;
-  OTAState _ota_state;
-  PortentaOTAError _ota_error;
 
-  OTAState handle_Init();
-  OTAState handle_StartDownload();
-  OTAState handle_BinaryReceived();
-  OTAState handle_Reset();
 };
 
 #endif /* ARDUINO_OTA_LOGIC_PORTENTA_H_ */
