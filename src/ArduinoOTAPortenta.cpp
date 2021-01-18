@@ -19,7 +19,7 @@
  * INCLUDE
  ******************************************************************************/
 
-#include <ArduinoOTAPortenta.h>
+#include "ArduinoOTAPortenta.h"
 
 #include "OTAStorage_Internal_Flash.h"
 #include "OTAStorage_Portenta_Qspi_Flash.h"
@@ -38,6 +38,7 @@ static OTAStorage_Portenta_SD ota_storage_sd;
  ******************************************************************************/
 
 ArduinoOTAPortenta::ArduinoOTAPortenta()
+: _ota_storage{nullptr}
 {
 
 }
@@ -68,18 +69,31 @@ bool ArduinoOTAPortenta::begin(StorageTypePortenta storage, uint32_t offset)
   }
 }
 
-PortentaOTAError ArduinoOTAPortenta::update()
+ArduinoOTAPortenta::Error ArduinoOTAPortenta::update()
 {
-  /* If a _ota_logic object has been instantiated then we are spinning its
-    * 'update' method here in order to process incoming data and generally
-    * to transition to the OTA logic update states.
-    */
-  return _ota_logic_portenta.update();
+  if (!_ota_storage)
+    return Error::NoOtaStorage;
+
+  if(!_ota_storage->open())
+    return Error::OtaStorageOpen;
+
+  _ota_storage->write();
+  _ota_storage->close();
+  NVIC_SystemReset();
+  return Error::None;
 }
 
-void ArduinoOTAPortenta::setOTAStorage(OTAStoragePortenta & ota_storage, StorageTypePortenta storageType, uint32_t offset, uint32_t length)
+ArduinoOTAPortenta::Error ArduinoOTAPortenta::setOTAStorage(OTAStoragePortenta & ota_storage, StorageTypePortenta storageType, uint32_t offset, uint32_t length)
 {
-  _ota_logic_portenta.setOTAStorage(ota_storage, storageType, offset, length);
+  _ota_storage = &ota_storage;
+  _ota_storage->storagePortenta = storageType;
+  _ota_storage->data_offset = offset;
+  _ota_storage->program_len = length;
+
+  if (!_ota_storage->init())
+    return Error::OtaStorageInit;
+  else
+    return Error::None;
 }
 
 /******************************************************************************

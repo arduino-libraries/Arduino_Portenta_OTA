@@ -22,9 +22,7 @@
  * INCLUDE
  ******************************************************************************/
 
-#include "OTALogicPortenta.h"
 #include "OTAStoragePortenta.h"
-#include "OTAStorage_Portenta_SD.h"
 
 /******************************************************************************
  * CLASS DECLARATION
@@ -34,22 +32,30 @@ class ArduinoOTAPortenta
 {
   public:
 
+    enum class Error : int
+    {
+      None           = 0,
+      NoOtaStorage   = 1,
+      OtaStorageInit = 2,
+      OtaStorageOpen = 3
+    };
+
     ArduinoOTAPortenta();
 
 
-    PortentaOTAError update();
+    Error update();
 
     void setUpdateLen(uint32_t length);
     bool begin(StorageTypePortenta storage, uint32_t offset);
 
-    void setOTAStorage(OTAStoragePortenta & ota_storage, StorageTypePortenta storageType, uint32_t offset, uint32_t length);
+    Error setOTAStorage(OTAStoragePortenta & ota_storage, StorageTypePortenta storageType, uint32_t offset, uint32_t length);
 
     int download(char* url);
     size_t decompress();
 
   private:
 
-    OTALogicPortenta _ota_logic_portenta;
+    OTAStoragePortenta * _ota_storage;
     uint32_t data_offset;
     uint32_t program_len = 0;
     StorageTypePortenta PortentaStorageType;
