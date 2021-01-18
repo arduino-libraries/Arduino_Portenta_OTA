@@ -66,66 +66,74 @@ ArduinoOTAPortenta_SD::ArduinoOTAPortenta_SD(StorageTypePortenta const storage_t
 
 bool ArduinoOTAPortenta_SD::init()
 {
-  int err;
-
-  if(_storage_type==SD_OFFSET) {
-    err = _block_device.init();
+  if (_storage_type == SD_OFFSET)
+  {
+    int const err = _block_device.init();
     if (err)
+    {
+      Serial1.print("Error while _block_device.init() : ");
+      Serial1.println(err);
       return false;
-    else
-      return true;
-  } else if(_storage_type==SD_FATFS) {
+    }
+    return true;
+  }
+
+   if(_storage_type == SD_FATFS)
+   {
     _fs_sd = new mbed::FATFileSystem("fs");
-    err =  _fs_sd->mount(&_block_device);
+    int const err =  _fs_sd->mount(&_block_device);
     if (err) {
       Serial1.print("Error while mounting the filesystem. Err = ");
       Serial1.println(err);
       return false;
-    } else {
-      Serial1.println("Filesystem correcly mounted");
-      return true;
     }
-  } else if (_storage_type==SD_FATFS_MBR) {
+    return true;
+  }
+
+  if (_storage_type == SD_FATFS_MBR)
+  {
     _bd = &_block_device;
     mbed::BlockDevice* physical__block_device = _bd;
     _bd = new mbed::MBRBlockDevice(physical__block_device, 1);
     _fs_sd = new mbed::FATFileSystem("fs");
-    err =  _fs_sd->mount(_bd);
-    if (err) {
+    int const err =  _fs_sd->mount(_bd);
+    if (err)
+    {
       Serial1.print("Error while mounting the filesystem. Err = ");
       Serial1.println(err);
       return false;
-    } else {
-      Serial1.println("Filesystem correcly mounted");
-      return true;
     }
-  } else {
-    Serial1.println("storageType not implemented yet");
-    return false;
+    return true;
   }
+
+  return false;
 }
 
 bool ArduinoOTAPortenta_SD::open()
 {
-  if(_storage_type==SD_OFFSET) {
+  if (_storage_type == SD_OFFSET)
     return true;
-  } else if(_storage_type==SD_FATFS || _storage_type==SD_FATFS_MBR) {
-    struct dirent * ent_SD = NULL;
-    if ((_dir_sd = opendir("/fs")) != NULL) {
+
+  if (_storage_type == SD_FATFS || _storage_type == SD_FATFS_MBR)
+  {
+    struct dirent * entry = NULL;
+    if ((_dir_sd = opendir("/fs")) != NULL)
+    {
       /* print all the files and directories within directory */
-      while ((ent_SD = readdir(_dir_sd)) != NULL) {
-        if (String(ent_SD->d_name) == "UPDATE.BIN") {
-            struct stat stat_buf;
-            stat("/fs/UPDATE.BIN", &stat_buf);
-            _update_size_sd = stat_buf.st_size;
-            return true;
+      while ((entry = readdir(_dir_sd)) != NULL)
+      {
+        if (String(entry->d_name) == "UPDATE.BIN")
+        {
+          struct stat stat_buf;
+          stat("/fs/UPDATE.BIN", &stat_buf);
+          _update_size_sd = stat_buf.st_size;
+          return true;
         }
       }
     }
-  } else {
-    Serial1.println("storageType not implemented yet");
-    return false;
   }
+
+  return false;
 }
 
 size_t ArduinoOTAPortenta_SD::write()
@@ -142,6 +150,7 @@ size_t ArduinoOTAPortenta_SD::write()
       HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR2, _data_offset);
       _update_size_sd = _program_length;
     }
+
     HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR3, _update_size_sd);
     return _update_size_sd;
   }
