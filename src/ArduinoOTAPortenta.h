@@ -56,7 +56,6 @@ class ArduinoOTAPortenta
   private:
 
     OTAStoragePortenta * _ota_storage;
-    uint32_t data_offset;
     uint32_t program_len = 0;
     StorageTypePortenta PortentaStorageType;
 };
