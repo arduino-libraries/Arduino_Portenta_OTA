@@ -131,12 +131,9 @@ size_t ArduinoOTAPortenta_QSPI::write()
      _storage_type == QSPI_FLASH_FATFS_MBR)
   {
     HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR0, 0x07AA);
-    delay(200);
     HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR1, _storage_type);
-    delay(200);
     HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR2, _data_offset);
     HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR3, _update_size_qspi);
-    delay(200);
     return _update_size_qspi;
   }
   return 0;

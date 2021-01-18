@@ -130,37 +130,23 @@ bool ArduinoOTAPortenta_SD::open()
 
 size_t ArduinoOTAPortenta_SD::write()
 {
-  Serial1.println("ArduinoOTAPortenta_SD::write");
-  delay(200);
-
-  if(_storage_type==SD_FATFS || _storage_type==SD_OFFSET || _storage_type==SD_FATFS_MBR) {
+  if (_storage_type == SD_FATFS  ||
+      _storage_type == SD_OFFSET ||
+      _storage_type == SD_FATFS_MBR)
+  {
     HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR0, 0x07AA);
     HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR1, _storage_type);
-    Serial1.println("ArduinoOTAPortenta_SD::write    1");
-    Serial1.print("ArduinoOTAPortenta_SD::write    _storage_type = ");
-    Serial1.println(_storage_type);
-    delay(200);
 
-    if(_storage_type==SD_OFFSET || _storage_type==SD_FATFS_MBR) {
+    if(_storage_type == SD_OFFSET || _storage_type == SD_FATFS_MBR)
+    {
       HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR2, _data_offset);
       _update_size_sd = _program_length;
     }
-
-    Serial1.println("ArduinoOTAPortenta_SD::write    2");
-    Serial1.print("ArduinoOTAPortenta_SD::write    update_size = ");
-    Serial1.println(_update_size_sd);
-    Serial1.print("ArduinoOTAPortenta_SD::write    _data_offset = ");
-    Serial1.println(_data_offset);
-    delay(200);
     HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR3, _update_size_sd);
-    Serial1.println("ArduinoOTAPortenta_SD::write    3");
-    delay(200);
     return _update_size_sd;
-  } else {
-    Serial1.println("storageType not implemented yet");
-    return 0;
   }
-  
+
+  return 0;
 }
 
 void ArduinoOTAPortenta_SD::close()
