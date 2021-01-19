@@ -6,9 +6,9 @@
 # Class (KEYWORD1)
 #######################################
 
-ArduinoOTAPortenta_SD	KEYWORD1
-ArduinoOTAPortenta_QSPI	KEYWORD1
-ArduinoOTAPortenta_InternalFlash	KEYWORD1
+Arduino_OTA_Portenta_SD	KEYWORD1
+Arduino_OTA_Portenta_QSPI	KEYWORD1
+Arduino_OTA_Portenta_InternalFlash	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)

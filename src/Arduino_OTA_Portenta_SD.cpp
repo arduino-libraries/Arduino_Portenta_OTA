@@ -19,9 +19,11 @@
    INCLUDE
  ******************************************************************************/
 
-#include "ArduinoOTAPortenta_QSPI.h"
+#include "Arduino_OTA_Portenta_SD.h"
 
-#include <stm32h7xx_hal_rtc_ex.h>
+#include "BSP.h"
+#include "stm32h7xx_hal_sd.h"
+#include "stm32h7xx_hal_rtc_ex.h"
 
 #include <assert.h>
 
@@ -34,55 +36,70 @@ using namespace arduino;
 extern RTC_HandleTypeDef RTCHandle;
 
 /******************************************************************************
+   CONSTANTS
+ ******************************************************************************/
+
+static char const SD_UPDATE_FILENAME[] = "UPDATE.BIN";
+
+/******************************************************************************
    CTOR/DTOR
  ******************************************************************************/
 
-ArduinoOTAPortenta_QSPI::ArduinoOTAPortenta_QSPI(StorageTypePortenta const storage_type, uint32_t const data_offset)
-: ArduinoOTAPortenta(storage_type, data_offset)
-, _bd_qspi{NULL}
-, _fs_qspi{NULL}
-, _block_device_qspi(PD_11, PD_12, PF_7, PD_13,  PF_10, PG_6, QSPIF_POLARITY_MODE_1, 40000000)
-, _update_size_qspi{0}
+Arduino_OTA_Portenta_SD::Arduino_OTA_Portenta_SD(StorageTypePortenta const storage_type, uint32_t const data_offset)
+: Arduino_OTA_Portenta(storage_type, data_offset)
+, _bd{NULL}
+, _block_device()
+, _fs_sd{NULL}
+, _update_size_sd{0}
 {
-  assert(_storage_type == QSPI_FLASH_OFFSET    ||
-         _storage_type == QSPI_FLASH_FATFS     ||
-         _storage_type == QSPI_FLASH_LITTLEFS  ||
-         _storage_type == QSPI_FLASH_FATFS_MBR ||
-         _storage_type == QSPI_FLASH_LITTLEFS_MBR);
+  assert(_storage_type == SD_OFFSET    ||
+         _storage_type == SD_FATFS     ||
+         _storage_type == SD_LITTLEFS  ||
+         _storage_type == SD_FATFS_MBR ||
+         _storage_type == SD_LITTLEFS_MBR);
 }
 
 /******************************************************************************
    PUBLIC MEMBER FUNCTIONS
  ******************************************************************************/
 
-bool ArduinoOTAPortenta_QSPI::init()
+bool Arduino_OTA_Portenta_SD::init()
 {
-  if(_storage_type == QSPI_FLASH_OFFSET)
-    return (_block_device_qspi.init() == QSPIF_BD_ERROR_OK);
-
-  if(_storage_type == QSPI_FLASH_FATFS)
+  if (_storage_type == SD_OFFSET)
   {
-    _fs_qspi = new mbed::FATFileSystem("fs");
-    int const err_mount = _fs_qspi->mount(&_block_device_qspi);
-    if (err_mount)
+    int const err = _block_device.init();
+    if (err)
     {
-      Serial1.print("Error while mounting the filesystem. Err = ");
-      Serial1.println(err_mount);
+      Serial1.print("Error while _block_device.init() : ");
+      Serial1.println(err);
       return false;
     }
     return true;
   }
 
-  if (_storage_type == QSPI_FLASH_FATFS_MBR)
-  {
-    _bd_qspi = &_block_device_qspi;
-    mbed::BlockDevice* physical_block_device = _bd_qspi;
-    _bd_qspi = new mbed::MBRBlockDevice(physical_block_device, _data_offset);
-    _fs_qspi = new mbed::FATFileSystem("fs");
-    int const err_mount = _fs_qspi->mount(_bd_qspi);
-    if (err_mount) {
+   if(_storage_type == SD_FATFS)
+   {
+    _fs_sd = new mbed::FATFileSystem("fs");
+    int const err =  _fs_sd->mount(&_block_device);
+    if (err) {
       Serial1.print("Error while mounting the filesystem. Err = ");
-      Serial1.println(err_mount);
+      Serial1.println(err);
+      return false;
+    }
+    return true;
+  }
+
+  if (_storage_type == SD_FATFS_MBR)
+  {
+    _bd = &_block_device;
+    mbed::BlockDevice* physical__block_device = _bd;
+    _bd = new mbed::MBRBlockDevice(physical__block_device, 1);
+    _fs_sd = new mbed::FATFileSystem("fs");
+    int const err =  _fs_sd->mount(_bd);
+    if (err)
+    {
+      Serial1.print("Error while mounting the filesystem. Err = ");
+      Serial1.println(err);
       return false;
     }
     return true;
@@ -91,15 +108,12 @@ bool ArduinoOTAPortenta_QSPI::init()
   return false;
 }
 
-bool ArduinoOTAPortenta_QSPI::open()
+bool Arduino_OTA_Portenta_SD::open()
 {
-  if (_storage_type == QSPI_FLASH_OFFSET)
-  {
-    _update_size_qspi = _program_length;
+  if (_storage_type == SD_OFFSET)
     return true;
-  }
 
-  if(_storage_type == QSPI_FLASH_FATFS || _storage_type == QSPI_FLASH_FATFS_MBR)
+  if (_storage_type == SD_FATFS || _storage_type == SD_FATFS_MBR)
   {
     DIR * dir = NULL;
     if ((dir = opendir("/fs")) != NULL)
@@ -112,30 +126,37 @@ bool ArduinoOTAPortenta_QSPI::open()
         {
           struct stat stat_buf;
           stat("/fs/UPDATE.BIN", &stat_buf);
-          _update_size_qspi = stat_buf.st_size;
+          _update_size_sd = stat_buf.st_size;
           closedir(dir);
           return true;
         }
       }
       closedir(dir);
     }
+    return false;
   }
 
-  _update_size_qspi = 0;
   return false;
 }
 
-size_t ArduinoOTAPortenta_QSPI::write()
+size_t Arduino_OTA_Portenta_SD::write()
 {
-  if(_storage_type == QSPI_FLASH_OFFSET ||
-     _storage_type == QSPI_FLASH_FATFS  ||
-     _storage_type == QSPI_FLASH_FATFS_MBR)
+  if (_storage_type == SD_FATFS  ||
+      _storage_type == SD_OFFSET ||
+      _storage_type == SD_FATFS_MBR)
   {
     HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR0, 0x07AA);
     HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR1, _storage_type);
-    HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR2, _data_offset);
-    HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR3, _update_size_qspi);
-    return _update_size_qspi;
+
+    if(_storage_type == SD_OFFSET || _storage_type == SD_FATFS_MBR)
+    {
+      HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR2, _data_offset);
+      _update_size_sd = _program_length;
+    }
+
+    HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR3, _update_size_sd);
+    return _update_size_sd;
   }
+
   return 0;
 }

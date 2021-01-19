@@ -19,7 +19,7 @@
    INCLUDE
  ******************************************************************************/
 
-#include "ArduinoOTAPortenta_InternalFlash.h"
+#include "Arduino_OTA_Portenta_InternalFlash.h"
 
 #include <stm32h7xx_hal_rtc_ex.h>
 
@@ -39,8 +39,8 @@ extern RTC_HandleTypeDef RTCHandle;
    CTOR/DTOR
  ******************************************************************************/
 
-ArduinoOTAPortenta_InternalFlash::ArduinoOTAPortenta_InternalFlash(StorageTypePortenta const storage_type, uint32_t const _data_offset)
-: ArduinoOTAPortenta(storage_type, _data_offset)
+Arduino_OTA_Portenta_InternalFlash::Arduino_OTA_Portenta_InternalFlash(StorageTypePortenta const storage_type, uint32_t const _data_offset)
+: Arduino_OTA_Portenta(storage_type, _data_offset)
 , _fs_flash("fs")
 , _littlefs_fs_flash("little_fs")
 , _update_size_internal_flash{0}
@@ -54,7 +54,7 @@ ArduinoOTAPortenta_InternalFlash::ArduinoOTAPortenta_InternalFlash(StorageTypePo
    PUBLIC MEMBER FUNCTIONS
  ******************************************************************************/
 
-bool ArduinoOTAPortenta_InternalFlash::init()
+bool Arduino_OTA_Portenta_InternalFlash::init()
 {
   FlashIAPBlockDevice bd(0x8000000 + _data_offset, 2 * 1024 * 1024 - _data_offset);
 
@@ -88,7 +88,7 @@ bool ArduinoOTAPortenta_InternalFlash::init()
   return false;
 }
 
-bool ArduinoOTAPortenta_InternalFlash::open()
+bool Arduino_OTA_Portenta_InternalFlash::open()
 {
   DIR * dir = NULL;
   struct dirent *entry = NULL;
@@ -145,7 +145,7 @@ bool ArduinoOTAPortenta_InternalFlash::open()
   return false;
 }
 
-size_t ArduinoOTAPortenta_InternalFlash::write()
+size_t Arduino_OTA_Portenta_InternalFlash::write()
 {
   HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR0, 0x07AA);
   HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR1, _storage_type);

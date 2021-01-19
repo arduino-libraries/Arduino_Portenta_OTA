@@ -67,7 +67,7 @@ enum StorageTypePortenta {
  * CLASS DECLARATION
  ******************************************************************************/
 
-class ArduinoOTAPortenta
+class Arduino_OTA_Portenta
 {
   public:
 
@@ -82,8 +82,8 @@ class ArduinoOTAPortenta
       OtaHeaterMagicNumber = -6,
     };
 
-             ArduinoOTAPortenta(StorageTypePortenta const storage_type, uint32_t const data_offset);
-    virtual ~ArduinoOTAPortenta();
+             Arduino_OTA_Portenta(StorageTypePortenta const storage_type, uint32_t const data_offset);
+    virtual ~Arduino_OTA_Portenta();
 
 
     Error begin();
@@ -110,8 +110,8 @@ class ArduinoOTAPortenta
  * INCLUDE
  ******************************************************************************/
 
-#include "ArduinoOTAPortenta_SD.h"
-#include "ArduinoOTAPortenta_QSPI.h"
-#include "ArduinoOTAPortenta_InternalFlash.h"
+#include "Arduino_OTA_Portenta_SD.h"
+#include "Arduino_OTA_Portenta_QSPI.h"
+#include "Arduino_OTA_Portenta_InternalFlash.h"
 
 #endif /* ARDUINO_OTA_PORTENTA_H */

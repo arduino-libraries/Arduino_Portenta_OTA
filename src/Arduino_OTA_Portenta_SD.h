@@ -15,26 +15,25 @@
    a commercial license, send an email to license@arduino.cc.
 */
 
-#ifndef ARDUINO_OTA_PORTENTA_QSPI_H_
-#define ARDUINO_OTA_PORTENTA_QSPI_H_
+#ifndef ARDUINO_OTA_PORTENTA_SD_H_
+#define ARDUINO_OTA_PORTENTA_SD_H_
 
 /******************************************************************************
  * INCLUDE
  ******************************************************************************/
 
-#include "ArduinoOTAPortenta.h"
+#include "Arduino_OTA_Portenta.h"
 
 /******************************************************************************
  * CLASS DECLARATION
  ******************************************************************************/
 
-class ArduinoOTAPortenta_QSPI : public ArduinoOTAPortenta
+class Arduino_OTA_Portenta_SD : public Arduino_OTA_Portenta
 {
-
 public:
 
-           ArduinoOTAPortenta_QSPI(StorageTypePortenta const storage_type, uint32_t const data_offset);
-  virtual ~ArduinoOTAPortenta_QSPI() { }
+           Arduino_OTA_Portenta_SD(StorageTypePortenta const storage_type, uint32_t const data_offset);
+  virtual ~Arduino_OTA_Portenta_SD() { }
 
 
 protected:
@@ -46,11 +45,11 @@ protected:
 
 private:
 
-  mbed::BlockDevice * _bd_qspi;
-  mbed::FATFileSystem * _fs_qspi;
-  QSPIFBlockDevice _block_device_qspi;
-  int _update_size_qspi;
+  mbed::BlockDevice * _bd;
+  SDMMCBlockDevice _block_device;
+  mbed::FATFileSystem * _fs_sd;
+  int _update_size_sd;
 
 };
 
-#endif /* ARDUINO_OTA_PORTENTA_QSPI_H_ */
+#endif /* ARDUINO_OTA_PORTENTA_SD_H_ */

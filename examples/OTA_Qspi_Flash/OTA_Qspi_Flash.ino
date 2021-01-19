@@ -3,14 +3,14 @@
  the firmware of the Arduino Portenta H7 using
  a firmware image stored on the QSPI.
  */
-#include "ArduinoOTAPortenta.h"
+#include "Arduino_OTA_Portenta.h"
 
 void setup() {
   Serial.begin(115200);
   while (!Serial) {}
 
   Serial.println("*****OTA from QSPI Flash*****");
-  ArduinoOTAPortenta_QSPI ota(QSPI_FLASH_FATFS_MBR, 2);
+  Arduino_OTA_Portenta_QSPI ota(QSPI_FLASH_FATFS_MBR, 2);
   ota.setUpdateLen(131728);
 
   pinMode(LEDB, OUTPUT);

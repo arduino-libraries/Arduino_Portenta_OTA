@@ -22,18 +22,18 @@
  * INCLUDE
  ******************************************************************************/
 
-#include "ArduinoOTAPortenta.h"
+#include "Arduino_OTA_Portenta.h"
 
 /******************************************************************************
  * CLASS DECLARATION
  ******************************************************************************/
 
-class ArduinoOTAPortenta_InternalFlash : public ArduinoOTAPortenta
+class Arduino_OTA_Portenta_InternalFlash : public Arduino_OTA_Portenta
 {
 public:
 
-           ArduinoOTAPortenta_InternalFlash(StorageTypePortenta const storage_type, uint32_t const data_offset);
-  virtual ~ArduinoOTAPortenta_InternalFlash() { }
+           Arduino_OTA_Portenta_InternalFlash(StorageTypePortenta const storage_type, uint32_t const data_offset);
+  virtual ~Arduino_OTA_Portenta_InternalFlash() { }
 
 
 protected:

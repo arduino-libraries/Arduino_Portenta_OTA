@@ -4,7 +4,7 @@
  a firmware image stored on a SD card.
  */
 
-#include "ArduinoOTAPortenta.h"
+#include "Arduino_OTA_Portenta.h"
 
 void setup()
 {
@@ -12,7 +12,7 @@ void setup()
   while (!Serial) {}
 
   Serial.println("*****OTA from SD*****");
-  ArduinoOTAPortenta_SD ota(SD_OFFSET, 10240);
+  Arduino_OTA_Portenta_SD ota(SD_OFFSET, 10240);
   ota.setUpdateLen(131728);
 
   pinMode(LEDB, OUTPUT);
