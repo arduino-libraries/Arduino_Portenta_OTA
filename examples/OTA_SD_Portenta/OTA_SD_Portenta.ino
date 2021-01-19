@@ -1,35 +1,29 @@
 /*
- This example demonstrates how to use the OTA on Portenta, 
- flashing the binary stored in the SD card.
- Before uploading this sketch:
- Upload OTA_Usage_Portenta.ino and follow the instructions
-*/
+ This example demonstrates how to use to update
+ the firmware of the Arduino Portenta H7 using
+ a firmware image stored on a SD card.
+ */
+
 #include "ArduinoOTAPortenta.h"
 
-void setup() {
+void setup()
+{
   Serial.begin(115200);
   while (!Serial) {}
 
   Serial.println("*****OTA from SD*****");
-
-  int started = millis();
-
-  Serial.print("Opening SD card...");
-
-  OTAPortenta.setUpdateLen(131728);
-  OTAPortenta.begin(SD_OFFSET,10240);
-
-  Serial.println("OK!");
+  ArduinoOTAPortenta_SD ota(SD_OFFSET, 10240);
+  ota.setUpdateLen(131728);
 
   pinMode(LEDB, OUTPUT);
   digitalWrite(LEDB, LOW);
   delay(5000);
   digitalWrite(LEDB, HIGH);
 
-  Serial.println("Restarting the system with updated fw...");
-
+  ota.update();
 }
 
-void loop() {
-  OTAPortenta.update();
+void loop()
+{
+
 }
