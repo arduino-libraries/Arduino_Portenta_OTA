@@ -39,9 +39,9 @@ public:
 
 protected:
 
-  virtual bool   init  () override;
-  virtual bool   open  () override;
-  virtual size_t write () override;
+  virtual bool init  () override;
+  virtual bool open  () override;
+  virtual bool write () override;
 
 
 private:

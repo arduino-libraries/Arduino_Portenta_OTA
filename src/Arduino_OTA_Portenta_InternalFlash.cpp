@@ -145,11 +145,11 @@ bool Arduino_OTA_Portenta_InternalFlash::open()
   return false;
 }
 
-size_t Arduino_OTA_Portenta_InternalFlash::write()
+bool Arduino_OTA_Portenta_InternalFlash::write()
 {
   HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR0, 0x07AA);
   HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR1, _storage_type);
   HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR2, _data_offset);
   HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR3, _update_size_internal_flash);
-  return _update_size_internal_flash;
+  return true;
 }

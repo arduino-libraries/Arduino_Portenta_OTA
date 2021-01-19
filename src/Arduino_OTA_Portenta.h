@@ -101,9 +101,9 @@ class Arduino_OTA_Portenta
     uint32_t _data_offset;
     uint32_t _program_length;
 
-    virtual bool   init  () = 0;
-    virtual bool   open  () = 0;
-    virtual size_t write () = 0;
+    virtual bool init  () = 0;
+    virtual bool open  () = 0;
+    virtual bool write () = 0;
 
 };
 

@@ -139,7 +139,7 @@ bool Arduino_OTA_Portenta_SD::open()
   return false;
 }
 
-size_t Arduino_OTA_Portenta_SD::write()
+bool Arduino_OTA_Portenta_SD::write()
 {
   if (_storage_type == SD_FATFS  ||
       _storage_type == SD_OFFSET ||
@@ -155,8 +155,8 @@ size_t Arduino_OTA_Portenta_SD::write()
     }
 
     HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR3, _update_size_sd);
-    return _update_size_sd;
+    return true;
   }
 
-  return 0;
+  return false;
 }

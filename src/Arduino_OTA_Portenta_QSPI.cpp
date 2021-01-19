@@ -125,7 +125,7 @@ bool Arduino_OTA_Portenta_QSPI::open()
   return false;
 }
 
-size_t Arduino_OTA_Portenta_QSPI::write()
+bool Arduino_OTA_Portenta_QSPI::write()
 {
   if(_storage_type == QSPI_FLASH_OFFSET ||
      _storage_type == QSPI_FLASH_FATFS  ||
@@ -135,7 +135,8 @@ size_t Arduino_OTA_Portenta_QSPI::write()
     HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR1, _storage_type);
     HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR2, _data_offset);
     HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR3, _update_size_qspi);
-    return _update_size_qspi;
+    return true;
   }
-  return 0;
+
+  return false;
 }
