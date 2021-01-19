@@ -17,6 +17,8 @@ void setup()
 
   Serial.println("*****OTA from Internal Flash*****");
   Arduino_OTA_Portenta_InternalFlash ota(INTERNAL_FLASH_OFFSET, 0x80000);
+  ota.begin();
+  ota.setUpdateLen(131728);
 
   pinMode(LEDB, OUTPUT);
   digitalWrite(LEDB, LOW);

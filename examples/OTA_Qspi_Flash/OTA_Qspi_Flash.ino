@@ -11,6 +11,7 @@ void setup() {
 
   Serial.println("*****OTA from QSPI Flash*****");
   Arduino_OTA_Portenta_QSPI ota(QSPI_FLASH_FATFS_MBR, 2);
+  ota.begin();
   ota.setUpdateLen(131728);
 
   pinMode(LEDB, OUTPUT);

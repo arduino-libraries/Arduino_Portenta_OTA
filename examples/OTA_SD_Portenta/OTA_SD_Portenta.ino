@@ -13,6 +13,7 @@ void setup()
 
   Serial.println("*****OTA from SD*****");
   Arduino_OTA_Portenta_SD ota(SD_OFFSET, 10240);
+  ota.begin();
   ota.setUpdateLen(131728);
 
   pinMode(LEDB, OUTPUT);
