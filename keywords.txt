@@ -1,34 +1,39 @@
 #######################################
-# Syntax Coloring Map For ArduinoIoTCloud
+# Syntax Coloring Map For Arduino_Portenta_OTA
 #######################################
 
 #######################################
 # Class (KEYWORD1)
 #######################################
 
-OTAPortenta	KEYWORD1
+ArduinoOTAPortenta_SD	KEYWORD1
+ArduinoOTAPortenta_QSPI	KEYWORD1
+ArduinoOTAPortenta_InternalFlash	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
 
-initProperties	KEYWORD2
-
-# ArduinoOTAPortenta.h
 begin	KEYWORD2
-#setBoardId	KEYWORD2
-setOTAStorage	KEYWORD2
+setUpdateLen	KEYWORD2
 update	KEYWORD2
+download	KEYWORD2
+decompress	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
 #######################################
 
-ON	LITERAL1
-OFF	LITERAL1
-ON_CHANGE	LITERAL1
-SECONDS	LITERAL1
-MINUTES	LITERAL1
-HOURS	LITERAL1
-DAYS	LITERAL1
-
+INTERNAL_FLASH_OFFSET	LITERAL1
+INTERNAL_FLASH_FATFS	LITERAL1
+INTERNAL_FLASH_LITTLEFS	LITERAL1
+QSPI_FLASH_OFFSET	LITERAL1
+QSPI_FLASH_FATFS	LITERAL1
+QSPI_FLASH_LITTLEFS	LITERAL1
+QSPI_FLASH_FATFS_MBR	LITERAL1
+QSPI_FLASH_LITTLEFS_MBR	LITERAL1
+SD_OFFSET	LITERAL1
+SD_FATFS	LITERAL1
+SD_LITTLEFS	LITERAL1
+SD_FATFS_MBR	LITERAL1
+SD_LITTLEFS_MBR	LITERAL1
