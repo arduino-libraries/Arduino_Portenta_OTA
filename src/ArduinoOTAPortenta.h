@@ -73,10 +73,13 @@ class ArduinoOTAPortenta
 
     enum class Error : int
     {
-      None           = 0,
-      NoOtaStorage   = 1,
-      OtaStorageInit = 2,
-      OtaStorageOpen = 3
+      None                 =  0,
+      NoOtaStorage         = -1,
+      OtaStorageInit       = -2,
+      OtaStorageOpen       = -3,
+      OtaHeaderLength      = -4,
+      OtaHeaderCrc         = -5,
+      OtaHeaterMagicNumber = -6,
     };
 
              ArduinoOTAPortenta(StorageTypePortenta const storage_type, uint32_t const data_offset);
@@ -88,7 +91,7 @@ class ArduinoOTAPortenta
     Error update();
 
     int download(const char * url);
-    size_t decompress();
+    int decompress();
 
 
   protected:

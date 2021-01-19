@@ -95,8 +95,8 @@ int ArduinoOTAPortenta::download(const char * url)
   return WiFi.download((char *)url, UPDATE_FILE_NAME_LZSS);
 }
 
-size_t ArduinoOTAPortenta::decompress() {
-
+int ArduinoOTAPortenta::decompress()
+{
   struct stat stat_buf;
   stat(UPDATE_FILE_NAME_LZSS, &stat_buf);
   auto update_file_size = stat_buf.st_size;
@@ -144,7 +144,7 @@ size_t ArduinoOTAPortenta::decompress() {
   if (ota_header.header.len != (update_file_size - sizeof(ota_header.header.len) - sizeof(ota_header.header.crc32))) {
     fclose(update_file);
     remove(UPDATE_FILE_NAME_LZSS);
-    return 0;
+    return static_cast<int>(Error::OtaHeaderLength);
   }
 
   /* ... and the CRC second ... rewind to start of CRC verified header ... */
@@ -167,14 +167,14 @@ size_t ArduinoOTAPortenta::decompress() {
   if (ota_header.header.crc32 != crc32) {
     fclose(update_file);
     remove(UPDATE_FILE_NAME_LZSS);
-    return 0;
+    return static_cast<int>(Error::OtaHeaderCrc);
   }
 
   if (ota_header.header.magic_number != 0x2341025b) /* 0x2341:025b = VID/PID Portenta H7 */
   {
     fclose(update_file);
     remove(UPDATE_FILE_NAME_LZSS);
-    return 0;
+    return static_cast<int>(Error::OtaHeaterMagicNumber);
   }
 
   /* Rewind to start of LZSS compressed binary. */
