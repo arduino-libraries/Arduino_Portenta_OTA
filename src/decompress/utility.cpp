@@ -195,12 +195,13 @@ int ArduinoOTAPortenta::decompress()
    */
   lzss_flush();
 
-  stat(UPDATE_FILE_NAME, &stat_buf);
+  /* Determine the size of the decompressed file. */
+  int const decompressed_file_size = ftell(decompressed);
 
   /* Delete UPDATE.BIN.LZSS because this update is complete. */
   fclose(update_file);
   fclose(decompressed);
   remove(UPDATE_FILE_NAME_LZSS);
 
-  return stat_buf.st_size;
+  return decompressed_file_size;
 }
