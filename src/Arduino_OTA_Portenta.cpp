@@ -58,9 +58,13 @@ Arduino_OTA_Portenta::Error Arduino_OTA_Portenta::update()
   if(!open())
     return Error::OtaStorageOpen;
 
-  if(!write());
+  if(!write())
     return Error::OtaStorageWrite;
 
-  NVIC_SystemReset();
   return Error::None;
+}
+
+void Arduino_OTA_Portenta::reset()
+{
+  NVIC_SystemReset();
 }

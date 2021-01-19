@@ -90,6 +90,7 @@ class Arduino_OTA_Portenta
     Error begin();
     void  setUpdateLen(uint32_t const program_length);
     Error update();
+    void  reset();
 
     int download(const char * url);
     int decompress();

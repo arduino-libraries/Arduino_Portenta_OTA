@@ -26,6 +26,7 @@ void setup()
   digitalWrite(LEDB, HIGH);
 
   ota.update();
+  ota.reset();
 }
 
 void loop()
