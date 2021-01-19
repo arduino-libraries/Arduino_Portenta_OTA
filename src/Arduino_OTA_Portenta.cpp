@@ -55,9 +55,12 @@ void Arduino_OTA_Portenta::setUpdateLen(uint32_t const program_length)
 
 Arduino_OTA_Portenta::Error Arduino_OTA_Portenta::update()
 {
-  if(!open()) return Error::OtaStorageOpen;
+  if(!open())
+    return Error::OtaStorageOpen;
 
-  write();
+  if(write() != _program_length);
+    return Error::OtaStorageWrite;
+
   NVIC_SystemReset();
   return Error::None;
 }

@@ -80,6 +80,7 @@ class Arduino_OTA_Portenta
       OtaHeaderLength      = -4,
       OtaHeaderCrc         = -5,
       OtaHeaterMagicNumber = -6,
+      OtaStorageWrite      = -7,
     };
 
              Arduino_OTA_Portenta(StorageTypePortenta const storage_type, uint32_t const data_offset);
