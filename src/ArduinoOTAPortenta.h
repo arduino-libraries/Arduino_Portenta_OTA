@@ -83,8 +83,8 @@ class ArduinoOTAPortenta
     virtual ~ArduinoOTAPortenta();
 
 
-    bool begin();
-    void setUpdateLen(uint32_t const program_length);
+    Error begin();
+    void  setUpdateLen(uint32_t const program_length);
     Error update();
 
     int download(const char * url);

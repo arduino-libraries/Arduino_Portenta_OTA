@@ -42,10 +42,10 @@ ArduinoOTAPortenta::~ArduinoOTAPortenta()
  * PUBLIC MEMBER FUNCTIONS
  ******************************************************************************/
 
-bool ArduinoOTAPortenta::begin()
+ArduinoOTAPortenta::Error ArduinoOTAPortenta::begin()
 {
   Serial1.begin(115200);
-  return init();
+  return (init() == false) ? Error::OtaStorageInit : Error::None;
 }
 
 void ArduinoOTAPortenta::setUpdateLen(uint32_t const program_length)
