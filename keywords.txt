@@ -6,9 +6,11 @@
 # Class (KEYWORD1)
 #######################################
 
+Arduino_Portenta_OTA	KEYWORD1
 Arduino_Portenta_OTA_SD	KEYWORD1
 Arduino_Portenta_OTA_QSPI	KEYWORD1
 Arduino_Portenta_OTA_InternalFlash	KEYWORD1
+Error	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
@@ -17,6 +19,7 @@ Arduino_Portenta_OTA_InternalFlash	KEYWORD1
 begin	KEYWORD2
 setUpdateLen	KEYWORD2
 update	KEYWORD2
+reset	KEYWORD2
 download	KEYWORD2
 decompress	KEYWORD2
 
@@ -37,3 +40,12 @@ SD_FATFS	LITERAL1
 SD_LITTLEFS	LITERAL1
 SD_FATFS_MBR	LITERAL1
 SD_LITTLEFS_MBR	LITERAL1
+
+None	LITERAL1
+NoOtaStorage	LITERAL1
+OtaStorageInit	LITERAL1
+OtaStorageOpen	LITERAL1
+OtaHeaderLength	LITERAL1
+OtaHeaderCrc	LITERAL1
+OtaHeaterMagicNumber	LITERAL1
+OtaStorageWrite	LITERAL1
