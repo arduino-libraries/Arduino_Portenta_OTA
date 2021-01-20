@@ -92,6 +92,9 @@ class Arduino_Portenta_OTA
     Error update();
     void  reset();
 
+    /* This functionality is intended for usage with the Arduino IoT Cloud for
+     * performing OTA firmware updates using the Arduino IoT Cloud servers.
+     */
     int download(const char * url);
     int decompress();
 
