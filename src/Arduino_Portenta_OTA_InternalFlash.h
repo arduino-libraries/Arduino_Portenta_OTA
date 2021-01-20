@@ -15,26 +15,25 @@
    a commercial license, send an email to license@arduino.cc.
 */
 
-#ifndef ARDUINO_OTA_PORTENTA_QSPI_H_
-#define ARDUINO_OTA_PORTENTA_QSPI_H_
+#ifndef ARDUINO_PORTENTA_OTA_INTERNAL_FLASH_H_
+#define ARDUINO_PORTENTA_OTA_INTERNAL_FLASH_H_
 
 /******************************************************************************
  * INCLUDE
  ******************************************************************************/
 
-#include "Arduino_OTA_Portenta.h"
+#include "Arduino_Portenta_OTA.h"
 
 /******************************************************************************
  * CLASS DECLARATION
  ******************************************************************************/
 
-class Arduino_OTA_Portenta_QSPI : public Arduino_OTA_Portenta
+class Arduino_Portenta_OTA_InternalFlash : public Arduino_Portenta_OTA
 {
-
 public:
 
-           Arduino_OTA_Portenta_QSPI(StorageTypePortenta const storage_type, uint32_t const data_offset);
-  virtual ~Arduino_OTA_Portenta_QSPI() { }
+           Arduino_Portenta_OTA_InternalFlash(StorageTypePortenta const storage_type, uint32_t const data_offset);
+  virtual ~Arduino_Portenta_OTA_InternalFlash() { }
 
 
 protected:
@@ -46,11 +45,10 @@ protected:
 
 private:
 
-  mbed::BlockDevice * _bd_qspi;
-  mbed::FATFileSystem * _fs_qspi;
-  QSPIFBlockDevice _block_device_qspi;
-  int _update_size_qspi;
+  mbed::FATFileSystem _fs_flash;
+  mbed::LittleFileSystem _littlefs_fs_flash;
+  int _update_size_internal_flash;
 
 };
 
-#endif /* ARDUINO_OTA_PORTENTA_QSPI_H_ */
+#endif /* ARDUINO_PORTENTA_OTA_INTERNAL_FLASH_H_ */

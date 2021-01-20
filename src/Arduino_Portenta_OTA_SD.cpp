@@ -19,7 +19,7 @@
    INCLUDE
  ******************************************************************************/
 
-#include "Arduino_OTA_Portenta_SD.h"
+#include "Arduino_Portenta_OTA_SD.h"
 
 #include "BSP.h"
 #include "stm32h7xx_hal_sd.h"
@@ -45,8 +45,8 @@ static char const SD_UPDATE_FILENAME[] = "UPDATE.BIN";
    CTOR/DTOR
  ******************************************************************************/
 
-Arduino_OTA_Portenta_SD::Arduino_OTA_Portenta_SD(StorageTypePortenta const storage_type, uint32_t const data_offset)
-: Arduino_OTA_Portenta(storage_type, data_offset)
+Arduino_Portenta_OTA_SD::Arduino_Portenta_OTA_SD(StorageTypePortenta const storage_type, uint32_t const data_offset)
+: Arduino_Portenta_OTA(storage_type, data_offset)
 , _bd{NULL}
 , _block_device()
 , _fs_sd{NULL}
@@ -63,7 +63,7 @@ Arduino_OTA_Portenta_SD::Arduino_OTA_Portenta_SD(StorageTypePortenta const stora
    PUBLIC MEMBER FUNCTIONS
  ******************************************************************************/
 
-bool Arduino_OTA_Portenta_SD::init()
+bool Arduino_Portenta_OTA_SD::init()
 {
   if (_storage_type == SD_OFFSET)
   {
@@ -108,7 +108,7 @@ bool Arduino_OTA_Portenta_SD::init()
   return false;
 }
 
-bool Arduino_OTA_Portenta_SD::open()
+bool Arduino_Portenta_OTA_SD::open()
 {
   if (_storage_type == SD_OFFSET)
     return true;
@@ -139,7 +139,7 @@ bool Arduino_OTA_Portenta_SD::open()
   return false;
 }
 
-bool Arduino_OTA_Portenta_SD::write()
+bool Arduino_Portenta_OTA_SD::write()
 {
   if (_storage_type == SD_FATFS  ||
       _storage_type == SD_OFFSET ||

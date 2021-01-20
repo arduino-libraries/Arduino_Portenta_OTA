@@ -4,7 +4,7 @@
  a firmware image stored on a SD card.
  */
 
-#include "Arduino_OTA_Portenta.h"
+#include "Arduino_Portenta_OTA.h"
 
 void setup()
 {
@@ -12,11 +12,11 @@ void setup()
   while (!Serial) {}
 
   Serial.println("*****OTA from SD*****");
-  Arduino_OTA_Portenta_SD ota(SD_OFFSET, 10240);
-  Arduino_OTA_Portenta::Error ota_err = Arduino_OTA_Portenta::Error::None;
+  Arduino_Portenta_OTA_SD ota(SD_OFFSET, 10240);
+  Arduino_Portenta_OTA::Error ota_err = Arduino_Portenta_OTA::Error::None;
 
   Serial.println("Initializing OTA storage");
-  if ((ota_err = ota.begin()) != Arduino_OTA_Portenta::Error::None)
+  if ((ota_err = ota.begin()) != Arduino_Portenta_OTA::Error::None)
   {
     Serial.print  ("ota.begin() failed with error code ");
     Serial.println((int)ota_err);
@@ -27,7 +27,7 @@ void setup()
   ota.setUpdateLen(131728);
 
   Serial.println("Storing parameters for firmware update in bootloader accessible non-volatile memory");
-  if ((ota_err = ota.update()) != Arduino_OTA_Portenta::Error::None)
+  if ((ota_err = ota.update()) != Arduino_Portenta_OTA::Error::None)
   {
     Serial.print  ("ota.update() failed with error code ");
     Serial.println((int)ota_err);

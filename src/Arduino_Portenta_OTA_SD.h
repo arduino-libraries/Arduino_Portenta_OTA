@@ -15,25 +15,25 @@
    a commercial license, send an email to license@arduino.cc.
 */
 
-#ifndef OTA_STORAGE_INTERNAL_FLASH_H_
-#define OTA_STORAGE_INTERNAL_FLASH_H_
+#ifndef ARDUINO_PORTENTA_OTA_SD_H_
+#define ARDUINO_PORTENTA_OTA_SD_H_
 
 /******************************************************************************
  * INCLUDE
  ******************************************************************************/
 
-#include "Arduino_OTA_Portenta.h"
+#include "Arduino_Portenta_OTA.h"
 
 /******************************************************************************
  * CLASS DECLARATION
  ******************************************************************************/
 
-class Arduino_OTA_Portenta_InternalFlash : public Arduino_OTA_Portenta
+class Arduino_Portenta_OTA_SD : public Arduino_Portenta_OTA
 {
 public:
 
-           Arduino_OTA_Portenta_InternalFlash(StorageTypePortenta const storage_type, uint32_t const data_offset);
-  virtual ~Arduino_OTA_Portenta_InternalFlash() { }
+           Arduino_Portenta_OTA_SD(StorageTypePortenta const storage_type, uint32_t const data_offset);
+  virtual ~Arduino_Portenta_OTA_SD() { }
 
 
 protected:
@@ -45,10 +45,11 @@ protected:
 
 private:
 
-  mbed::FATFileSystem _fs_flash;
-  mbed::LittleFileSystem _littlefs_fs_flash;
-  int _update_size_internal_flash;
+  mbed::BlockDevice * _bd;
+  SDMMCBlockDevice _block_device;
+  mbed::FATFileSystem * _fs_sd;
+  int _update_size_sd;
 
 };
 
-#endif /* OTA_STORAGE_PORTENTA */
+#endif /* ARDUINO_PORTENTA_OTA_SD_H_ */

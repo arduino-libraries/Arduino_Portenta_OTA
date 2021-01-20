@@ -19,7 +19,7 @@
    INCLUDE
  ******************************************************************************/
 
-#include "Arduino_OTA_Portenta_QSPI.h"
+#include "Arduino_Portenta_OTA_QSPI.h"
 
 #include <stm32h7xx_hal_rtc_ex.h>
 
@@ -37,8 +37,8 @@ extern RTC_HandleTypeDef RTCHandle;
    CTOR/DTOR
  ******************************************************************************/
 
-Arduino_OTA_Portenta_QSPI::Arduino_OTA_Portenta_QSPI(StorageTypePortenta const storage_type, uint32_t const data_offset)
-: Arduino_OTA_Portenta(storage_type, data_offset)
+Arduino_Portenta_OTA_QSPI::Arduino_Portenta_OTA_QSPI(StorageTypePortenta const storage_type, uint32_t const data_offset)
+: Arduino_Portenta_OTA(storage_type, data_offset)
 , _bd_qspi{NULL}
 , _fs_qspi{NULL}
 , _block_device_qspi(PD_11, PD_12, PF_7, PD_13,  PF_10, PG_6, QSPIF_POLARITY_MODE_1, 40000000)
@@ -55,7 +55,7 @@ Arduino_OTA_Portenta_QSPI::Arduino_OTA_Portenta_QSPI(StorageTypePortenta const s
    PUBLIC MEMBER FUNCTIONS
  ******************************************************************************/
 
-bool Arduino_OTA_Portenta_QSPI::init()
+bool Arduino_Portenta_OTA_QSPI::init()
 {
   if(_storage_type == QSPI_FLASH_OFFSET)
     return (_block_device_qspi.init() == QSPIF_BD_ERROR_OK);
@@ -91,7 +91,7 @@ bool Arduino_OTA_Portenta_QSPI::init()
   return false;
 }
 
-bool Arduino_OTA_Portenta_QSPI::open()
+bool Arduino_Portenta_OTA_QSPI::open()
 {
   if (_storage_type == QSPI_FLASH_OFFSET)
   {
@@ -125,7 +125,7 @@ bool Arduino_OTA_Portenta_QSPI::open()
   return false;
 }
 
-bool Arduino_OTA_Portenta_QSPI::write()
+bool Arduino_Portenta_OTA_QSPI::write()
 {
   if(_storage_type == QSPI_FLASH_OFFSET ||
      _storage_type == QSPI_FLASH_FATFS  ||

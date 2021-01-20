@@ -19,13 +19,13 @@
  * INCLUDE
  ******************************************************************************/
 
-#include "Arduino_OTA_Portenta.h"
+#include "Arduino_Portenta_OTA.h"
 
 /******************************************************************************
    CTOR/DTOR
  ******************************************************************************/
 
-Arduino_OTA_Portenta::Arduino_OTA_Portenta(StorageTypePortenta const storage_type, uint32_t const data_offset)
+Arduino_Portenta_OTA::Arduino_Portenta_OTA(StorageTypePortenta const storage_type, uint32_t const data_offset)
 : _storage_type{storage_type}
 , _data_offset{data_offset}
 , _program_length{0}
@@ -33,7 +33,7 @@ Arduino_OTA_Portenta::Arduino_OTA_Portenta(StorageTypePortenta const storage_typ
 
 }
 
-Arduino_OTA_Portenta::~Arduino_OTA_Portenta()
+Arduino_Portenta_OTA::~Arduino_Portenta_OTA()
 {
 
 }
@@ -42,18 +42,18 @@ Arduino_OTA_Portenta::~Arduino_OTA_Portenta()
  * PUBLIC MEMBER FUNCTIONS
  ******************************************************************************/
 
-Arduino_OTA_Portenta::Error Arduino_OTA_Portenta::begin()
+Arduino_Portenta_OTA::Error Arduino_Portenta_OTA::begin()
 {
   Serial1.begin(115200);
   return (init() == false) ? Error::OtaStorageInit : Error::None;
 }
 
-void Arduino_OTA_Portenta::setUpdateLen(uint32_t const program_length)
+void Arduino_Portenta_OTA::setUpdateLen(uint32_t const program_length)
 {
   _program_length = program_length;
 }
 
-Arduino_OTA_Portenta::Error Arduino_OTA_Portenta::update()
+Arduino_Portenta_OTA::Error Arduino_Portenta_OTA::update()
 {
   if(!open())
     return Error::OtaStorageOpen;
@@ -64,7 +64,7 @@ Arduino_OTA_Portenta::Error Arduino_OTA_Portenta::update()
   return Error::None;
 }
 
-void Arduino_OTA_Portenta::reset()
+void Arduino_Portenta_OTA::reset()
 {
   NVIC_SystemReset();
 }

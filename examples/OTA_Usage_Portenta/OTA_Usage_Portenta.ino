@@ -1,6 +1,6 @@
 /*
  Usage
- This example demonstrates how to use the Arduino_OTA_Portenta library to update a 
+ This example demonstrates how to use the Arduino_Portenta_OTA library to update a 
  sketch on any Portenta via the storage types allowed by the board.
  Steps to update sketch:
  1) Upload this sketch or any other sketch (this one lights the LED up with different colours).

@@ -15,8 +15,8 @@
    a commercial license, send an email to license@arduino.cc.
 */
 
-#ifndef ARDUINO_OTA_PORTENTA_H
-#define ARDUINO_OTA_PORTENTA_H
+#ifndef ARDUINO_PORTENTA_OTA_H_
+#define ARDUINO_PORTENTA_OTA_H_
 
 /******************************************************************************
  * INCLUDE
@@ -67,7 +67,7 @@ enum StorageTypePortenta {
  * CLASS DECLARATION
  ******************************************************************************/
 
-class Arduino_OTA_Portenta
+class Arduino_Portenta_OTA
 {
   public:
 
@@ -83,8 +83,8 @@ class Arduino_OTA_Portenta
       OtaStorageWrite      = -7,
     };
 
-             Arduino_OTA_Portenta(StorageTypePortenta const storage_type, uint32_t const data_offset);
-    virtual ~Arduino_OTA_Portenta();
+             Arduino_Portenta_OTA(StorageTypePortenta const storage_type, uint32_t const data_offset);
+    virtual ~Arduino_Portenta_OTA();
 
 
     Error begin();
@@ -112,8 +112,8 @@ class Arduino_OTA_Portenta
  * INCLUDE
  ******************************************************************************/
 
-#include "Arduino_OTA_Portenta_SD.h"
-#include "Arduino_OTA_Portenta_QSPI.h"
-#include "Arduino_OTA_Portenta_InternalFlash.h"
+#include "Arduino_Portenta_OTA_SD.h"
+#include "Arduino_Portenta_OTA_QSPI.h"
+#include "Arduino_Portenta_OTA_InternalFlash.h"
 
-#endif /* ARDUINO_OTA_PORTENTA_H */
+#endif /* ARDUINO_PORTENTA_OTA_H_ */
