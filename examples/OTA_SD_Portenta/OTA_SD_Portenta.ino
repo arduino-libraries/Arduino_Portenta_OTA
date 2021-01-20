@@ -13,15 +13,28 @@ void setup()
 
   Serial.println("*****OTA from SD*****");
   Arduino_OTA_Portenta_SD ota(SD_OFFSET, 10240);
-  ota.begin();
+  Arduino_OTA_Portenta::Error ota_err = Arduino_OTA_Portenta::Error::None;
+
+  Serial.println("Initializing OTA storage");
+  if ((ota_err = ota.begin()) != Arduino_OTA_Portenta::Error::None)
+  {
+    Serial.print  ("ota.begin() failed with error code ");
+    Serial.println((int)ota_err);
+    return;
+  }
+
+  /* This functions set's the precise length of update binary, in this case of OTA_Usage_Portenta.ino.PORTENTA_H7_M7.bin */
   ota.setUpdateLen(131728);
 
-  pinMode(LEDB, OUTPUT);
-  digitalWrite(LEDB, LOW);
-  delay(5000);
-  digitalWrite(LEDB, HIGH);
+  Serial.println("Storing parameters for firmware update in bootloader accessible non-volatile memory");
+  if ((ota_err = ota.update()) != Arduino_OTA_Portenta::Error::None)
+  {
+    Serial.print  ("ota.update() failed with error code ");
+    Serial.println((int)ota_err);
+    return;
+  }
 
-  ota.update();
+  Serial.println("Performing a reset after which the bootloader will update the firmware.");
   ota.reset();
 }
 
