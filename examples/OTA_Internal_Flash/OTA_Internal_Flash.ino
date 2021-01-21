@@ -28,7 +28,7 @@ void setup()
     return;
   }
 
-  /* This functions set's the precise length of update binary, in this case of OTA_Usage_Portenta.ino.PORTENTA_H7_M7.bin */
+  /* This function sets the precise length of update binary, in this case of OTA_Usage_Portenta.ino.PORTENTA_H7_M7.bin */
   ota.setUpdateLen(131728);
 
   Serial.println("Storing parameters for firmware update in bootloader accessible non-volatile memory");
