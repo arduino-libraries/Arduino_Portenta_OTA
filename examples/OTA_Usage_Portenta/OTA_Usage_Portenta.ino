@@ -5,7 +5,7 @@
  Steps to update sketch:
  1) Upload this sketch or any other sketch (this one lights the LED up with different colours).
  2) In the IDE select: Sketch -> Export compiled Binary
- 3) Open the location of the sketch and to choose the next step according to the desired storage type:
+ 3) Open the location of the sketch and choose the next step according to the desired storage type:
     - SD: copy the binary to the SD with the name "UPDATE.BIN"
     - INTERNAL FLASH:
     - QSPI Flash:
