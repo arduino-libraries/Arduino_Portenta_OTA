@@ -87,18 +87,15 @@ bool Arduino_Portenta_OTA_SD::init()
 
 bool Arduino_Portenta_OTA_SD::open()
 {
-  if (_storage_type == SD_FATFS || _storage_type == SD_FATFS_MBR)
+  DIR * dir = NULL;
+  if ((dir = opendir("/fs")) != NULL)
   {
-    DIR * dir = NULL;
-    if ((dir = opendir("/fs")) != NULL)
+    if (Arduino_Portenta_OTA::findProgramLength(dir, _program_length))
     {
-      if (Arduino_Portenta_OTA::findProgramLength(dir, _program_length))
-      {
-        closedir(dir);
-        return true;
-      }
       closedir(dir);
+      return true;
     }
+    closedir(dir);
   }
 
   return false;
