@@ -1,5 +1,5 @@
 /*
-   This file is part of ArduinoIoTCloud.
+   This file is part of Arduino_Portenta_OTA.
 
    Copyright 2019 ARDUINO SA (http://www.arduino.cc/)
 
