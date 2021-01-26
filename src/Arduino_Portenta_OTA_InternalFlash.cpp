@@ -21,17 +21,9 @@
 
 #include "Arduino_Portenta_OTA_InternalFlash.h"
 
-#include <stm32h7xx_hal_rtc_ex.h>
-
 #include <assert.h>
 
 using namespace arduino;
-
-/******************************************************************************
- * EXTERN
- ******************************************************************************/
-
-extern RTC_HandleTypeDef RTCHandle;
 
 /******************************************************************************
    CTOR/DTOR
@@ -42,7 +34,6 @@ Arduino_Portenta_OTA_InternalFlash::Arduino_Portenta_OTA_InternalFlash(StorageTy
 , _bd(0x8000000 + _data_offset, 2 * 1024 * 1024 - _data_offset)
 , _fs_flash("fs")
 , _littlefs_fs_flash("little_fs")
-, _update_size_internal_flash{0}
 {
   assert(_storage_type == INTERNAL_FLASH_FATFS  ||
          _storage_type == INTERNAL_FLASH_LITTLEFS);
@@ -97,7 +88,7 @@ bool Arduino_Portenta_OTA_InternalFlash::open()
         {
           struct stat stat_buf;
           stat("/fs/UPDATE.BIN", &stat_buf);
-          _update_size_internal_flash = stat_buf.st_size;
+          _program_length = stat_buf.st_size;
           closedir(dir);
           return true;
         }
@@ -118,7 +109,7 @@ bool Arduino_Portenta_OTA_InternalFlash::open()
         {
           struct stat stat_buf;
           stat("/little_fs/UPDATE.BIN", &stat_buf);
-          _update_size_internal_flash = stat_buf.st_size;
+          _program_length = stat_buf.st_size;
           closedir(dir);
           return true;
         }
@@ -128,15 +119,5 @@ bool Arduino_Portenta_OTA_InternalFlash::open()
     return false;
   }
 
-  _update_size_internal_flash = 0;
   return false;
-}
-
-bool Arduino_Portenta_OTA_InternalFlash::write()
-{
-  HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR0, 0x07AA);
-  HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR1, _storage_type);
-  HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR2, _data_offset);
-  HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR3, _update_size_internal_flash);
-  return true;
 }

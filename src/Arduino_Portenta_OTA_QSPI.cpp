@@ -21,17 +21,9 @@
 
 #include "Arduino_Portenta_OTA_QSPI.h"
 
-#include <stm32h7xx_hal_rtc_ex.h>
-
 #include <assert.h>
 
 using namespace arduino;
-
-/******************************************************************************
- * EXTERN
- ******************************************************************************/
-
-extern RTC_HandleTypeDef RTCHandle;
 
 /******************************************************************************
    CTOR/DTOR
@@ -42,7 +34,6 @@ Arduino_Portenta_OTA_QSPI::Arduino_Portenta_OTA_QSPI(StorageTypePortenta const s
 , _bd_qspi{NULL}
 , _fs_qspi{NULL}
 , _block_device_qspi(PD_11, PD_12, PF_7, PD_13,  PF_10, PG_6, QSPIF_POLARITY_MODE_1, 40000000)
-, _update_size_qspi{0}
 {
   assert(_storage_type == QSPI_FLASH_FATFS     ||
          _storage_type == QSPI_FLASH_LITTLEFS  ||
@@ -103,29 +94,13 @@ bool Arduino_Portenta_OTA_QSPI::open()
         {
           struct stat stat_buf;
           stat("/fs/UPDATE.BIN", &stat_buf);
-          _update_size_qspi = stat_buf.st_size;
+          _program_length = stat_buf.st_size;
           closedir(dir);
           return true;
         }
       }
       closedir(dir);
     }
-  }
-
-  _update_size_qspi = 0;
-  return false;
-}
-
-bool Arduino_Portenta_OTA_QSPI::write()
-{
-  if(_storage_type == QSPI_FLASH_FATFS  ||
-     _storage_type == QSPI_FLASH_FATFS_MBR)
-  {
-    HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR0, 0x07AA);
-    HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR1, _storage_type);
-    HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR2, _data_offset);
-    HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR3, _update_size_qspi);
-    return true;
   }
 
   return false;

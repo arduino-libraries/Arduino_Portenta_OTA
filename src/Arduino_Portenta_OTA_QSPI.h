@@ -41,7 +41,6 @@ protected:
 
   virtual bool init  () override;
   virtual bool open  () override;
-  virtual bool write () override;
 
 
 private:
@@ -49,7 +48,6 @@ private:
   mbed::BlockDevice * _bd_qspi;
   mbed::FATFileSystem * _fs_qspi;
   QSPIFBlockDevice _block_device_qspi;
-  int _update_size_qspi;
 
 };
 

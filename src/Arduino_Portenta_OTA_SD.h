@@ -40,7 +40,6 @@ protected:
 
   virtual bool init  () override;
   virtual bool open  () override;
-  virtual bool write () override;
 
 
 private:
@@ -48,7 +47,6 @@ private:
   mbed::BlockDevice * _bd;
   SDMMCBlockDevice _block_device;
   mbed::FATFileSystem * _fs_sd;
-  int _update_size_sd;
 
 };
 

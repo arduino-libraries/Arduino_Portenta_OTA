@@ -21,6 +21,14 @@
 
 #include "Arduino_Portenta_OTA.h"
 
+#include <stm32h7xx_hal_rtc_ex.h>
+
+/******************************************************************************
+ * EXTERN
+ ******************************************************************************/
+
+extern RTC_HandleTypeDef RTCHandle;
+
 /******************************************************************************
    CTOR/DTOR
  ******************************************************************************/
@@ -48,18 +56,12 @@ Arduino_Portenta_OTA::Error Arduino_Portenta_OTA::begin()
   return (init() == false) ? Error::OtaStorageInit : Error::None;
 }
 
-void Arduino_Portenta_OTA::setUpdateLen(uint32_t const program_length)
-{
-  _program_length = program_length;
-}
-
 Arduino_Portenta_OTA::Error Arduino_Portenta_OTA::update()
 {
   if(!open())
     return Error::OtaStorageOpen;
 
-  if(!write())
-    return Error::OtaStorageWrite;
+  write();
 
   return Error::None;
 }
@@ -67,4 +69,16 @@ Arduino_Portenta_OTA::Error Arduino_Portenta_OTA::update()
 void Arduino_Portenta_OTA::reset()
 {
   NVIC_SystemReset();
+}
+
+/******************************************************************************
+ * PRIVATE MEMBER FUNCTIONS
+ ******************************************************************************/
+
+void Arduino_Portenta_OTA::write()
+{
+  HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR0, 0x07AA);
+  HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR1, _storage_type);
+  HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR2, _data_offset);
+  HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR3, _program_length);
 }

@@ -77,7 +77,6 @@ class Arduino_Portenta_OTA
       OtaHeaderLength      = -4,
       OtaHeaderCrc         = -5,
       OtaHeaterMagicNumber = -6,
-      OtaStorageWrite      = -7,
     };
 
              Arduino_Portenta_OTA(StorageTypePortenta const storage_type, uint32_t const data_offset);
@@ -85,7 +84,6 @@ class Arduino_Portenta_OTA
 
 
     Error begin();
-    void  setUpdateLen(uint32_t const program_length);
     Error update();
     void  reset();
 
@@ -102,9 +100,13 @@ class Arduino_Portenta_OTA
     uint32_t _data_offset;
     uint32_t _program_length;
 
-    virtual bool init  () = 0;
-    virtual bool open  () = 0;
-    virtual bool write () = 0;
+    virtual bool init() = 0;
+    virtual bool open() = 0;
+
+
+  private:
+
+    void write();
 
 };
 

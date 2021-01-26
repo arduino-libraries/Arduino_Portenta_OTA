@@ -42,7 +42,6 @@ protected:
 
   virtual bool init  () override;
   virtual bool open  () override;
-  virtual bool write () override;
 
 
 private:
@@ -50,7 +49,6 @@ private:
   FlashIAPBlockDevice _bd;
   mbed::FATFileSystem _fs_flash;
   mbed::LittleFileSystem _littlefs_fs_flash;
-  int _update_size_internal_flash;
 
 };
 

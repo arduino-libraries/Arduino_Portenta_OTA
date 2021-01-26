@@ -23,17 +23,10 @@
 
 #include "BSP.h"
 #include "stm32h7xx_hal_sd.h"
-#include "stm32h7xx_hal_rtc_ex.h"
 
 #include <assert.h>
 
 using namespace arduino;
-
-/******************************************************************************
- * EXTERN
- ******************************************************************************/
-
-extern RTC_HandleTypeDef RTCHandle;
 
 /******************************************************************************
    CONSTANTS
@@ -50,7 +43,6 @@ Arduino_Portenta_OTA_SD::Arduino_Portenta_OTA_SD(StorageTypePortenta const stora
 , _bd{NULL}
 , _block_device()
 , _fs_sd{NULL}
-, _update_size_sd{0}
 {
   assert(_storage_type == SD_FATFS     ||
          _storage_type == SD_LITTLEFS  ||
@@ -111,7 +103,7 @@ bool Arduino_Portenta_OTA_SD::open()
         {
           struct stat stat_buf;
           stat("/fs/UPDATE.BIN", &stat_buf);
-          _update_size_sd = stat_buf.st_size;
+          _program_length = stat_buf.st_size;
           closedir(dir);
           return true;
         }
@@ -119,21 +111,6 @@ bool Arduino_Portenta_OTA_SD::open()
       closedir(dir);
     }
     return false;
-  }
-
-  return false;
-}
-
-bool Arduino_Portenta_OTA_SD::write()
-{
-  if (_storage_type == SD_FATFS  ||
-      _storage_type == SD_FATFS_MBR)
-  {
-    HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR0, 0x07AA);
-    HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR1, _storage_type);
-    HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR2, _data_offset);
-    HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR3, _update_size_sd);
-    return true;
   }
 
   return false;
