@@ -103,6 +103,7 @@ class Arduino_Portenta_OTA
     virtual bool init() = 0;
     virtual bool open() = 0;
 
+    static bool findProgramLength(DIR * dir, uint32_t & program_length);
 
   private:
 

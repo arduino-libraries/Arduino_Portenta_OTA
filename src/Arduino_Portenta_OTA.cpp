@@ -72,6 +72,27 @@ void Arduino_Portenta_OTA::reset()
 }
 
 /******************************************************************************
+ * PROTECTED MEMBER FUNCTIONS
+ ******************************************************************************/
+
+bool Arduino_Portenta_OTA::findProgramLength(DIR * dir, uint32_t & program_length)
+{
+  struct dirent * entry = NULL;
+  while ((entry = readdir(dir)) != NULL)
+  {
+    if (String(entry->d_name) == "UPDATE.BIN")
+    {
+      struct stat stat_buf;
+      stat("/fs/UPDATE.BIN", &stat_buf);
+      program_length = stat_buf.st_size;
+      return true;
+    }
+  }
+
+  return false;
+}
+
+/******************************************************************************
  * PRIVATE MEMBER FUNCTIONS
  ******************************************************************************/
 

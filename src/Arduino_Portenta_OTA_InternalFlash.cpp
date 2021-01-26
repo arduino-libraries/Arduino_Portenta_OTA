@@ -77,23 +77,15 @@ bool Arduino_Portenta_OTA_InternalFlash::init()
 bool Arduino_Portenta_OTA_InternalFlash::open()
 {
   DIR * dir = NULL;
-  struct dirent *entry = NULL;
 
   if (_storage_type == INTERNAL_FLASH_FATFS)
   {
     if ((dir = opendir("/fs")) != NULL)
     {
-      /* print all the files and directories within directory */
-      while ((entry = readdir(dir)) != NULL)
+      if (Arduino_Portenta_OTA::findProgramLength(dir, _program_length))
       {
-        if (String(entry->d_name) == "UPDATE.BIN")
-        {
-          struct stat stat_buf;
-          stat("/fs/UPDATE.BIN", &stat_buf);
-          _program_length = stat_buf.st_size;
-          closedir(dir);
-          return true;
-        }
+        closedir(dir);
+        return true;
       }
       closedir(dir);
     }
@@ -104,17 +96,10 @@ bool Arduino_Portenta_OTA_InternalFlash::open()
   {
     if ((dir = opendir("/little_fs")) != NULL)
     {
-      /* print all the files and directories within directory */
-      while ((entry = readdir(dir)) != NULL)
+      if (Arduino_Portenta_OTA::findProgramLength(dir, _program_length))
       {
-        if (String(entry->d_name) == "UPDATE.BIN")
-        {
-          struct stat stat_buf;
-          stat("/little_fs/UPDATE.BIN", &stat_buf);
-          _program_length = stat_buf.st_size;
-          closedir(dir);
-          return true;
-        }
+        closedir(dir);
+        return true;
       }
       closedir(dir);
     }

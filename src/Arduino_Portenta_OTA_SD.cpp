@@ -95,22 +95,13 @@ bool Arduino_Portenta_OTA_SD::open()
     DIR * dir = NULL;
     if ((dir = opendir("/fs")) != NULL)
     {
-      /* print all the files and directories within directory */
-      struct dirent * entry = NULL;
-      while ((entry = readdir(dir)) != NULL)
+      if (Arduino_Portenta_OTA::findProgramLength(dir, _program_length))
       {
-        if (String(entry->d_name) == "UPDATE.BIN")
-        {
-          struct stat stat_buf;
-          stat("/fs/UPDATE.BIN", &stat_buf);
-          _program_length = stat_buf.st_size;
-          closedir(dir);
-          return true;
-        }
+        closedir(dir);
+        return true;
       }
       closedir(dir);
     }
-    return false;
   }
 
   return false;
