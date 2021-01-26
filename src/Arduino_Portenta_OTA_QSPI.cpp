@@ -75,9 +75,7 @@ bool Arduino_Portenta_OTA_QSPI::init()
 
   if (_storage_type == QSPI_FLASH_FATFS_MBR)
   {
-    _bd_qspi = &_block_device_qspi;
-    mbed::BlockDevice* physical_block_device = _bd_qspi;
-    _bd_qspi = new mbed::MBRBlockDevice(physical_block_device, _data_offset);
+    _bd_qspi = new mbed::MBRBlockDevice(reinterpret_cast<mbed::BlockDevice *>(&_block_device_qspi), _data_offset);
     _fs_qspi = new mbed::FATFileSystem("fs");
     int const err_mount = _fs_qspi->mount(_bd_qspi);
     if (err_mount) {
