@@ -23,8 +23,6 @@
 
 #include <stm32h7xx_hal_rtc_ex.h>
 
-#include "FlashIAPBlockDevice.h"
-
 #include <assert.h>
 
 using namespace arduino;
@@ -41,6 +39,7 @@ extern RTC_HandleTypeDef RTCHandle;
 
 Arduino_Portenta_OTA_InternalFlash::Arduino_Portenta_OTA_InternalFlash(StorageTypePortenta const storage_type, uint32_t const _data_offset)
 : Arduino_Portenta_OTA(storage_type, _data_offset)
+, _bd(0x8000000 + _data_offset, 2 * 1024 * 1024 - _data_offset)
 , _fs_flash("fs")
 , _littlefs_fs_flash("little_fs")
 , _update_size_internal_flash{0}
@@ -55,11 +54,9 @@ Arduino_Portenta_OTA_InternalFlash::Arduino_Portenta_OTA_InternalFlash(StorageTy
 
 bool Arduino_Portenta_OTA_InternalFlash::init()
 {
-  FlashIAPBlockDevice bd(0x8000000 + _data_offset, 2 * 1024 * 1024 - _data_offset);
-
   if (_storage_type == INTERNAL_FLASH_FATFS)
   {
-    int const err = _fs_flash.mount(&bd);
+    int const err = _fs_flash.mount(&_bd);
     if (err)
     {
       Serial1.print("Error while mounting flash filesystem: ");
@@ -71,7 +68,7 @@ bool Arduino_Portenta_OTA_InternalFlash::init()
 
   if (_storage_type == INTERNAL_FLASH_LITTLEFS)
   {
-    int const err = _littlefs_fs_flash.mount(&bd);
+    int const err = _littlefs_fs_flash.mount(&_bd);
     if (err)
     {
       Serial1.print("Error while mounting littlefs filesystem: ");

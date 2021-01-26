@@ -24,6 +24,8 @@
 
 #include "Arduino_Portenta_OTA.h"
 
+#include <FlashIAPBlockDevice.h>
+
 /******************************************************************************
  * CLASS DECLARATION
  ******************************************************************************/
@@ -45,6 +47,7 @@ protected:
 
 private:
 
+  FlashIAPBlockDevice _bd;
   mbed::FATFileSystem _fs_flash;
   mbed::LittleFileSystem _littlefs_fs_flash;
   int _update_size_internal_flash;
