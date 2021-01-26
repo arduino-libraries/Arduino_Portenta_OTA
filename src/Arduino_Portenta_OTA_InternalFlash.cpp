@@ -35,8 +35,7 @@ Arduino_Portenta_OTA_InternalFlash::Arduino_Portenta_OTA_InternalFlash(StorageTy
 , _fs_flash{NULL}
 , _littlefs_fs_flash{NULL}
 {
-  assert(_storage_type == INTERNAL_FLASH_FATFS  ||
-         _storage_type == INTERNAL_FLASH_LITTLEFS);
+  assert(_storage_type == INTERNAL_FLASH_FATFS || _storage_type == INTERNAL_FLASH_LITTLEFS);
 }
 
 /******************************************************************************

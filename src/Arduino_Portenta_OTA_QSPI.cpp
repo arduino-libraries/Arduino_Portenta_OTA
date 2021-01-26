@@ -35,10 +35,7 @@ Arduino_Portenta_OTA_QSPI::Arduino_Portenta_OTA_QSPI(StorageTypePortenta const s
 , _fs_qspi{NULL}
 , _block_device_qspi(PD_11, PD_12, PF_7, PD_13,  PF_10, PG_6, QSPIF_POLARITY_MODE_1, 40000000)
 {
-  assert(_storage_type == QSPI_FLASH_FATFS     ||
-         _storage_type == QSPI_FLASH_LITTLEFS  ||
-         _storage_type == QSPI_FLASH_FATFS_MBR ||
-         _storage_type == QSPI_FLASH_LITTLEFS_MBR);
+  assert(_storage_type == QSPI_FLASH_FATFS || _storage_type == QSPI_FLASH_FATFS_MBR);
 }
 
 /******************************************************************************

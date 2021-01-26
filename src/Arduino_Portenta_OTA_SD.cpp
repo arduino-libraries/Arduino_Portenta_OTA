@@ -44,10 +44,7 @@ Arduino_Portenta_OTA_SD::Arduino_Portenta_OTA_SD(StorageTypePortenta const stora
 , _block_device()
 , _fs_sd{NULL}
 {
-  assert(_storage_type == SD_FATFS     ||
-         _storage_type == SD_LITTLEFS  ||
-         _storage_type == SD_FATFS_MBR ||
-         _storage_type == SD_LITTLEFS_MBR);
+  assert(_storage_type == SD_FATFS || _storage_type == SD_FATFS_MBR);
 }
 
 /******************************************************************************
