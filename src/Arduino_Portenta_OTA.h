@@ -35,25 +35,25 @@
  * DEFINE
  ******************************************************************************/
 
-#define INTERNAL_FLASH_FLAG     (1 << 1)
-#define QSPI_FLASH_FLAG         (1 << 2)
-#define SDCARD_FLAG             (1 << 3)
-#define RAW_FLAG                (1 << 4)
-#define FATFS_FLAG              (1 << 5)
-#define LITTLEFS_FLAG           (1 << 6)
-#define MBR_FLAG                (1 << 7)
+#define APOTA_INTERNAL_FLASH_FLAG     (1 << 1)
+#define APOTA_QSPI_FLASH_FLAG         (1 << 2)
+#define APOTA_SDCARD_FLAG             (1 << 3)
+#define APOTA_RAW_FLAG                (1 << 4)
+#define APOTA_FATFS_FLAG              (1 << 5)
+#define APOTA_LITTLEFS_FLAG           (1 << 6)
+#define APOTA_MBR_FLAG                (1 << 7)
 
 /******************************************************************************
  * TYPEDEF
  ******************************************************************************/
 
 enum StorageTypePortenta {
-    INTERNAL_FLASH_FATFS    = INTERNAL_FLASH_FLAG | FATFS_FLAG,
-    INTERNAL_FLASH_LITTLEFS = INTERNAL_FLASH_FLAG | LITTLEFS_FLAG,
-    QSPI_FLASH_FATFS        = QSPI_FLASH_FLAG | FATFS_FLAG,
-    QSPI_FLASH_FATFS_MBR    = QSPI_FLASH_FLAG | FATFS_FLAG | MBR_FLAG,
-    SD_FATFS                = SDCARD_FLAG | FATFS_FLAG,
-    SD_FATFS_MBR            = SDCARD_FLAG | FATFS_FLAG | MBR_FLAG,
+    INTERNAL_FLASH_FATFS    = APOTA_INTERNAL_FLASH_FLAG | APOTA_FATFS_FLAG,
+    INTERNAL_FLASH_LITTLEFS = APOTA_INTERNAL_FLASH_FLAG | APOTA_LITTLEFS_FLAG,
+    QSPI_FLASH_FATFS        = APOTA_QSPI_FLASH_FLAG | APOTA_FATFS_FLAG,
+    QSPI_FLASH_FATFS_MBR    = APOTA_QSPI_FLASH_FLAG | APOTA_FATFS_FLAG | APOTA_MBR_FLAG,
+    SD_FATFS                = APOTA_SDCARD_FLAG | APOTA_FATFS_FLAG,
+    SD_FATFS_MBR            = APOTA_SDCARD_FLAG | APOTA_FATFS_FLAG | APOTA_MBR_FLAG,
 };
 
 /******************************************************************************
