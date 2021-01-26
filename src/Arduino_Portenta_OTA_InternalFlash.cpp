@@ -32,8 +32,8 @@ using namespace arduino;
 Arduino_Portenta_OTA_InternalFlash::Arduino_Portenta_OTA_InternalFlash(StorageTypePortenta const storage_type, uint32_t const _data_offset)
 : Arduino_Portenta_OTA(storage_type, _data_offset)
 , _bd(0x8000000 + _data_offset, 2 * 1024 * 1024 - _data_offset)
-, _fs_flash("fs")
-, _littlefs_fs_flash("little_fs")
+, _fs_flash{NULL}
+, _littlefs_fs_flash{NULL}
 {
   assert(_storage_type == INTERNAL_FLASH_FATFS  ||
          _storage_type == INTERNAL_FLASH_LITTLEFS);
@@ -47,7 +47,8 @@ bool Arduino_Portenta_OTA_InternalFlash::init()
 {
   if (_storage_type == INTERNAL_FLASH_FATFS)
   {
-    int const err = _fs_flash.mount(&_bd);
+    _fs_flash = new mbed::FATFileSystem("fs");
+    int const err = _fs_flash->mount(&_bd);
     if (err)
     {
       Serial1.print("Error while mounting flash filesystem: ");
@@ -59,7 +60,8 @@ bool Arduino_Portenta_OTA_InternalFlash::init()
 
   if (_storage_type == INTERNAL_FLASH_LITTLEFS)
   {
-    int const err = _littlefs_fs_flash.mount(&_bd);
+    _littlefs_fs_flash = new mbed::LittleFileSystem("little_fs");
+    int const err = _littlefs_fs_flash->mount(&_bd);
     if (err)
     {
       Serial1.print("Error while mounting littlefs filesystem: ");

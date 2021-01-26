@@ -47,8 +47,8 @@ protected:
 private:
 
   FlashIAPBlockDevice _bd;
-  mbed::FATFileSystem _fs_flash;
-  mbed::LittleFileSystem _littlefs_fs_flash;
+  mbed::FATFileSystem * _fs_flash;
+  mbed::LittleFileSystem * _littlefs_fs_flash;
 
 };
 
