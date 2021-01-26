@@ -52,8 +52,7 @@ Arduino_Portenta_OTA_SD::Arduino_Portenta_OTA_SD(StorageTypePortenta const stora
 , _fs_sd{NULL}
 , _update_size_sd{0}
 {
-  assert(_storage_type == SD_OFFSET    ||
-         _storage_type == SD_FATFS     ||
+  assert(_storage_type == SD_FATFS     ||
          _storage_type == SD_LITTLEFS  ||
          _storage_type == SD_FATFS_MBR ||
          _storage_type == SD_LITTLEFS_MBR);
@@ -65,17 +64,8 @@ Arduino_Portenta_OTA_SD::Arduino_Portenta_OTA_SD(StorageTypePortenta const stora
 
 bool Arduino_Portenta_OTA_SD::init()
 {
-  if (_storage_type == SD_OFFSET)
-  {
-    int const err = _block_device.init();
-    if (err)
-    {
-      Serial1.print("Error while _block_device.init() : ");
-      Serial1.println(err);
-      return false;
-    }
-    return true;
-  }
+  if (_block_device.init())
+    return false;
 
    if(_storage_type == SD_FATFS)
    {
@@ -108,9 +98,6 @@ bool Arduino_Portenta_OTA_SD::init()
 
 bool Arduino_Portenta_OTA_SD::open()
 {
-  if (_storage_type == SD_OFFSET)
-    return true;
-
   if (_storage_type == SD_FATFS || _storage_type == SD_FATFS_MBR)
   {
     DIR * dir = NULL;
@@ -140,18 +127,11 @@ bool Arduino_Portenta_OTA_SD::open()
 bool Arduino_Portenta_OTA_SD::write()
 {
   if (_storage_type == SD_FATFS  ||
-      _storage_type == SD_OFFSET ||
       _storage_type == SD_FATFS_MBR)
   {
     HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR0, 0x07AA);
     HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR1, _storage_type);
-
-    if(_storage_type == SD_OFFSET || _storage_type == SD_FATFS_MBR)
-    {
-      HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR2, _data_offset);
-      _update_size_sd = _program_length;
-    }
-
+    HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR2, _data_offset);
     HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR3, _update_size_sd);
     return true;
   }

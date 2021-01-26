@@ -45,8 +45,7 @@ Arduino_Portenta_OTA_InternalFlash::Arduino_Portenta_OTA_InternalFlash(StorageTy
 , _littlefs_fs_flash("little_fs")
 , _update_size_internal_flash{0}
 {
-  assert(_storage_type == INTERNAL_FLASH_OFFSET ||
-         _storage_type == INTERNAL_FLASH_FATFS  ||
+  assert(_storage_type == INTERNAL_FLASH_FATFS  ||
          _storage_type == INTERNAL_FLASH_LITTLEFS);
 }
 
@@ -69,9 +68,6 @@ bool Arduino_Portenta_OTA_InternalFlash::init()
     }
     return true;
   }
-
-  if (_storage_type == INTERNAL_FLASH_OFFSET)
-    return true;
 
   if (_storage_type == INTERNAL_FLASH_LITTLEFS)
   {
@@ -112,12 +108,6 @@ bool Arduino_Portenta_OTA_InternalFlash::open()
       closedir(dir);
     }
     return false;
-  }
-
-  if (_storage_type == INTERNAL_FLASH_OFFSET)
-  {
-    _update_size_internal_flash = 2 * 1024 * 1024;
-    return true;
   }
 
   if (_storage_type == INTERNAL_FLASH_LITTLEFS)

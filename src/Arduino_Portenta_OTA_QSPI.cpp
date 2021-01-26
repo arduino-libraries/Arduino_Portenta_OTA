@@ -44,8 +44,7 @@ Arduino_Portenta_OTA_QSPI::Arduino_Portenta_OTA_QSPI(StorageTypePortenta const s
 , _block_device_qspi(PD_11, PD_12, PF_7, PD_13,  PF_10, PG_6, QSPIF_POLARITY_MODE_1, 40000000)
 , _update_size_qspi{0}
 {
-  assert(_storage_type == QSPI_FLASH_OFFSET    ||
-         _storage_type == QSPI_FLASH_FATFS     ||
+  assert(_storage_type == QSPI_FLASH_FATFS     ||
          _storage_type == QSPI_FLASH_LITTLEFS  ||
          _storage_type == QSPI_FLASH_FATFS_MBR ||
          _storage_type == QSPI_FLASH_LITTLEFS_MBR);
@@ -57,8 +56,8 @@ Arduino_Portenta_OTA_QSPI::Arduino_Portenta_OTA_QSPI(StorageTypePortenta const s
 
 bool Arduino_Portenta_OTA_QSPI::init()
 {
-  if(_storage_type == QSPI_FLASH_OFFSET)
-    return (_block_device_qspi.init() == QSPIF_BD_ERROR_OK);
+  if (_block_device_qspi.init() != QSPIF_BD_ERROR_OK)
+    return false;
 
   if(_storage_type == QSPI_FLASH_FATFS)
   {
@@ -91,12 +90,6 @@ bool Arduino_Portenta_OTA_QSPI::init()
 
 bool Arduino_Portenta_OTA_QSPI::open()
 {
-  if (_storage_type == QSPI_FLASH_OFFSET)
-  {
-    _update_size_qspi = _program_length;
-    return true;
-  }
-
   if(_storage_type == QSPI_FLASH_FATFS || _storage_type == QSPI_FLASH_FATFS_MBR)
   {
     DIR * dir = NULL;
@@ -125,8 +118,7 @@ bool Arduino_Portenta_OTA_QSPI::open()
 
 bool Arduino_Portenta_OTA_QSPI::write()
 {
-  if(_storage_type == QSPI_FLASH_OFFSET ||
-     _storage_type == QSPI_FLASH_FATFS  ||
+  if(_storage_type == QSPI_FLASH_FATFS  ||
      _storage_type == QSPI_FLASH_FATFS_MBR)
   {
     HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR0, 0x07AA);
