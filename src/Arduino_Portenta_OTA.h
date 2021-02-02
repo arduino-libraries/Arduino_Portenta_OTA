@@ -67,12 +67,13 @@ class Arduino_Portenta_OTA
     enum class Error : int
     {
       None                 =  0,
-      NoOtaStorage         = -1,
-      OtaStorageInit       = -2,
-      OtaStorageOpen       = -3,
-      OtaHeaderLength      = -4,
-      OtaHeaderCrc         = -5,
-      OtaHeaterMagicNumber = -6,
+      NoCapableBootloader  = -1,
+      NoOtaStorage         = -2,
+      OtaStorageInit       = -3,
+      OtaStorageOpen       = -4,
+      OtaHeaderLength      = -5,
+      OtaHeaderCrc         = -6,
+      OtaHeaterMagicNumber = -7,
     };
 
              Arduino_Portenta_OTA(StorageTypePortenta const storage_type, uint32_t const data_offset);

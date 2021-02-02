@@ -65,7 +65,14 @@ bool Arduino_Portenta_OTA::isOtaCapable()
 Arduino_Portenta_OTA::Error Arduino_Portenta_OTA::begin()
 {
   Serial1.begin(115200);
-  return (init() == false) ? Error::OtaStorageInit : Error::None;
+
+  if (!isOtaCapable())
+    return Error::NoCapableBootloader;
+
+  if (!init())
+    return Error::OtaStorageInit;
+
+  return Error::None;
 }
 
 Arduino_Portenta_OTA::Error Arduino_Portenta_OTA::update()
