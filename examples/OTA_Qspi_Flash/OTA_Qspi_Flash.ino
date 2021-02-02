@@ -11,7 +11,7 @@
  *      A) ./lzss.py --encode SKETCH.bin SKETCH.lzss
  *      B) ./bin2ota.py PORTENTA_H7_M7 SKETCH.lzss SKETCH.ota
  *   4) Upload the OTA file to a network reachable location, e.g. OTA_Usage_Portenta.ino.PORTENTA_H7_M7.ota
- *      has been uploaded to: http://www.107-systems.org/ota/OTA_Usage_Portenta.ino.PORTENTA_H7_M7.ota
+ *      has been uploaded to: http://downloads.arduino.cc/ota/OTA_Usage_Portenta.ino.PORTENTA_H7_M7.ota
  *   5) Perform an OTA update via steps outlined below.
  */
 
@@ -33,7 +33,7 @@
 static char const SSID[] = SECRET_SSID;  /* your network SSID (name) */
 static char const PASS[] = SECRET_PASS;  /* your network password (use for WPA, or use as key for WEP) */
 
-static char const OTA_FILE_LOCATION[] = "http://www.107-systems.org/ota/OTA_Usage_Portenta.ino.PORTENTA_H7_M7.ota";
+static char const OTA_FILE_LOCATION[] = "http://downloads.arduino.cc/ota/OTA_Usage_Portenta.ino.PORTENTA_H7_M7.ota";
 
 /******************************************************************************
  * SETUP/LOOP
@@ -84,7 +84,7 @@ void setup()
 
 
   Serial.println("Starting download to QSPI ...");
-  int const ota_download = ota.download(OTA_FILE_LOCATION);
+  int const ota_download = ota.download(OTA_FILE_LOCATION, false /* is_https */);
   if (ota_download <= 0)
   {
     Serial.print  ("Arduino_Portenta_OTA_QSPI::download failed with error code ");
@@ -117,6 +117,7 @@ void setup()
 
   Serial.println("Performing a reset after which the bootloader will update the firmware.");
   Serial.println("Hint: Portenta H7 LED will blink Red-Blue-Green.");
+  delay(1000); /* Make sure the serial message gets out before the reset. */
   ota.reset();
 }
 
