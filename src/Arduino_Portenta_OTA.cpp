@@ -50,10 +50,29 @@ Arduino_Portenta_OTA::~Arduino_Portenta_OTA()
  * PUBLIC MEMBER FUNCTIONS
  ******************************************************************************/
 
+bool Arduino_Portenta_OTA::isOtaCapable()
+{
+  #define BOOTLOADER_ADDR   (0x8000000)
+  uint32_t bootloader_data_offset = 0x1F000;
+  uint8_t* bootloader_data = (uint8_t*)(BOOTLOADER_ADDR + bootloader_data_offset);
+  uint8_t currentBootloaderVersion = bootloader_data[1];
+  if (currentBootloaderVersion < 22)
+    return false;
+  else
+    return true;
+}
+
 Arduino_Portenta_OTA::Error Arduino_Portenta_OTA::begin()
 {
   Serial1.begin(115200);
-  return (init() == false) ? Error::OtaStorageInit : Error::None;
+
+  if (!isOtaCapable())
+    return Error::NoCapableBootloader;
+
+  if (!init())
+    return Error::OtaStorageInit;
+
+  return Error::None;
 }
 
 Arduino_Portenta_OTA::Error Arduino_Portenta_OTA::update()

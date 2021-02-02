@@ -66,6 +66,14 @@ void setup()
   Arduino_Portenta_OTA_QSPI ota(QSPI_FLASH_FATFS_MBR, 2);
   Arduino_Portenta_OTA::Error ota_err = Arduino_Portenta_OTA::Error::None;
 
+  if (!ota.isOtaCapable())
+  {
+    Serial.println("Higher version bootloader required to perform OTA.");
+    Serial.println("Please update the bootloader.");
+    Serial.println("File -> Examples -> Portenta_System -> PortentaH7_updateBootloader");
+    return;
+  }
+
   Serial.println("Initializing OTA storage");
   if ((ota_err = ota.begin()) != Arduino_Portenta_OTA::Error::None)
   {
