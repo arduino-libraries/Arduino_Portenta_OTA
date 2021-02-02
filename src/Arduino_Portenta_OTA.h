@@ -79,6 +79,7 @@ class Arduino_Portenta_OTA
     virtual ~Arduino_Portenta_OTA();
 
 
+    bool  isOtaCapable();
     Error begin();
     Error update();
     void  reset();
