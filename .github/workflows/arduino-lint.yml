@@ -23,4 +23,4 @@ jobs:
         uses: arduino/arduino-lint-action@v1
         with:
           official: true
-          library-manager: submit # Change this to "update" once the library has been added to the Library Manager index.
+          library-manager: update
