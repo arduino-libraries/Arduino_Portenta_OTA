@@ -90,9 +90,9 @@ uint32_t crc_update(uint32_t crc, const void * data, size_t data_len)
    MAIN
  **************************************************************************************/
 
-int Arduino_Portenta_OTA::download(const char * url)
+int Arduino_Portenta_OTA::download(const char * url, bool const is_https)
 {
-  return WiFi.download((char *)url, UPDATE_FILE_NAME_LZSS);
+  return WiFi.download((char *)url, UPDATE_FILE_NAME_LZSS, is_https);
 }
 
 int Arduino_Portenta_OTA::decompress()

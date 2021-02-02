@@ -88,7 +88,7 @@ class Arduino_Portenta_OTA
     /* This functionality is intended for usage with the Arduino IoT Cloud for
      * performing OTA firmware updates using the Arduino IoT Cloud servers.
      */
-    int download(const char * url);
+    int download(const char * url, bool const is_https);
     int decompress();
 
 
