@@ -35,7 +35,6 @@
  * DEFINE
  ******************************************************************************/
 
-#define APOTA_INTERNAL_FLASH_FLAG     (1 << 1)
 #define APOTA_QSPI_FLASH_FLAG         (1 << 2)
 #define APOTA_SDCARD_FLAG             (1 << 3)
 #define APOTA_RAW_FLAG                (1 << 4)
@@ -48,8 +47,6 @@
  ******************************************************************************/
 
 enum StorageTypePortenta {
-    INTERNAL_FLASH_FATFS    = APOTA_INTERNAL_FLASH_FLAG | APOTA_FATFS_FLAG,
-    INTERNAL_FLASH_LITTLEFS = APOTA_INTERNAL_FLASH_FLAG | APOTA_LITTLEFS_FLAG,
     QSPI_FLASH_FATFS        = APOTA_QSPI_FLASH_FLAG | APOTA_FATFS_FLAG,
     QSPI_FLASH_FATFS_MBR    = APOTA_QSPI_FLASH_FLAG | APOTA_FATFS_FLAG | APOTA_MBR_FLAG,
     SD_FATFS                = APOTA_SDCARD_FLAG | APOTA_FATFS_FLAG,
@@ -115,6 +112,5 @@ class Arduino_Portenta_OTA
 
 #include "Arduino_Portenta_OTA_SD.h"
 #include "Arduino_Portenta_OTA_QSPI.h"
-#include "Arduino_Portenta_OTA_InternalFlash.h"
 
 #endif /* ARDUINO_PORTENTA_OTA_H_ */

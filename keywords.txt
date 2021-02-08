@@ -9,7 +9,6 @@
 Arduino_Portenta_OTA	KEYWORD1
 Arduino_Portenta_OTA_SD	KEYWORD1
 Arduino_Portenta_OTA_QSPI	KEYWORD1
-Arduino_Portenta_OTA_InternalFlash	KEYWORD1
 Error	KEYWORD1
 
 #######################################
@@ -27,8 +26,6 @@ decompress	KEYWORD2
 # Constants (LITERAL1)
 #######################################
 
-INTERNAL_FLASH_FATFS	LITERAL1
-INTERNAL_FLASH_LITTLEFS	LITERAL1
 QSPI_FLASH_FATFS	LITERAL1
 QSPI_FLASH_FATFS_MBR	LITERAL1
 SD_FATFS	LITERAL1
