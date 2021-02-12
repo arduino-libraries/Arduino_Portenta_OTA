@@ -67,7 +67,7 @@ bool Arduino_Portenta_OTA_SD::init()
 
   if (_storage_type == SD_FATFS_MBR)
   {
-    _bd = new mbed::MBRBlockDevice(reinterpret_cast<mbed::BlockDevice *>(&_block_device), 1);
+    _bd = new mbed::MBRBlockDevice(reinterpret_cast<mbed::BlockDevice *>(&_block_device), _data_offset);
     _fs_sd = new mbed::FATFileSystem("fs");
     int const err =  _fs_sd->mount(_bd);
     if (err)
