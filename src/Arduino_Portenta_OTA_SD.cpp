@@ -53,9 +53,6 @@ Arduino_Portenta_OTA_SD::Arduino_Portenta_OTA_SD(StorageTypePortenta const stora
 
 bool Arduino_Portenta_OTA_SD::init()
 {
-  if (_block_device.init())
-    return false;
-
    if(_storage_type == SD_FATFS)
    {
     _fs_sd = new mbed::FATFileSystem("fs");
