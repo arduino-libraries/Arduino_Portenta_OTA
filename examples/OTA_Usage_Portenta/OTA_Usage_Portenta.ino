@@ -1,15 +1,17 @@
 /*
- Usage
- This example demonstrates how to use the Arduino_Portenta_OTA library to update a 
- sketch on any Portenta via the storage types allowed by the board.
- Steps to update sketch:
- 1) Upload this sketch or any other sketch (this one lights the LED up with different colours).
+ This sketch can be used to generate an example binary that can be uploaded to Portenta via OTA.
+ It needs to be used together with
+  - 'OTA_Qspi_Flash.ino' if you want to use the Qspi Flash as storage system
+  OR
+  - 'SD_Qspi_Flash.ino' if you want to use the SD card as storage system
+
+ Steps to test OTA on Portenta:
+ 1) Upload this sketch or any other sketch (this one lights up the RGB LED with different colours).
  2) In the IDE select: Sketch -> Export compiled Binary
- 3) Open the location of the sketch and choose the next step according to the desired storage type:
-    - SD: copy the binary to the SD with the name "UPDATE.BIN"
-    - INTERNAL FLASH:
-    - QSPI Flash:
- 5) Upload the sketch OTA_*_Portenta.ino
+ 3) Upload the exported binary to a server
+ 4) Choose a storage mechanism (SD or QSPI), open the related OTA_*_Portenta.ino sketch,
+    eventually update the OTA_FILE_LOCATION
+ 5) Upload the sketch OTA_*_Portenta.ino to perform OTA via SD or QSPI Flash
 */
 
 void setLed(int blue, int gree, int red) {
