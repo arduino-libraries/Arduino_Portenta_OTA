@@ -10,13 +10,14 @@ Arduino_Portenta_OTA	KEYWORD1
 Arduino_Portenta_OTA_SD	KEYWORD1
 Arduino_Portenta_OTA_QSPI	KEYWORD1
 Error	KEYWORD1
+StorageTypePortenta	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
 
+isOtaCapable	KEYWORD2
 begin	KEYWORD2
-setUpdateLen	KEYWORD2
 update	KEYWORD2
 reset	KEYWORD2
 download	KEYWORD2
@@ -32,10 +33,10 @@ SD_FATFS	LITERAL1
 SD_FATFS_MBR	LITERAL1
 
 None	LITERAL1
+NoCapableBootloader	LITERAL1
 NoOtaStorage	LITERAL1
 OtaStorageInit	LITERAL1
 OtaStorageOpen	LITERAL1
 OtaHeaderLength	LITERAL1
 OtaHeaderCrc	LITERAL1
 OtaHeaterMagicNumber	LITERAL1
-OtaStorageWrite	LITERAL1
