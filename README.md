@@ -5,7 +5,7 @@ Arduino_Portenta_OTA
 [![Arduino Lint](https://github.com/arduino-libraries/Arduino_Portenta_OTA/workflows/Arduino%20Lint/badge.svg)](https://github.com/arduino-libraries/Arduino_Portenta_OTA/actions?workflow=Arduino+Lint)
 [![Spell Check](https://github.com/arduino-libraries/Arduino_Portenta_OTA/workflows/Spell%20Check/badge.svg)](https://github.com/arduino-libraries/Arduino_Portenta_OTA/actions?workflow=Spell+Check)
 
-This library allows to perform OTA (Over-The-Air) firmware update for the Arduino Portenta H7. OTA binaries are downloaded via WiFi and stored on a SD card or on the Portenta H7's QSPI flash storage. Next all information relevant to the firmware update is stored in non-volatile memory. After a reset the Portenta H7 bootloader is accessing this information and uses it for performing the firmware update.
+This library allows OTA (Over-The-Air) firmware updates for the Arduino Portenta H7. OTA binaries are downloaded via WiFi and stored on a SD card or on the Portenta H7's QSPI flash storage. Next, all information relevant to the firmware update is stored in non-volatile memory. After a reset the Portenta H7 bootloader accesses this information and uses it to perform the firmware update.
 
 ### Example
 ```C++
