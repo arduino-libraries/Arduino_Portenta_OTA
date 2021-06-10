@@ -54,6 +54,9 @@ void lzss_flush()
 {
   bytes_written_fputc += write_buf_num_bytes;
 
+  if (wdog_feed_func)
+    wdog_feed_func();
+
   fwrite(write_buf, 1, write_buf_num_bytes, target_file);
 
   write_buf_num_bytes = 0;
