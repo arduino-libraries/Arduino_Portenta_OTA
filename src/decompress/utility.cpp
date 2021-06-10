@@ -184,7 +184,7 @@ int Arduino_Portenta_OTA::decompress()
 
   FILE* decompressed = fopen(UPDATE_FILE_NAME, "w");
 
-  lzss_init(update_file, decompressed, LZSS_FILE_SIZE);
+  lzss_init(update_file, decompressed, LZSS_FILE_SIZE, _feed_watchdog_func);
 
   /* During the process of decoding UPDATE.BIN.LZSS
    * is decompressed and stored as UPDATE.BIN.
