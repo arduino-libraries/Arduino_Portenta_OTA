@@ -55,7 +55,7 @@ enum StorageTypePortenta {
     SD_FATFS_MBR            = APOTA_SDCARD_FLAG | APOTA_FATFS_FLAG | APOTA_MBR_FLAG,
 };
 
-typedef void* (*voidPrtFuncPtr)(void);
+typedef void(*ArduinoPortentaOtaWatchdogResetFuncPointer)(void);
 
 /******************************************************************************
  * CLASS DECLARATION
@@ -91,7 +91,7 @@ class Arduino_Portenta_OTA
      */
     int download(const char * url, bool const is_https);
     int decompress();
-    void setFeedWatchdogFunc(voidPrtFuncPtr func);
+    void setFeedWatchdogFunc(ArduinoPortentaOtaWatchdogResetFuncPointer func);
 
 
   protected:
@@ -108,7 +108,7 @@ class Arduino_Portenta_OTA
   private:
 
     void write();
-    voidPrtFuncPtr _feed_watchdog_func = 0;
+    ArduinoPortentaOtaWatchdogResetFuncPointer _feed_watchdog_func = 0;
 
 };
 

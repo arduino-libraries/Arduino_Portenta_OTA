@@ -13,7 +13,7 @@
    FUNCTION DEFINITION
  **************************************************************************************/
 
-void lzss_init(FILE * update_file_ptr, FILE * target_file_ptr, uint32_t const lzss_file_size, voidPrtFuncPtr wdog_feed_func_ptr);
+void lzss_init(FILE * update_file_ptr, FILE * target_file_ptr, uint32_t const lzss_file_size, ArduinoPortentaOtaWatchdogResetFuncPointer wdog_feed_func_ptr);
 void lzss_decode();
 void lzss_flush();
 

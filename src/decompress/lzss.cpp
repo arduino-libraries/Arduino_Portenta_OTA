@@ -36,13 +36,13 @@ unsigned char buffer[N * 2];
 static char write_buf[FPUTC_BUF_SIZE];
 static size_t write_buf_num_bytes = 0;
 static size_t bytes_written_fputc = 0;
-static voidPrtFuncPtr wdog_feed_func = 0;
+static ArduinoPortentaOtaWatchdogResetFuncPointer wdog_feed_func = 0;
 
 /**************************************************************************************
    PUBLIC FUNCTIONS
  **************************************************************************************/
 
-void lzss_init(FILE * update_file_ptr, FILE * target_file_ptr, uint32_t const lzss_file_size, voidPrtFuncPtr wdog_feed_func_ptr)
+void lzss_init(FILE * update_file_ptr, FILE * target_file_ptr, uint32_t const lzss_file_size, ArduinoPortentaOtaWatchdogResetFuncPointer wdog_feed_func_ptr)
 {
   update_file = update_file_ptr;
   target_file = target_file_ptr;
