@@ -95,6 +95,12 @@ void Arduino_Portenta_OTA::setFeedWatchdogFunc(ArduinoPortentaOtaWatchdogResetFu
   _feed_watchdog_func = func;
 }
 
+void Arduino_Portenta_OTA::feedWatchdog()
+{
+  if (_feed_watchdog_func)
+    _feed_watchdog_func();
+}
+
 /******************************************************************************
  * PROTECTED MEMBER FUNCTIONS
  ******************************************************************************/

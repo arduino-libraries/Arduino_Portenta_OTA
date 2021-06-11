@@ -92,6 +92,7 @@ class Arduino_Portenta_OTA
     int download(const char * url, bool const is_https);
     int decompress();
     void setFeedWatchdogFunc(ArduinoPortentaOtaWatchdogResetFuncPointer func);
+    void feedWatchdog();
 
 
   protected:
