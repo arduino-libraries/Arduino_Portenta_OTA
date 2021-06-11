@@ -137,6 +137,8 @@ int Arduino_Portenta_OTA::decompress()
   uint32_t crc32, bytes_read;
   uint8_t crc_buf[128];
 
+  feedWatchdog();
+
   /* Read the OTA header ... */
   fread(ota_header.buf, 1, sizeof(ota_header.buf), update_file);
 
@@ -146,6 +148,8 @@ int Arduino_Portenta_OTA::decompress()
     remove(UPDATE_FILE_NAME_LZSS);
     return static_cast<int>(Error::OtaHeaderLength);
   }
+
+  feedWatchdog();
 
   /* ... and the CRC second ... rewind to start of CRC verified header ... */
   fseek(update_file, sizeof(ota_header.header.len) + sizeof(ota_header.header.crc32), SEEK_SET);
@@ -161,6 +165,9 @@ int Arduino_Portenta_OTA::decompress()
   }
   fread(crc_buf, 1, ota_header.header.len - bytes_read, update_file);
   crc32 = crc_update(crc32, crc_buf, ota_header.header.len - bytes_read);
+
+  feedWatchdog();
+
   /* ... then finalise ... */
   crc32 ^= 0xFFFFFFFF;
   /* ... and compare. */
@@ -169,6 +176,8 @@ int Arduino_Portenta_OTA::decompress()
     remove(UPDATE_FILE_NAME_LZSS);
     return static_cast<int>(Error::OtaHeaderCrc);
   }
+
+  feedWatchdog();
 
   if (ota_header.header.magic_number != 0x2341025b) /* 0x2341:025b = VID/PID Portenta H7 */
   {
