@@ -42,7 +42,7 @@
 #define APOTA_LITTLEFS_FLAG           (1 << 6)
 #define APOTA_MBR_FLAG                (1 << 7)
 
-#define PORTENTA_OTA_HAS_WATCHDOG_FEED
+#define ARDUINO_PORTENTA_OTA_HAS_WATCHDOG_FEED
 
 /******************************************************************************
  * TYPEDEF
