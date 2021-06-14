@@ -90,6 +90,17 @@ void Arduino_Portenta_OTA::reset()
   NVIC_SystemReset();
 }
 
+void Arduino_Portenta_OTA::setFeedWatchdogFunc(ArduinoPortentaOtaWatchdogResetFuncPointer func)
+{
+  _feed_watchdog_func = func;
+}
+
+void Arduino_Portenta_OTA::feedWatchdog()
+{
+  if (_feed_watchdog_func)
+    _feed_watchdog_func();
+}
+
 /******************************************************************************
  * PROTECTED MEMBER FUNCTIONS
  ******************************************************************************/
