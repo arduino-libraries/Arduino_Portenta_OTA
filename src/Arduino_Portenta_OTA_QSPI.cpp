@@ -25,6 +25,8 @@
 
 using namespace arduino;
 
+extern QSPIFBlockDevice *qspi_bd;
+
 /******************************************************************************
    CTOR/DTOR
  ******************************************************************************/
@@ -33,7 +35,7 @@ Arduino_Portenta_OTA_QSPI::Arduino_Portenta_OTA_QSPI(StorageTypePortenta const s
 : Arduino_Portenta_OTA(storage_type, data_offset)
 , _bd_qspi{NULL}
 , _fs_qspi{NULL}
-, _block_device_qspi(PD_11, PD_12, PF_7, PD_13,  PF_10, PG_6, QSPIF_POLARITY_MODE_1, 40000000)
+, _block_device_qspi{qspi_bd}
 {
   assert(_storage_type == QSPI_FLASH_FATFS || _storage_type == QSPI_FLASH_FATFS_MBR);
 }
@@ -44,13 +46,17 @@ Arduino_Portenta_OTA_QSPI::Arduino_Portenta_OTA_QSPI(StorageTypePortenta const s
 
 bool Arduino_Portenta_OTA_QSPI::init()
 {
-  if (_block_device_qspi.init() != QSPIF_BD_ERROR_OK)
+  auto const err_init = _block_device_qspi->init();
+  if (err_init != QSPIF_BD_ERROR_OK) {
+    Serial1.print("Error while initialising the QSPI device. Err = ");
+    Serial1.println(err_init);
     return false;
+  }
 
   if(_storage_type == QSPI_FLASH_FATFS)
   {
     _fs_qspi = new mbed::FATFileSystem("fs");
-    int const err_mount = _fs_qspi->mount(&_block_device_qspi);
+    int const err_mount = _fs_qspi->mount(_block_device_qspi);
     if (err_mount)
     {
       Serial1.print("Error while mounting the filesystem. Err = ");
@@ -62,7 +68,7 @@ bool Arduino_Portenta_OTA_QSPI::init()
 
   if (_storage_type == QSPI_FLASH_FATFS_MBR)
   {
-    _bd_qspi = new mbed::MBRBlockDevice(reinterpret_cast<mbed::BlockDevice *>(&_block_device_qspi), _data_offset);
+    _bd_qspi = new mbed::MBRBlockDevice(reinterpret_cast<mbed::BlockDevice *>(_block_device_qspi), _data_offset);
     _fs_qspi = new mbed::FATFileSystem("fs");
     int const err_mount = _fs_qspi->mount(_bd_qspi);
     if (err_mount) {
