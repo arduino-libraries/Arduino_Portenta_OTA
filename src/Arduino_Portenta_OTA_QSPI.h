@@ -47,7 +47,9 @@ private:
 
   mbed::BlockDevice * _bd_qspi;
   mbed::FATFileSystem * _fs_qspi;
-  QSPIFBlockDevice _block_device_qspi;
+#if !defined (COMPONENT_4343W_FS)
+  QSPIFBlockDevice *qspi_bd;
+#endif
 
 };
 
