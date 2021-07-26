@@ -47,10 +47,6 @@ private:
 
   mbed::BlockDevice * _bd_qspi;
   mbed::FATFileSystem * _fs_qspi;
-#if !defined (COMPONENT_4343W_FS)
-  QSPIFBlockDevice *qspi_bd;
-#endif
-
 };
 
 #endif /* ARDUINO_PORTENTA_OTA_QSPI_H_ */
