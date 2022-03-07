@@ -22,6 +22,9 @@
  * INCLUDE
  ******************************************************************************/
 
+#include "Arduino_Portenta_OTA_Config.h"
+#if defined(ARDUINO_PORTENTA_OTA_SDMMC_SUPPORT)
+
 #include "Arduino_Portenta_OTA.h"
 
 /******************************************************************************
@@ -50,4 +53,5 @@ private:
 
 };
 
+#endif /* ARDUINO_PORTENTA_OTA_SDMMC_SUPPORT */
 #endif /* ARDUINO_PORTENTA_OTA_SD_H_ */

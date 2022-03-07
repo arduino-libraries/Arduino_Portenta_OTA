@@ -179,7 +179,7 @@ int Arduino_Portenta_OTA::decompress()
 
   feedWatchdog();
 
-  if (ota_header.header.magic_number != 0x2341025b) /* 0x2341:025b = VID/PID Portenta H7 */
+  if (ota_header.header.magic_number != ARDUINO_PORTENTA_OTA_MAGIC)
   {
     fclose(update_file);
     remove(UPDATE_FILE_NAME_LZSS);

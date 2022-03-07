@@ -19,6 +19,9 @@
    INCLUDE
  ******************************************************************************/
 
+#include "Arduino_Portenta_OTA_Config.h"
+#if defined(ARDUINO_PORTENTA_OTA_SDMMC_SUPPORT)
+
 #include "Arduino_Portenta_OTA_SD.h"
 
 #include "BSP.h"
@@ -97,3 +100,5 @@ bool Arduino_Portenta_OTA_SD::open()
 
   return false;
 }
+
+#endif /* ARDUINO_PORTENTA_OTA_SDMMC_SUPPORT */
