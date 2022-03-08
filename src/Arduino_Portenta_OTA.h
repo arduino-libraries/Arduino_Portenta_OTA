@@ -22,14 +22,19 @@
  * INCLUDE
  ******************************************************************************/
 
+#include "Arduino_Portenta_OTA_Config.h"
+#if defined(ARDUINO_PORTENTA_OTA_QSPI_SUPPORT)
+  #include <QSPIFBlockDevice.h>
+#endif
+
+#if defined(ARDUINO_PORTENTA_OTA_SDMMC_SUPPORT)
+  #include <SDMMCBlockDevice.h>
+#endif
+
 #include <BlockDevice.h>
 #include <MBRBlockDevice.h>
-#include <SDMMCBlockDevice.h>
-
 #include <FATFileSystem.h>
 #include <LittleFileSystem.h>
-
-#include <QSPIFBlockDevice.h>
 
 /******************************************************************************
  * DEFINE
@@ -117,7 +122,12 @@ class Arduino_Portenta_OTA
  * INCLUDE
  ******************************************************************************/
 
-#include "Arduino_Portenta_OTA_SD.h"
-#include "Arduino_Portenta_OTA_QSPI.h"
+#if defined(ARDUINO_PORTENTA_OTA_SDMMC_SUPPORT)
+  #include "Arduino_Portenta_OTA_SD.h"
+#endif
+
+#if defined(ARDUINO_PORTENTA_OTA_QSPI_SUPPORT)
+  #include "Arduino_Portenta_OTA_QSPI.h"
+#endif
 
 #endif /* ARDUINO_PORTENTA_OTA_H_ */
