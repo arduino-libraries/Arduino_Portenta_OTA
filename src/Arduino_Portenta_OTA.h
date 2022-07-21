@@ -37,6 +37,9 @@
 #include <LittleFileSystem.h>
 #include <Arduino_DebugUtils.h>
 
+#include "WiFi.h" /* WiFi from ArduinoCore-mbed */
+#include <SocketHelpers.h>
+
 /******************************************************************************
  * DEFINE
  ******************************************************************************/
@@ -95,7 +98,7 @@ class Arduino_Portenta_OTA
     /* This functionality is intended for usage with the Arduino IoT Cloud for
      * performing OTA firmware updates using the Arduino IoT Cloud servers.
      */
-    int download(const char * url, bool const is_https);
+    int download(const char * url, bool const is_https, MbedSocketClass * socket = static_cast<MbedSocketClass*>(&WiFi));
     int decompress();
     void setFeedWatchdogFunc(ArduinoPortentaOtaWatchdogResetFuncPointer func);
     void feedWatchdog();

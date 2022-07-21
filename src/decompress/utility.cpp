@@ -22,7 +22,6 @@
 
 #include "lzss.h"
 
-#include "WiFi.h" /* WiFi from ArduinoCore-mbed */
 #include "Arduino_Portenta_OTA.h"
 
 /**************************************************************************************
@@ -90,9 +89,9 @@ uint32_t crc_update(uint32_t crc, const void * data, size_t data_len)
    MAIN
  **************************************************************************************/
 
-int Arduino_Portenta_OTA::download(const char * url, bool const is_https)
+int Arduino_Portenta_OTA::download(const char * url, bool const is_https, MbedSocketClass * socket)
 {
-  return WiFi.download((char *)url, UPDATE_FILE_NAME_LZSS, is_https);
+  return socket->download((char *)url, UPDATE_FILE_NAME_LZSS, is_https);
 }
 
 int Arduino_Portenta_OTA::decompress()
