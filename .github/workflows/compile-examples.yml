@@ -35,6 +35,8 @@ jobs:
           - fqbn: arduino:mbed:envie_m7
             platforms: |
               - name: arduino:mbed
+            libraries: |
+              - name: Arduino_DebugUtils
             sketch-paths: |
               - examples/OTA_Qspi_Flash
               - examples/OTA_SD_Portenta
@@ -42,6 +44,8 @@ jobs:
           - fqbn: arduino:mbed_nicla:nicla_vision
             platforms: |
               - name: arduino:mbed_nicla
+            libraries: |
+              - name: Arduino_DebugUtils
             sketch-paths: |
               - examples/OTA_Qspi_Flash
               - examples/OTA_Usage_Portenta
@@ -59,8 +63,7 @@ jobs:
           libraries: |
             # Install the library from the local path.
             - source-path: ./
-            # Additional library dependencies can be listed here.
-            # See: https://github.com/arduino/compile-sketches#libraries
+            ${{ matrix.board.libraries }}
           sketch-paths: |
             ${{ matrix.board.sketch-paths }}
           enable-deltas-report: true
