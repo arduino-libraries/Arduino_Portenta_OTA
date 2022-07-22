@@ -46,12 +46,6 @@ Arduino_Portenta_OTA_QSPI::Arduino_Portenta_OTA_QSPI(StorageTypePortenta const s
 
 bool Arduino_Portenta_OTA_QSPI::init()
 {
-  _bd_raw_qspi = mbed::BlockDevice::get_default_instance();
-  if (_bd_raw_qspi->init() != QSPIF_BD_ERROR_OK) {
-    Debug.print(DBG_ERROR, F("Error: QSPI init failure."));
-    return false;
-  }
-
   if(_storage_type == QSPI_FLASH_FATFS)
   {
     _fs_qspi = new mbed::FATFileSystem("fs");
@@ -75,7 +69,6 @@ bool Arduino_Portenta_OTA_QSPI::init()
     }
     return true;
   }
-
   return false;
 }
 

@@ -84,6 +84,8 @@ class Arduino_Portenta_OTA
       OtaHeaderLength      = -5,
       OtaHeaderCrc         = -6,
       OtaHeaterMagicNumber = -7,
+      CaStorageInit        = -8,
+      CaStorageOpen        = -9,
     };
 
              Arduino_Portenta_OTA(StorageTypePortenta const storage_type, uint32_t const data_offset);
@@ -109,6 +111,7 @@ class Arduino_Portenta_OTA
     StorageTypePortenta _storage_type;
     uint32_t _data_offset;
     uint32_t _program_length;
+    mbed::BlockDevice * _bd_raw_qspi;
 
     virtual bool init() = 0;
     virtual bool open() = 0;
@@ -118,6 +121,8 @@ class Arduino_Portenta_OTA
   private:
 
     void write();
+    bool caStorageInit();
+    bool caStorageOpen();
     ArduinoPortentaOtaWatchdogResetFuncPointer _feed_watchdog_func = 0;
 
 };

@@ -67,6 +67,12 @@ Arduino_Portenta_OTA::Error Arduino_Portenta_OTA::begin()
   if (!isOtaCapable())
     return Error::NoCapableBootloader;
 
+  if (!caStorageInit())
+    return Error::CaStorageInit;
+
+  if (!caStorageOpen())
+    return Error::CaStorageOpen;
+
   if (!init())
     return Error::OtaStorageInit;
 
@@ -130,4 +136,35 @@ void Arduino_Portenta_OTA::write()
   HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR1, _storage_type);
   HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR2, _data_offset);
   HAL_RTCEx_BKUPWrite(&RTCHandle, RTC_BKP_DR3, _program_length);
+}
+
+bool Arduino_Portenta_OTA::caStorageInit()
+{
+  _bd_raw_qspi = mbed::BlockDevice::get_default_instance();
+
+  if (_bd_raw_qspi->init() != QSPIF_BD_ERROR_OK) {
+    Debug.print(DBG_ERROR, F("Error: QSPI init failure."));
+    return false;
+  }
+
+  mbed::MBRBlockDevice * cert_bd_qspi = new mbed::MBRBlockDevice(_bd_raw_qspi, 1);
+  mbed::FATFileSystem *  cert_fs_qspi = new mbed::FATFileSystem("wlan");
+  int const err_mount =  cert_fs_qspi->mount(cert_bd_qspi);
+  if (err_mount) {
+    Debug.print(DBG_ERROR, F("Error while mounting the certificate filesystem. Err = %d"), err_mount);
+    return false;
+  }
+  return true;
+}
+
+bool Arduino_Portenta_OTA::caStorageOpen()
+{
+  FILE* fp = fopen("/wlan/cacert.pem", "r");
+  if (!fp) {
+    Debug.print(DBG_ERROR, F("Error while opening the certificate file."));
+    return false;
+  }
+  fclose(fp);
+
+  return true;
 }
