@@ -64,8 +64,6 @@ bool Arduino_Portenta_OTA::isOtaCapable()
 
 Arduino_Portenta_OTA::Error Arduino_Portenta_OTA::begin()
 {
-  Serial1.begin(115200);
-
   if (!isOtaCapable())
     return Error::NoCapableBootloader;
 

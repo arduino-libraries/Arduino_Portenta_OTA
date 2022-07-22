@@ -61,8 +61,7 @@ bool Arduino_Portenta_OTA_SD::init()
     _fs_sd = new mbed::FATFileSystem("fs");
     int const err =  _fs_sd->mount(&_block_device);
     if (err) {
-      Serial1.print("Error while mounting the filesystem. Err = ");
-      Serial1.println(err);
+      Debug.print(DBG_ERROR, F("Error while mounting the filesystem. Err = %d"), err);
       return false;
     }
     return true;
@@ -75,8 +74,7 @@ bool Arduino_Portenta_OTA_SD::init()
     int const err =  _fs_sd->mount(_bd);
     if (err)
     {
-      Serial1.print("Error while mounting the filesystem. Err = ");
-      Serial1.println(err);
+      Debug.print(DBG_ERROR, F("Error while mounting the filesystem. Err = %d"), err);
       return false;
     }
     return true;
