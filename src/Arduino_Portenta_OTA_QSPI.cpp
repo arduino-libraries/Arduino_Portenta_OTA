@@ -46,11 +46,7 @@ Arduino_Portenta_OTA_QSPI::Arduino_Portenta_OTA_QSPI(StorageTypePortenta const s
 
 bool Arduino_Portenta_OTA_QSPI::init()
 {
-#if defined (COMPONENT_4343W_FS)
   _bd_raw_qspi = mbed::BlockDevice::get_default_instance();
-#else
-  _bd_raw_qspi = new QSPIFBlockDevice(PD_11, PD_12, PF_7, PD_13,  PF_10, PG_6, QSPIF_POLARITY_MODE_1, 40000000);
-#endif
   if (_bd_raw_qspi->init() != QSPIF_BD_ERROR_OK) {
     Serial1.println("Error: QSPI init failure.");
     return false;
