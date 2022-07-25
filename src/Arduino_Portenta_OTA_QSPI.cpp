@@ -48,7 +48,7 @@ bool Arduino_Portenta_OTA_QSPI::init()
 {
   _bd_raw_qspi = mbed::BlockDevice::get_default_instance();
   if (_bd_raw_qspi->init() != QSPIF_BD_ERROR_OK) {
-    Serial1.println("Error: QSPI init failure.");
+    Debug.print(DBG_ERROR, F("Error: QSPI init failure."));
     return false;
   }
 
@@ -58,8 +58,7 @@ bool Arduino_Portenta_OTA_QSPI::init()
     int const err_mount = _fs_qspi->mount(_bd_raw_qspi);
     if (err_mount)
     {
-      Serial1.print("Error while mounting the filesystem. Err = ");
-      Serial1.println(err_mount);
+      Debug.print(DBG_ERROR, F("Error while mounting the filesystem. Err = %d"), err_mount);
       return false;
     }
     return true;
@@ -71,8 +70,7 @@ bool Arduino_Portenta_OTA_QSPI::init()
     _fs_qspi = new mbed::FATFileSystem("fs");
     int const err_mount = _fs_qspi->mount(_bd_qspi);
     if (err_mount) {
-      Serial1.print("Error while mounting the filesystem. Err = ");
-      Serial1.println(err_mount);
+      Debug.print(DBG_ERROR, F("Error while mounting the filesystem. Err = %d"), err_mount);
       return false;
     }
     return true;
