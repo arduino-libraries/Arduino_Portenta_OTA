@@ -1,9 +1,9 @@
 /*
  This sketch can be used to generate an example binary that can be uploaded to Portenta via OTA.
  It needs to be used together with
-  - 'OTA_Qspi_Flash.ino' if you want to use the Qspi Flash as storage system
+  - 'OTA_Qspi_Flash.ino' if you want to use the QSPI Flash as storage system
   OR
-  - 'SD_Qspi_Flash.ino' if you want to use the SD card as storage system
+  - 'OTA_SD_Portenta.ino' if you want to use the SD card as storage system
 
  Steps to test OTA on Portenta:
  1) Upload this sketch or any other sketch (this one lights up the RGB LED with different colours).
@@ -46,13 +46,13 @@ void setup()
 }
 
 void loop()
-{ //led BLUE ON
+{ // Blue LED on
   setLed(1, 0, 0);
   delay(1000);
-  //led GREEN ON
+  // Green LED on
   setLed(0, 1, 0);
   delay(1000);
-  //led RED ON
+  // Red LED on
   setLed(0, 0, 1);
   delay(1000);
 }

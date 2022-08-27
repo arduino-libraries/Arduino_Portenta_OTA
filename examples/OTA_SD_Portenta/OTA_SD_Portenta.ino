@@ -3,7 +3,7 @@
  * a firmware image stored on the SD.
  *
  * Steps:
- *   1) Create a sketch for the Portenta H7 and verifiy
+ *   1) Create a sketch for the Portenta H7 and verify
  *      that it both compiles and works on a board.
  *   2) In the IDE select: Sketch -> Export compiled Binary.
  *   3) Create an OTA update file utilising the tools 'lzss.py' and 'bin2ota.py' stored in
