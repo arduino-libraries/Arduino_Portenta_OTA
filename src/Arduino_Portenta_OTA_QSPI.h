@@ -48,7 +48,6 @@ protected:
 
 private:
 
-  mbed::BlockDevice * _bd_raw_qspi;
   mbed::BlockDevice * _bd_qspi;
   mbed::FATFileSystem * _fs_qspi;
 };

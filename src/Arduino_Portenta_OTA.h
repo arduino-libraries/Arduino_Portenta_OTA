@@ -37,6 +37,9 @@
 #include <LittleFileSystem.h>
 #include <Arduino_DebugUtils.h>
 
+#include "WiFi.h" /* WiFi from ArduinoCore-mbed */
+#include <SocketHelpers.h>
+
 /******************************************************************************
  * DEFINE
  ******************************************************************************/
@@ -81,6 +84,8 @@ class Arduino_Portenta_OTA
       OtaHeaderLength      = -5,
       OtaHeaderCrc         = -6,
       OtaHeaterMagicNumber = -7,
+      CaStorageInit        = -8,
+      CaStorageOpen        = -9,
     };
 
              Arduino_Portenta_OTA(StorageTypePortenta const storage_type, uint32_t const data_offset);
@@ -95,7 +100,7 @@ class Arduino_Portenta_OTA
     /* This functionality is intended for usage with the Arduino IoT Cloud for
      * performing OTA firmware updates using the Arduino IoT Cloud servers.
      */
-    int download(const char * url, bool const is_https);
+    int download(const char * url, bool const is_https, MbedSocketClass * socket = static_cast<MbedSocketClass*>(&WiFi));
     int decompress();
     void setFeedWatchdogFunc(ArduinoPortentaOtaWatchdogResetFuncPointer func);
     void feedWatchdog();
@@ -106,6 +111,7 @@ class Arduino_Portenta_OTA
     StorageTypePortenta _storage_type;
     uint32_t _data_offset;
     uint32_t _program_length;
+    mbed::BlockDevice * _bd_raw_qspi;
 
     virtual bool init() = 0;
     virtual bool open() = 0;
@@ -115,6 +121,8 @@ class Arduino_Portenta_OTA
   private:
 
     void write();
+    bool caStorageInit();
+    bool caStorageOpen();
     ArduinoPortentaOtaWatchdogResetFuncPointer _feed_watchdog_func = 0;
 
 };
