@@ -39,6 +39,7 @@ jobs:
               - name: Arduino_DebugUtils
             sketch-paths: |
               - examples/OTA_Qspi_Flash
+              - examples/OTA_Qspi_Flash_Ethernet
               - examples/OTA_SD_Portenta
               - examples/OTA_Usage_Portenta
           - fqbn: arduino:mbed_nicla:nicla_vision
