@@ -27,9 +27,9 @@
  * CONSTANT
  ******************************************************************************/
 #if defined(ARDUINO_OPTA)
-static char const OTA_FILE_LOCATION[] = "http://downloads.arduino.cc/ota/OTA_Usage_Portenta.ino.OPTA.ota";
+static char const OTA_FILE_LOCATION[] = "https://downloads.arduino.cc/ota/OTA_Usage_Portenta.ino.OPTA.ota";
 #elif defined(ARDUINO_PORTENTA_H7_M7)
-static char const OTA_FILE_LOCATION[] = "http://downloads.arduino.cc/ota/OTA_Usage_Portenta.ino.PORTENTA_H7_M7.ota";
+static char const OTA_FILE_LOCATION[] = "https://downloads.arduino.cc/ota/OTA_Usage_Portenta.ino.PORTENTA_H7_M7.ota";
 #else
 #error "Board not supported"
 #endif
@@ -70,7 +70,7 @@ void setup()
   }
 
   Serial.println("Starting download to QSPI ...");
-  int const ota_download = ota.download(OTA_FILE_LOCATION, false /* is_https */);
+  int const ota_download = ota.download(OTA_FILE_LOCATION, true /* is_https */);
   if (ota_download <= 0)
   {
     Serial.print  ("Arduino_Portenta_OTA_QSPI::download failed with error code ");
