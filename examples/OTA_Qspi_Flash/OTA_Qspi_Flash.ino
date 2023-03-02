@@ -33,7 +33,15 @@
 static char const SSID[] = SECRET_SSID;  /* your network SSID (name) */
 static char const PASS[] = SECRET_PASS;  /* your network password (use for WPA, or use as key for WEP) */
 
+#if defined(ARDUINO_NICLA_VISION)
+static char const OTA_FILE_LOCATION[] = "http://downloads.arduino.cc/ota/OTA_Usage_Portenta.ino.NICLA_VISION.ota";
+#elif defined(ARDUINO_PORTENTA_H7_M7)
 static char const OTA_FILE_LOCATION[] = "http://downloads.arduino.cc/ota/OTA_Usage_Portenta.ino.PORTENTA_H7_M7.ota";
+#elif defined(ARDUINO_OPTA)
+static char const OTA_FILE_LOCATION[] = "http://downloads.arduino.cc/ota/OTA_Usage_Portenta.ino.OPTA.ota";
+#else
+#error "Board not supported"
+#endif
 
 /******************************************************************************
  * SETUP/LOOP
