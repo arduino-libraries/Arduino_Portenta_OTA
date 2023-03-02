@@ -39,6 +39,8 @@ static char const OTA_FILE_LOCATION[] = "http://downloads.arduino.cc/ota/OTA_Usa
 static char const OTA_FILE_LOCATION[] = "http://downloads.arduino.cc/ota/OTA_Usage_Portenta.ino.PORTENTA_H7_M7.ota";
 #elif defined(ARDUINO_OPTA)
 static char const OTA_FILE_LOCATION[] = "http://downloads.arduino.cc/ota/OTA_Usage_Portenta.ino.OPTA.ota";
+#elif defined(ARDUINO_GIGA)
+static char const OTA_FILE_LOCATION[] = "http://downloads.arduino.cc/ota/OTA_Usage_Portenta.ino.GIGA.ota";
 #else
 #error "Board not supported"
 #endif

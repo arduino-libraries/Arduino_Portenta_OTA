@@ -59,6 +59,14 @@ jobs:
               - examples/OTA_Qspi_Flash
               - examples/OTA_Qspi_Flash_Ethernet
               - examples/OTA_Usage_Portenta
+          - fqbn: arduino:mbed_giga:giga
+            platforms: |
+              - name: arduino:mbed_giga
+            libraries: |
+              - name: Arduino_DebugUtils
+            sketch-paths: |
+              - examples/OTA_Qspi_Flash
+              - examples/OTA_Usage_Portenta
 
     steps:
       - name: Checkout
