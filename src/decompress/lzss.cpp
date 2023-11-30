@@ -121,52 +121,6 @@ int lzss_fgetc()
    LZSS FUNCTIONS
  **************************************************************************************/
 
-void putbit1(void)
-{
-    bit_buffer |= bit_mask;
-    if ((bit_mask >>= 1) == 0) {
-        lzss_fputc(bit_buffer);
-        bit_buffer = 0;  bit_mask = 128;
-    }
-}
-
-void putbit0(void)
-{
-    if ((bit_mask >>= 1) == 0) {
-        lzss_fputc(bit_buffer);
-        bit_buffer = 0;  bit_mask = 128;
-    }
-}
-
-void output1(int c)
-{
-    int mask;
-    
-    putbit1();
-    mask = 256;
-    while (mask >>= 1) {
-        if (c & mask) putbit1();
-        else putbit0();
-    }
-}
-
-void output2(int x, int y)
-{
-    int mask;
-    
-    putbit0();
-    mask = N;
-    while (mask >>= 1) {
-        if (x & mask) putbit1();
-        else putbit0();
-    }
-    mask = (1 << EJ);
-    while (mask >>= 1) {
-        if (y & mask) putbit1();
-        else putbit0();
-    }
-}
-
 int getbit(int n) /* get n bits */
 {
     int i, x;
