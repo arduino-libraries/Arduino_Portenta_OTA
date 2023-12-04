@@ -86,6 +86,7 @@ class Arduino_Portenta_OTA
       OtaHeaterMagicNumber = -7,
       CaStorageInit        = -8,
       CaStorageOpen        = -9,
+      OtaDownload          = -12,
     };
 
              Arduino_Portenta_OTA(StorageTypePortenta const storage_type, uint32_t const data_offset);
