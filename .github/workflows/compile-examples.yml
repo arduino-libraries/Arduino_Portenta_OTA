@@ -42,6 +42,8 @@ jobs:
               - examples/OTA_Qspi_Flash_Ethernet
               - examples/OTA_SD_Portenta
               - examples/OTA_Usage_Portenta
+              - examples/LZSS
+              - examples/OTA_Qspi_Flash_download_onthefly
           - fqbn: arduino:mbed_nicla:nicla_vision
             platforms: |
               - name: arduino:mbed_nicla
@@ -50,6 +52,8 @@ jobs:
             sketch-paths: |
               - examples/OTA_Qspi_Flash
               - examples/OTA_Usage_Portenta
+              - examples/LZSS
+              - examples/OTA_Qspi_Flash_download_onthefly
           - fqbn: arduino:mbed_opta:opta
             platforms: |
               - name: arduino:mbed_opta
@@ -59,6 +63,8 @@ jobs:
               - examples/OTA_Qspi_Flash
               - examples/OTA_Qspi_Flash_Ethernet
               - examples/OTA_Usage_Portenta
+              - examples/LZSS
+              - examples/OTA_Qspi_Flash_download_onthefly
           - fqbn: arduino:mbed_giga:giga
             platforms: |
               - name: arduino:mbed_giga
@@ -67,6 +73,8 @@ jobs:
             sketch-paths: |
               - examples/OTA_Qspi_Flash
               - examples/OTA_Usage_Portenta
+              - examples/LZSS
+              - examples/OTA_Qspi_Flash_download_onthefly
 
     steps:
       - name: Checkout
