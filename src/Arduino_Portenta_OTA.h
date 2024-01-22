@@ -35,7 +35,6 @@
 #include <MBRBlockDevice.h>
 #include <FATFileSystem.h>
 #include <LittleFileSystem.h>
-#include <Arduino_DebugUtils.h>
 
 #include "WiFi.h" /* WiFi from ArduinoCore-mbed */
 #include <SocketHelpers.h>
