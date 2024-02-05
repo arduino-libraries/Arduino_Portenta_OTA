@@ -32,9 +32,9 @@ jobs:
 
       matrix:
         board:
-          - fqbn: arduino:mbed:envie_m7
+          - fqbn: arduino:mbed_portenta:envie_m7
             platforms: |
-              - name: arduino:mbed
+              - name: arduino:mbed_portenta
             libraries: |
               - name: Arduino_DebugUtils
             sketch-paths: |
