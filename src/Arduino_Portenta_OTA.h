@@ -86,6 +86,7 @@ class Arduino_Portenta_OTA
       OtaHeaterMagicNumber = -7,
       CaStorageInit        = -8,
       CaStorageOpen        = -9,
+      OtaDownload          = -12,
     };
 
              Arduino_Portenta_OTA(StorageTypePortenta const storage_type, uint32_t const data_offset);
@@ -102,6 +103,8 @@ class Arduino_Portenta_OTA
      */
     int download(const char * url, bool const is_https, MbedSocketClass * socket = static_cast<MbedSocketClass*>(&WiFi));
     int decompress();
+    int downloadAndDecompress(const char * url, bool const is_https, MbedSocketClass * socket = static_cast<MbedSocketClass*>(&WiFi));
+
     void setFeedWatchdogFunc(ArduinoPortentaOtaWatchdogResetFuncPointer func);
     void feedWatchdog();
 

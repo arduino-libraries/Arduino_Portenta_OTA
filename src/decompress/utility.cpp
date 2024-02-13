@@ -89,10 +89,148 @@ uint32_t crc_update(uint32_t crc, const void * data, size_t data_len)
    MAIN
  **************************************************************************************/
 
+union HeaderVersion
+{
+  struct __attribute__((packed))
+  {
+    uint32_t header_version    :  6;
+    uint32_t compression       :  1;
+    uint32_t signature         :  1;
+    uint32_t spare             :  4;
+    uint32_t payload_target    :  4;
+    uint32_t payload_major     :  8;
+    uint32_t payload_minor     :  8;
+    uint32_t payload_patch     :  8;
+    uint32_t payload_build_num : 24;
+  } field;
+  uint8_t buf[sizeof(field)];
+  static_assert(sizeof(buf) == 8, "Error: sizeof(HEADER.VERSION) != 8");
+};
+
+union OTAHeader
+{
+  struct __attribute__((packed))
+  {
+    uint32_t len;
+    uint32_t crc32;
+    uint32_t magic_number;
+    HeaderVersion hdr_version;
+  } header;
+  uint8_t buf[sizeof(header)];
+  static_assert(sizeof(buf) == 20, "Error: sizeof(HEADER) != 20");
+};
+
 int Arduino_Portenta_OTA::download(const char * url, bool const is_https, MbedSocketClass * socket)
 {
   return socket->download((char *)url, UPDATE_FILE_NAME_LZSS, is_https);
 }
+
+int Arduino_Portenta_OTA::downloadAndDecompress(const char * url, bool const is_https, MbedSocketClass * socket) {
+  int res=0;
+
+  FILE* decompressed = fopen(UPDATE_FILE_NAME, "wb");
+  OTAHeader ota_header;
+
+  LZSSDecoder decoder([&decompressed](const uint8_t c) {
+    fwrite(&c, 1, 1, decompressed);
+  });
+
+  enum OTA_DOWNLOAD_STATE: uint8_t {
+    OTA_DOWNLOAD_HEADER=0,
+    OTA_DOWNLOAD_FILE,
+    OTA_DOWNLOAD_ERR
+  };
+
+  // since mbed::Callback requires a function to not exceed a certain size, we group the following parameters in a struct
+  struct {
+    uint32_t crc32 = 0xFFFFFFFF;
+    uint32_t header_copied_bytes = 0;
+    OTA_DOWNLOAD_STATE state=OTA_DOWNLOAD_HEADER;
+  } ota_progress;
+
+  int bytes = socket->download(url, is_https, [&decoder, &ota_header, &ota_progress](const char* buffer, uint32_t size) {
+    for(char* cursor=(char*)buffer; cursor<buffer+size; ) {
+      switch(ota_progress.state) {
+        case OTA_DOWNLOAD_HEADER: {
+          // read to ota_header.buf
+          // the header could be split into two arrivals, we must handle that
+          uint32_t copied = size < sizeof(ota_header.buf) ? size : sizeof(ota_header.buf);
+          memcpy(ota_header.buf, buffer, copied);
+          cursor += copied;
+          ota_progress.header_copied_bytes += copied;
+
+          // when finished go to next state
+          if(sizeof(ota_header.buf) == ota_progress.header_copied_bytes) {
+            ota_progress.state = OTA_DOWNLOAD_FILE;
+
+            ota_progress.crc32 = crc_update(
+              ota_progress.crc32,
+              &(ota_header.header.magic_number),
+              sizeof(ota_header) - offsetof(OTAHeader, header.magic_number)
+            );
+
+          }
+          break;
+        }
+        case OTA_DOWNLOAD_FILE:
+          // continue to download the payload, decompressing it and calculate crc
+          decoder.decompress((uint8_t*)cursor, size - (cursor-buffer));
+          ota_progress.crc32 = crc_update(
+              ota_progress.crc32,
+              cursor,
+              size - (cursor-buffer)
+            );
+
+          cursor += size - (cursor-buffer);
+          break;
+        default:
+          ota_progress.state = OTA_DOWNLOAD_ERR;
+      }
+    }
+  });
+
+  // if download fails it return a negative error code
+  if(bytes <= 0) {
+    res = bytes;
+    goto exit;
+  }
+
+  // if state is download finished and completed correctly the state should be OTA_DOWNLOAD_FILE
+  if(ota_progress.state != OTA_DOWNLOAD_FILE) {
+    res = static_cast<int>(Error::OtaDownload);
+    goto exit;
+  }
+
+  if(ota_header.header.len == (bytes-sizeof(ota_header.buf))) {
+    res = static_cast<int>(Error::OtaHeaderLength);
+    goto exit;
+  }
+
+  // verify magic number: it may be done in the download function and stop the download immediately
+  if(ota_header.header.magic_number != ARDUINO_PORTENTA_OTA_MAGIC) {
+    res = static_cast<int>(Error::OtaHeaterMagicNumber);
+    goto exit;
+  }
+
+  // finalize CRC and verify it
+  ota_progress.crc32 ^= 0xFFFFFFFF;
+  if(ota_header.header.crc32 != ota_progress.crc32) {
+    res = static_cast<int>(Error::OtaHeaderCrc);
+    goto exit;
+  }
+
+  res = ftell(decompressed);
+
+exit:
+  fclose(decompressed);
+
+  if(res < 0) {
+    remove(UPDATE_FILE_NAME);
+  }
+
+  return res;
+}
+
 
 int Arduino_Portenta_OTA::decompress()
 {
@@ -103,36 +241,7 @@ int Arduino_Portenta_OTA::decompress()
   /* For UPDATE.BIN.LZSS - LZSS compressed binary files. */
   FILE* update_file = fopen(UPDATE_FILE_NAME_LZSS, "rb");
 
-  union HeaderVersion
-  {
-    struct __attribute__((packed))
-    {
-      uint32_t header_version    :  6;
-      uint32_t compression       :  1;
-      uint32_t signature         :  1;
-      uint32_t spare             :  4;
-      uint32_t payload_target    :  4;
-      uint32_t payload_major     :  8;
-      uint32_t payload_minor     :  8;
-      uint32_t payload_patch     :  8;
-      uint32_t payload_build_num : 24;
-    } field;
-    uint8_t buf[sizeof(field)];
-    static_assert(sizeof(buf) == 8, "Error: sizeof(HEADER.VERSION) != 8");
-  };
-
-  union
-  {
-    struct __attribute__((packed))
-    {
-      uint32_t len;
-      uint32_t crc32;
-      uint32_t magic_number;
-      HeaderVersion hdr_version;
-    } header;
-    uint8_t buf[sizeof(header)];
-    static_assert(sizeof(buf) == 20, "Error: sizeof(HEADER) != 20");
-  } ota_header;
+  OTAHeader ota_header;
   uint32_t crc32, bytes_read;
   uint8_t crc_buf[128];
 
