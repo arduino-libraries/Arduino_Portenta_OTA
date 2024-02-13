@@ -26,18 +26,19 @@
   #if __has_include (<Arduino_DebugUtils.h>)
     #include <Arduino_DebugUtils.h>
   #else
-    #define DEBUG_ERROR(fmt, ...)
-    #define DEBUG_WARNING(fmt, ...)
-    #define DEBUG_INFO(fmt, ...)
-    #define DEBUG_DEBUG(fmt, ...)
-    #define DEBUG_VERBOSE(fmt, ...)
+    #define ARDUINO_PORTENTA_OTA_NO_DEBUG
   #endif
 #else
-    #define DEBUG_ERROR(fmt, ...)
-    #define DEBUG_WARNING(fmt, ...)
-    #define DEBUG_INFO(fmt, ...)
-    #define DEBUG_DEBUG(fmt, ...)
-    #define DEBUG_VERBOSE(fmt, ...)
+  #define ARDUINO_PORTENTA_OTA_NO_DEBUG
+#endif 
+
+#ifdef ARDUINO_PORTENTA_OTA_NO_DEBUG
+  #define DEBUG_ERROR(fmt, ...) ((void)0)
+  #define DEBUG_WARNING(fmt, ...) ((void)0)
+  #define DEBUG_INFO(fmt, ...) ((void)0)
+  #define DEBUG_DEBUG(fmt, ...) ((void)0)
+  #define DEBUG_VERBOSE(fmt, ...) ((void)0)
 #endif
+#undef ARDUINO_PORTENTA_OTA_NO_DEBUG
 
 #endif /* ARDUINO_PORTENTA_OTA_DEBUG_H_ */
