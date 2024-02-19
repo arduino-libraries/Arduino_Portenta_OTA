@@ -23,7 +23,7 @@
 #if defined(ARDUINO_PORTENTA_OTA_QSPI_SUPPORT)
 
 #include "Arduino_Portenta_OTA_QSPI.h"
-
+#include "Arduino_Portenta_OTA_Debug.h"
 #include <assert.h>
 
 using namespace arduino;
@@ -52,7 +52,7 @@ bool Arduino_Portenta_OTA_QSPI::init()
     int const err_mount = _fs_qspi->mount(_bd_raw_qspi);
     if (err_mount)
     {
-      Debug.print(DBG_ERROR, F("Error while mounting the filesystem. Err = %d"), err_mount);
+      DEBUG_ERROR(F("Error while mounting the filesystem. Err = %d"), err_mount);
       return false;
     }
     return true;
@@ -64,7 +64,7 @@ bool Arduino_Portenta_OTA_QSPI::init()
     _fs_qspi = new mbed::FATFileSystem("fs");
     int const err_mount = _fs_qspi->mount(_bd_qspi);
     if (err_mount) {
-      Debug.print(DBG_ERROR, F("Error while mounting the filesystem. Err = %d"), err_mount);
+      DEBUG_ERROR(F("Error while mounting the filesystem. Err = %d"), err_mount);
       return false;
     }
     return true;

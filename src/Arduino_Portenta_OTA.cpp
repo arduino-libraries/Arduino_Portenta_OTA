@@ -20,7 +20,7 @@
  ******************************************************************************/
 
 #include "Arduino_Portenta_OTA.h"
-
+#include "Arduino_Portenta_OTA_Debug.h"
 #include <stm32h7xx_hal_rtc_ex.h>
 
 /******************************************************************************
@@ -143,7 +143,7 @@ bool Arduino_Portenta_OTA::caStorageInit()
   _bd_raw_qspi = mbed::BlockDevice::get_default_instance();
 
   if (_bd_raw_qspi->init() != QSPIF_BD_ERROR_OK) {
-    Debug.print(DBG_ERROR, F("Error: QSPI init failure."));
+    DEBUG_ERROR(F("Error: QSPI init failure."));
     return false;
   }
 
@@ -151,7 +151,7 @@ bool Arduino_Portenta_OTA::caStorageInit()
   mbed::FATFileSystem *  cert_fs_qspi = new mbed::FATFileSystem("wlan");
   int const err_mount =  cert_fs_qspi->mount(cert_bd_qspi);
   if (err_mount) {
-    Debug.print(DBG_ERROR, F("Error while mounting the certificate filesystem. Err = %d"), err_mount);
+    DEBUG_ERROR(F("Error while mounting the certificate filesystem. Err = %d"), err_mount);
     return false;
   }
   return true;
@@ -161,7 +161,7 @@ bool Arduino_Portenta_OTA::caStorageOpen()
 {
   FILE* fp = fopen("/wlan/cacert.pem", "r");
   if (!fp) {
-    Debug.print(DBG_ERROR, F("Error while opening the certificate file."));
+    DEBUG_ERROR(F("Error while opening the certificate file."));
     return false;
   }
   fclose(fp);

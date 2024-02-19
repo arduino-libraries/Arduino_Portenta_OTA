@@ -23,7 +23,7 @@
 #if defined(ARDUINO_PORTENTA_OTA_SDMMC_SUPPORT)
 
 #include "Arduino_Portenta_OTA_SD.h"
-
+#include "Arduino_Portenta_OTA_Debug.h"
 #include "BSP.h"
 #include "stm32h7xx_hal_sd.h"
 
@@ -61,7 +61,7 @@ bool Arduino_Portenta_OTA_SD::init()
     _fs_sd = new mbed::FATFileSystem("fs");
     int const err =  _fs_sd->mount(&_block_device);
     if (err) {
-      Debug.print(DBG_ERROR, F("Error while mounting the filesystem. Err = %d"), err);
+      DEBUG_ERROR(F("Error while mounting the filesystem. Err = %d"), err);
       return false;
     }
     return true;
@@ -74,7 +74,7 @@ bool Arduino_Portenta_OTA_SD::init()
     int const err =  _fs_sd->mount(_bd);
     if (err)
     {
-      Debug.print(DBG_ERROR, F("Error while mounting the filesystem. Err = %d"), err);
+      DEBUG_ERROR(F("Error while mounting the filesystem. Err = %d"), err);
       return false;
     }
     return true;
