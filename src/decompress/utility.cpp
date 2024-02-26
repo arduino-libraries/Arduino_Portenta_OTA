@@ -146,9 +146,13 @@ int Arduino_Portenta_OTA::downloadAndDecompress(const char * url, bool const is_
     uint32_t crc32 = 0xFFFFFFFF;
     uint32_t header_copied_bytes = 0;
     OTA_DOWNLOAD_STATE state=OTA_DOWNLOAD_HEADER;
+    Arduino_Portenta_OTA* ref;
   } ota_progress;
 
-  int bytes = socket->download(url, is_https, [&decoder, &ota_header, &ota_progress](const char* buffer, uint32_t size) {
+  ota_progress.ref = this;
+
+  int bytes = socket->download(url, is_https, [ &decoder, &ota_header, &ota_progress](const char* buffer, uint32_t size) {
+    ota_progress.ref->feedWatchdog();
     for(char* cursor=(char*)buffer; cursor<buffer+size; ) {
       switch(ota_progress.state) {
         case OTA_DOWNLOAD_HEADER: {
